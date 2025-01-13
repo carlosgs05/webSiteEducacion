@@ -5,7 +5,7 @@ const Home = () => {
         <>
             <HeaderHome />
             <section>
-                <h1>KELITAAAA</h1>
+                <h1>HOME</h1>
             </section>
             <Footer />
         </>
