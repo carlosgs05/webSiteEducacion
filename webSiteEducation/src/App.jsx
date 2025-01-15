@@ -1,4 +1,4 @@
-import Autoridades from './page/organizacion/Autoridades'
+import Organizacion from './page/organizacion/organizacion'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import Home from './page/home/Home'
 
@@ -7,7 +7,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/organizacion/autoridades' element={<Autoridades />} />
+        <Route path='/organizacion' element={<Organizacion />} />
       </Routes>
     </BrowserRouter>
   )

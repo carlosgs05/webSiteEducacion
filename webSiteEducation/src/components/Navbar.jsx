@@ -48,7 +48,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full px-12 py-1 transition-colors duration-300 z-50 ${
+      className={`fixed top-0 left-0 w-full px-4 md:px-12 py-1 transition-colors duration-300 z-50 ${
         isOpaque ? "bg-[#545454]" : "bg-[#545454]/80"
       }`}
     >
