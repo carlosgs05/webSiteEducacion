@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const CardOrganization = ({ photo, name, role }) => {
   return (
     <div className="w-64 p-4 shadow-md rounded-md text-center">
@@ -22,5 +24,9 @@ const CardOrganization = ({ photo, name, role }) => {
     </div>
   );
 };
-
+CardOrganization.propTypes = {
+  photo: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  role: PropTypes.string.isRequired,
+};
 export default CardOrganization;
