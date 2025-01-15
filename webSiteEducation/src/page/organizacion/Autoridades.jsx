@@ -1,58 +1,43 @@
-import Footer from '../../components/Footer'
-import Header from '../../components/Header'
-
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import Button from "../../components/Button";
+import CardOrganization from "../../components/CardOrganization";
 const Autoridades = () => {
-    return (
-        <>
-            <Header />
-            <section>
-                Autoridades
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. In omnis, libero unde magni repudiandae similique veritatis quisquam enim consequuntur facilis praesentium dolor deserunt nobis accusantium vero. Nobis iusto accusamus quidem!
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam voluptatum iste vitae, facilis possimus molestias fugiat aut! Quam nulla expedita nemo eaque ut voluptate, deleniti pariatur, adipisci optio rem ducimus?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum repellendus amet similique veritatis, error voluptates quam numquam nulla necessitatibus debitis ipsum nemo temporibus quis odio soluta dolorum voluptatibus ea iste?
-            </section>
-            <Footer />
-        </>
-    )
-}
+  return (
+    <>
+      <Header />
+      <section className="-translate-y-5">
+        <div className=" items-center justify-center flex flex-wrap gap-4">
+          <Button
+            bgColor="bg-[#545454]"
+            hoverBgColor="hover:bg-[#545454]"
+            name="AUTORIDADES"
+            link="https://www.google.com"
+          />
+          <Button
+            bgColor="bg-[#E4BCD3]"
+            hoverBgColor="hover:bg-[#545454]"
+            name="PERSONAL ADMINISTRATIVO"
+            link="https://www.google.com"
+          />
+          <Button
+            bgColor="bg-[#E4BCD3]"
+            hoverBgColor="hover:bg-[#545454]"
+            name="PERSONAL DOCENTE"
+            link="https://www.google.com"
+          />
+        </div>
+        <div className="mt-10">
+        <CardOrganization
+        photo="../src/assets/foto1.png" // Reemplaza con la URL de la foto
+        name="Kelita Marilu Mauricio Saavedra"
+        role="Directora de Escuela"
+      />
+        </div>
+      </section>
+      <Footer />
+    </>
+  );
+};
 
-
-export default Autoridades
-
-
+export default Autoridades;

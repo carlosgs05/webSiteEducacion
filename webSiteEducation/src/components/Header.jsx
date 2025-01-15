@@ -4,15 +4,14 @@ import Navbar from './Navbar';
 const Header = () => {
    
   return (
-    <header className="relative h-[650px]"> {/* Definir altura explícita */}
+    <header className=" border-gray-500"> {/* Definir altura explícita */}
       <img
-        src="../src/assets/fondo_header.png"
-        alt="Foto"
-        className="absolute top-0 left-0 w-full h-full object-cover z-0"
-      />
+      src="../src/assets/portada-inicial.jpg"
+      alt="Foto"
+      className="w-full object-cover" />
       <Navbar/>
     </header>
-  );
+    );
 };
 
 export default Header;
