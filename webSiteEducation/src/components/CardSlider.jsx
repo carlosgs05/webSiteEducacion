@@ -1,143 +1,91 @@
-// import PropTypes from "prop-types";
-// import { useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Button from "./Button";
 
-// const CardSlider = ({ cards }) => {
-//   const [currentIndex, setCurrentIndex] = useState(0);
-
-//   const handleNext = () => {
-//     setCurrentIndex((prevIndex) => (prevIndex + 1) % cards.length);
-//   };
-
-//   const handlePrev = () => {
-//     setCurrentIndex((prevIndex) =>
-//       prevIndex === 0 ? cards.length - 1 : prevIndex - 1
-//     );
-//   };
-
-//   const getTransformValue = () => {
-//     // Ajustar el desplazamiento en función del índice actual
-//     return `translateX(-${currentIndex * (100 / 3)}%)`;
-//   };
-
-//   return (
-//     <div className="relative w-full h-64 flex items-center justify-center overflow-hidden">
-//       {/* Contenedor de los cards */}
-//       <div
-//         className="flex transition-transform duration-500 ease-in-out"
-//         style={{
-//           width: `${(cards.length / 3) * 100}%`,
-//           transform: getTransformValue(),
-//         }}
-//       >
-//         {cards.map((card, index) => (
-//           <div
-//             key={index}
-//             className="flex-shrink-0 w-1/3 h-full bg-white shadow-md rounded-lg flex flex-col items-center justify-center mx-2"
-//           >
-//             <h2 className="text-lg font-bold">{card.title}</h2>
-//             <p>{card.content}</p>
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* Botones de navegación */}
-//       <button
-//         onClick={handlePrev}
-//         className="absolute left-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-//       >
-//         Anterior
-//       </button>
-//       <button
-//         onClick={handleNext}
-//         className="absolute right-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-//       >
-//         Siguiente
-//       </button>
-//     </div>
-//   );
-// };
-
-// CardSlider.propTypes = {
-//   cards: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       title: PropTypes.string.isRequired,
-//       content: PropTypes.string.isRequired,
-//     })
-//   ).isRequired,
-// };
-
-// export default CardSlider;
-import PropTypes from "prop-types";
-import { useState } from "react";
-
-const CardSlider = ({ cards }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const visibleCardsCount = 3; // Número de tarjetas visibles
-
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % cards.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? cards.length - 1 : prevIndex - 1
-    );
+const CardSlider = ({ title, data }) => {
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
   };
 
   return (
-    <div className="relative w-full h-64 flex items-center justify-center overflow-hidden">
-      {/* Contenedor principal */}
-      <div className="flex gap-4 w-3/4 justify-center items-center overflow-hidden relative">
-        {/* Cards */}
-        <div
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{
-            transform: `translateX(-${
-              (100 / visibleCardsCount) * currentIndex
-            }%)`,
-            width: `${(cards.length / visibleCardsCount) * 100}%`,
-          }}
-        >
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              className="flex-shrink-0 w-1/3 h-full bg-white shadow-md rounded-lg flex flex-col items-center justify-center"
-            >
-              <h2 className="text-lg font-bold">{card.title}</h2>
-              <p>{card.content}</p>
-            </div>
-          ))}
+    <section className="my-6 mx-10 md:my-10 md:mx-16">
+      <div className="flex flex-col items-start gap-2 mb-9">
+        <div className="text-2xl font-semibold text-[#262D73]">{title}</div>
+        <div className="w-full h-1 bg-[#D9D9D9]"></div>
+      </div>
+      <div className='w-full h-fit flex flex-col justify-center items-center pb-6'>
+        <div className='w-full h-fit px-8'>
+          <Slider {...settings}>
+            {
+              data.map((item, index) => (
+                <div key={index} className="py-10 px-6">
+                  <div className="border border-gray-200 rounded-md flex flex-col justify-center shadow-lg">
+                    <div className="flex flex-col relative">
+                      <img src={item.image}
+                        className="w-full relative z-10 max-h-80 rounded-t-md" title="" alt="" />
+                    </div>
+                    <div className="flex flex-col px-4">
+                      <p className="text-base mt-3 mb-2 text-[#545454] font-semibold">
+                        {item.date}
+                      </p>
+                      <p className="text-base mb-3 line-clamp-3 hover:line-clamp-none text-gray-500 ">
+                        {item.description}
+                      </p>
+                    </div>
+                    <div className="flex flex-row py-3 px-4 border-t border-gray-200">
+                      <div className="w-1/2 flex flex-row text-[#262D73]">
+                        <a href={item.link} target="_blank" className="mr-1 cursor-pointer hover:text-[#E4BCD3]">Leer más ➔</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </Slider>
         </div>
       </div>
+      {title === "Noticias" && (
+        <div className="flex justify-center mt-8">
+          <Button name="VER MÁS NOTICIAS" />
+        </div>
+      )}
+    </section>
+  )
+}
 
-      {/* Botones */}
-      <button
-        onClick={handlePrev}
-        className="absolute left-0 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 z-10"
-        style={{ transform: "translateX(-50%)" }}
-      >
-        Anterior
-      </button>
-      <button
-        onClick={handleNext}
-        className="absolute right-0 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 z-10"
-        style={{ transform: "translateX(50%)" }}
-      >
-        Siguiente
-      </button>
-    </div>
-  );
-};
+export default CardSlider
 
-CardSlider.propTypes = {
-  cards: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-};
-
-export default CardSlider;
 
 
