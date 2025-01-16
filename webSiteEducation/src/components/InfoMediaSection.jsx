@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const InfoMediaSection = ({ title, content, media, mediaType, mediaPosition }) => {
     return (
         <section className="my-6 mx-10 md:my-10 md:mx-16">
@@ -39,5 +41,11 @@ const InfoMediaSection = ({ title, content, media, mediaType, mediaPosition }) =
         </section>
     );
 };
-
+InfoMediaSection.propTypes = {
+  title: PropTypes.string.isRequired,
+  content: PropTypes.string,
+  media: PropTypes.string.isRequired,
+  mediaType: PropTypes.string.isRequired,
+  mediaPosition: PropTypes.string.isRequired,
+};
 export default InfoMediaSection;  
