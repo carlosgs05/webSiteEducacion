@@ -4,7 +4,7 @@ import Navbar from './Navbar';
 const Header = () => {
    
   return (
-    <header className=" border-gray-500"> {/* Definir altura explícita */}
+    <header className=" border-gray-500">
       <img
       src="../src/assets/portada-inicial.jpg"
       alt="Foto"

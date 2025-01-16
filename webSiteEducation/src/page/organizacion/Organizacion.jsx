@@ -36,7 +36,7 @@ const Organizacion = () => {
       <section
         className={`${
           activeSection === "autoridades" ? "block" : "hidden"
-        } mt-10`}
+        } my-10`}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-16">
           <CardOrganization
@@ -54,7 +54,7 @@ const Organizacion = () => {
 
       {/* PERSONAL DOCENTE */}
       <section
-        className={`${activeSection === "docente" ? "block" : "hidden"} mt-10`}
+        className={`${activeSection === "docente" ? "block" : "hidden"} my-10`}
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-y-16">
           <CardOrganization
@@ -79,7 +79,7 @@ const Organizacion = () => {
       <section
         className={`${
           activeSection === "administrativo" ? "block" : "hidden"
-        } mt-10`}
+        } my-10`}
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-y-16">
           <CardOrganization

@@ -97,7 +97,7 @@ const Navbar = () => {
           } w-full lg:block lg:w-auto py-4`}
         >
           {/* Ajuste de espacio horizontal entre li */}
-          <ul className="flex flex-col font-medium p-4 lg:p-0 mt-4 border border-gray-100 rounded-lg lg:space-x-8 rtl:space-x-reverse lg:flex-row lg:mt-0 lg:border-0 lg:items-center">
+          <ul className="flex flex-col font-medium p-4 lg:p-0 mt-4 border border-gray-100 rounded-lg lg:space-x-12 rtl:space-x-reverse lg:flex-row lg:mt-0 lg:border-0 lg:items-center">
             <li>
               <a
                 href="/"

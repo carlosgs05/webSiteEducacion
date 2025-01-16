@@ -1,4 +1,3 @@
-
 import Navbar from './Navbar';
 import { useEffect } from "react";
 import Slider from './Slider';
@@ -11,7 +10,7 @@ const HeaderHome = () => {
         }
       }, []); // Se ejecuta al montar el componente
   return (
-    <header className="relative h-[500px]"> {/* Definir altura explícita */}
+    <header className="relative h-72 sm:h-96 md:h-[500px] transition-all duration-500 ease-in-out"> {/* Definir altura explícita */}
       <Slider/>
       <Navbar/>
     </header>
