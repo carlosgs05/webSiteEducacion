@@ -2,6 +2,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Button from "./Button";
+import PropTypes from 'prop-types';
 
 const CardSlider = ({ title, data }) => {
   var settings = {
@@ -83,6 +84,10 @@ const CardSlider = ({ title, data }) => {
       )}
     </section>
   )
+}
+CardSlider.propTypes = {
+  title: PropTypes.string,
+  data: PropTypes.array
 }
 
 export default CardSlider
