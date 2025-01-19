@@ -58,11 +58,7 @@ const Navbar = () => {
           href="#"
           className="flex items-center space-x-3 rtl:space-x-reverse lg:py-4"
         >
-          <img
-            src="../src/assets/logo.png"
-            className="h-10"
-            alt="Logo"
-          />
+          <img src="../src/assets/logo.png" className="h-10" alt="Logo" />
         </a>
 
         {/* Hamburguesa */}
@@ -126,8 +122,12 @@ const Navbar = () => {
 
             <li>
               <a
-                href="/organizacion"
-                className="block py-2 px-3 text-white lg:text-center lg:leading-tight rounded hover:bg-[#E4BCD3] lg:hover:bg-transparent lg:border-0 lg:hover:text-[#E4BCD3] lg:p-0"
+                href="/informacionAcademica/perfiles"
+                className={`block py-2 px-3 rounded lg:p-0 ${
+                  isActive("/informacionAcademica/perfiles")
+                    ? "text-white bg-[#E4BCD3] lg:text-[#E4BCD3] lg:bg-transparent"
+                    : "text-white bg-transparent"
+                } hover:bg-[#E4BCD3] lg:hover:text-[#E4BCD3] lg:hover:bg-transparent`}
               >
                 <span className="block lg:hidden">Información Académica</span>
                 <span className="hidden lg:block">

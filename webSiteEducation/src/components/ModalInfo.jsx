@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const ModalInfo = ({ isOpen, onClose, data }) => {
     if (!isOpen) return null;
 
@@ -69,4 +71,9 @@ const ModalInfo = ({ isOpen, onClose, data }) => {
     )
 }
 
+ModalInfo.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired
+};
 export default ModalInfo;

@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 
-const Button = ({ name, link, onClick, isActive }) => {
+const Button = ({ name, link, onClick, isActive,target }) => {
   return (
-    <a
+    <a target={target ? target : "_self"} // Si no se proporciona target, usa "_self"
       href={link ? link : "#"} // Si no se proporciona link, usa "#"
       onClick={(e) => {
         if (onClick) {
@@ -10,7 +10,7 @@ const Button = ({ name, link, onClick, isActive }) => {
           onClick(); // Llama a la función si existe
         }
       }}
-      className={`w-40 h-14 flex items-center justify-center text-center px-4 py-2 text-white rounded transition-all ${
+      className={`w-40 h-14 flex items-center justify-center text-center px-4 py-2 text-white font-semibold rounded transition-all ${
         isActive ? "bg-[#545454] pointer-events-none" : "bg-[#E4BCD3] hover:bg-[#545454]"
       }`}
     >
@@ -24,6 +24,8 @@ Button.propTypes = {
   link: PropTypes.string, // Puede ser opcional
   onClick: PropTypes.func, // Puede ser opcional
   isActive: PropTypes.bool, // Puede ser opcional
+  target: PropTypes.string, // Puede ser opcional
+
 };
 
 export default Button;
