@@ -124,7 +124,7 @@ const Navbar = () => {
               <a
                 href="/informacionAcademica/perfiles"
                 className={`block py-2 px-3 rounded lg:p-0 ${
-                  isActive("/informacionAcademica/perfiles")
+                  ["/informacionAcademica/perfiles", "/informacionAcademica/mallaCurricular"].some(isActive)
                     ? "text-white bg-[#E4BCD3] lg:text-[#E4BCD3] lg:bg-transparent"
                     : "text-white bg-transparent"
                 } hover:bg-[#E4BCD3] lg:hover:text-[#E4BCD3] lg:hover:bg-transparent`}
