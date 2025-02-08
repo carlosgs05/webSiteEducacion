@@ -92,7 +92,6 @@ const MallaCurricular = () => {
                 name="Ver plan de estudios"
                 link="../src/assets/historia.pdf"
                 target="_blank" />
-                
         </div>
       </section>
       <Footer />

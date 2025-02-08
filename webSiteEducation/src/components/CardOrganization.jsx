@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ModalInfo from "./ModalInfo";
+import { array } from "prop-types";
 
 const CardOrganization = ({ data }) => {
   // Para trabajar el modal
@@ -45,4 +46,8 @@ const CardOrganization = ({ data }) => {
   );
 };
 
+CardOrganization.propTypes = {
+  data: array.isRequired
+
+};
 export default CardOrganization;
