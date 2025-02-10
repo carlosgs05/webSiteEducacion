@@ -11,7 +11,6 @@ const Noticias = () => {
         <div className="grid col-span-2">
         <PortadaNoticias />
         </div>
-       
         <ListaNoticias />
       </section>
 

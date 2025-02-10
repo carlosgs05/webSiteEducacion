@@ -98,7 +98,7 @@ const DetalleNoticia = () => {
       <section className="grid grid-cols-1 md:grid-cols-3 gap-5 px-8 py-8">
       <div className="grid col-span-2 p-4">
         <p className="text-gray-500 text-sm">{noticia.fecha}</p>
-        <h1 className="text-2xl font-bold text-blue-600 mt-2">
+        <h1 className="text-2xl font-bold text-[#262D73] mt-2">
           {noticia.titulo}
         </h1>
         <h3 className="text-gray-700 text-xl my-4">{noticia.encabezado}</h3>
@@ -107,7 +107,7 @@ const DetalleNoticia = () => {
         </div>
         <p className="text-gray-700 mt-4">{noticia.descripcion}</p>
       </div>
-      <div className="">
+      <div className="pt-4">
         <ListaNoticias />   
       </div>
       </section>

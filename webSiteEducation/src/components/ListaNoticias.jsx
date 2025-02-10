@@ -4,7 +4,7 @@ const noticias = [
   {
     id: 1,
     imagen: "/assets/noticia1.jpeg",
-    titulo: "Noticia 1",
+    titulo: "Noticia 1: Las aventuras de petter pan, wendy y sus hermanos",
     fecha: "10 de Febrero, 2025",
     url: "/novedades/noticia/1",
 
@@ -53,9 +53,11 @@ const noticias = [
 
 const ListaNoticias = () => {
   return (
-      <div className="mt-6">
-        <h3 className="text-lg font-bold text-blue-600">Más noticias</h3>
-        <div className="border-t border-gray-300 mt-2 pt-2 h-[470px] overflow-y-auto">
+      <div>
+        <h3 className="text-lg font-bold text-[#262D73]">Más noticias</h3>
+        <div className="w-full h-1 bg-[#D9D9D9]"></div>
+        <div className=" mt-2 pt-2 h-[470px] overflow-y-auto">
+
           {noticias.map((noticia) => (
             <Link
               key={noticia.id}
@@ -65,7 +67,7 @@ const ListaNoticias = () => {
               <img
                 src={noticia.imagen}
                 alt={noticia.titulo}
-                className="w-32 h-32  object-cover rounded-md"
+                className="w-32 h-32  object-cover rounded-md "
               />
               <div className="flex flex-col">
                 <span className="text-gray-500 text-xs">{noticia.fecha}</span>

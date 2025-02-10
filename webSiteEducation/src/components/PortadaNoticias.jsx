@@ -1,6 +1,4 @@
 import { Link } from "react-router";
-
-
 const noticias = [
     {
       id: 1,
@@ -33,10 +31,9 @@ const PortadaNoticias = () => {
           {/* Noticia Principal */}
           <Link to={noticias[0].url} className="relative group block overflow-hidden border border-blue-300 rounded-lg">
             <img src={noticias[0].imagen} alt={noticias[0].titulo} className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300" />
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4">
-              
-              <h2 className="text-white text-lg font-bold mt-2">{noticias[0].titulo}</h2>
-              <p className="text-gray-300 text-sm mt-1">{noticias[0].fecha}</p>
+            <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-end p-4">
+              <h2 className="text-white text-xl font-bold mt-2">{noticias[0].titulo}</h2>
+              <p className="text-gray-300 text-base mt-1">{noticias[0].fecha}</p>
             </div>
           </Link>
           
@@ -46,8 +43,8 @@ const PortadaNoticias = () => {
               <Link key={noticia.id} to={noticia.url} className="relative group block overflow-hidden border border-blue-300 rounded-lg">
                 <img src={noticia.imagen} alt={noticia.titulo} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2">
-                  <h3 className="text-white text-sm font-semibold">{noticia.titulo}</h3>
-                  <p className="text-gray-300 text-xs">{noticia.fecha}</p>
+                  <h3 className="text-white text-base font-semibold">{noticia.titulo}</h3>
+                  <p className="text-gray-300 text-sm">{noticia.fecha}</p>
                 </div>
               </Link>
             ))}

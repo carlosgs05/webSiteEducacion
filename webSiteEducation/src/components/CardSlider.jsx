@@ -79,7 +79,9 @@ const CardSlider = ({ title, data }) => {
       </div>
       {title === "Noticias" && (
         <div className="flex justify-center mt-8">
-          <Button name="VER MÁS NOTICIAS" />
+          <Button name="VER MÁS NOTICIAS" 
+          link={"/novedades/noticias"
+          }/>
         </div>
       )}
     </section>
