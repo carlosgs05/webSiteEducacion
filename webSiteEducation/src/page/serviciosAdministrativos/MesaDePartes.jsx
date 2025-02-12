@@ -1,8 +1,10 @@
+import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import { useState } from "react";
 const MesaDePartes = () => {
   const [formData, setFormData] = useState({
     documentoIdentidad: "DNI",
+    numeroIdentidad: "",
     nombre: "",
     apellidoMaterno: "",
     apellidoPaterno: "",
@@ -32,7 +34,7 @@ const MesaDePartes = () => {
   return (
     <div>
       <Header />
-      <div className="flex flex-col px-20 gap-y-5">
+      <div className="flex flex-col px-20 gap-y-5 pb-10">
         <h1 className="text-3xl font-bold text-center mt-10 text-[#262D73]">
           Mesa de Partes - Escuela de Educación inicial
         </h1>
@@ -51,7 +53,7 @@ const MesaDePartes = () => {
             <div className="flex flex-col gap-6">
               <div>
                 <label className="block text-sm font-medium">
-                  Tipo de documento
+                  Tipo de documento de identidad
                 </label>
                 <select
                   name="documentoIdentidad"
@@ -66,6 +68,17 @@ const MesaDePartes = () => {
                   <option value="Pasaporte">Ruc 10 (Persona natural)</option>
                   <option value="Pasaporte">Otros</option>
                 </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Numero de documento de identidad</label>
+                <input
+                  type="number"
+                  name="numeroIdentidad"
+                  value={formData.numeroIdentidad}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded"
+                  required
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium">Nombre</label>
@@ -130,18 +143,16 @@ const MesaDePartes = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium">
-                  Tipo de documento
+                  Tipo y número de documento a enviar
                 </label>
-                <select
+                <input
+                  type="text"
                   name="tipoDocumento"
                   value={formData.tipoDocumento}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                   required
-                >
-                  <option value="DNI">DNI</option>
-                  <option value="Pasaporte">Pasaporte</option>
-                </select>
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium">Correo</label>
@@ -213,7 +224,9 @@ const MesaDePartes = () => {
           </form>
         </div>
       </div>
+      <Footer/>
     </div>
+    
   );
 };
 

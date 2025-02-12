@@ -260,6 +260,14 @@ const Navbar = () => {
                         Libro de reclamaciones
                       </a>
                     </li>
+                    <li>
+                      <a
+                        href="/serviciosAdministrativos/documentos-tramites"
+                        className="block px-4 py-2 hover:bg-[#E4BCD3]"
+                      >
+                        Documentación
+                      </a>
+                    </li>
                   </ul>
                 </div>
               )}

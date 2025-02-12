@@ -15,22 +15,24 @@ const Organizacion = () => {
       photo: "../src/assets/foto1.png",
       name: "Autoridad 1",
       role: "Directora de Escuela",
-      contacto: "123456789",
+      correo: "123456789",
       titulo: "Ingeniero en Sistemas",
       publicaciones: [
-        { title: "Publicación 1", description: "Descripción breve", url: "https://example.com" },
-        { title: "Publicación 2", description: "Otra descripción", url: "https://example.com" }
+        { title: "Publicación 1",  url: "https://example.com" },
+        { title: "Publicación 2",  url: "https://example.com" },
+        { title: "Publicación 3",  url: "https://example.com" }
       ]
     },
     {
       photo: "../src/assets/foto1.png",
       name: "Autoridad 2",
       role: "Directora de Escuela",
-      contacto: "123456789",
+      correo: "123456789",
       titulo: "Ingeniero en Sistemas",
       publicaciones: [
-        { title: "Publicación 1", description: "Descripción breve", url: "https://example.com" },
-        { title: "Publicación 2", description: "Otra descripción", url: "https://example.com" }
+        { title: "Publicación 1",  url: "https://example.com" },
+        { title: "Publicación 2",  url: "https://example.com" },
+        { title: "Publicación 3",  url: "https://example.com" }
       ]
     }
   ]
@@ -41,36 +43,36 @@ const Organizacion = () => {
       photo: "../src/assets/foto1.png",
       name: "Docente 1",
       role: "Docente",
-      contacto: "123456789",
+      correo: "123456789",
       titulo: "Ingeniero en Sistemas",
       publicaciones: [
-        { title: "Publicación 1", description: "Descripción breve", url: "https://example.com" },
-        { title: "Publicación 2", description: "Otra descripción", url: "https://example.com" },
-        { title: "Publicación 3", description: "Otra descripción 2", url: "https://example.com" }
+        { title: "Publicación 1",  url: "https://example.com" },
+        { title: "Publicación 2",  url: "https://example.com" },
+        { title: "Publicación 3",  url: "https://example.com" }
       ]
     },
     {
       photo: "../src/assets/foto1.png",
       name: "Docente 2",
       role: "Docente",
-      contacto: "123456789",
+      correo: "123456789",
       titulo: "Ingeniero en Sistemas",
       publicaciones: [
-        { title: "Publicación 1", description: "Descripción breve", url: "https://example.com" },
-        { title: "Publicación 2", description: "Otra descripción", url: "https://example.com" },
-        { title: "Publicación 3", description: "Otra descripción 2", url: "https://example.com" }
+        { title: "Publicación 1",  url: "https://example.com" },
+        { title: "Publicación 2",  url: "https://example.com" },
+        { title: "Publicación 3",  url: "https://example.com" }
       ]
     },
     {
       photo: "../src/assets/foto1.png",
       name: "Docente 3",
       role: "Docente",
-      contacto: "123456789",
+      correo: "123456789",
       titulo: "Ingeniero en Sistemas",
       publicaciones: [
-        { title: "Publicación 1", description: "Descripción breve", url: "https://example.com" },
-        { title: "Publicación 2", description: "Otra descripción", url: "https://example.com" },
-        { title: "Publicación 3", description: "Otra descripción 2", url: "https://example.com" }
+        { title: "Publicación 1",  url: "https://example.com" },
+        { title: "Publicación 2",  url: "https://example.com" },
+        { title: "Publicación 3",  url: "https://example.com" }
       ]
     }
   ]
@@ -81,48 +83,48 @@ const Organizacion = () => {
       photo: "../src/assets/foto1.png",
       name: "Administrativo 1",
       role: "Administrativo",
-      contacto: "123456789",
+      correo: "123456789",
       titulo: "Ingeniero en Sistemas",
       publicaciones: [
-        { title: "Publicación 1", description: "Descripción breve", url: "https://example.com" },
-        { title: "Publicación 2", description: "Otra descripción", url: "https://example.com" },
-        { title: "Publicación 3", description: "Otra descripción 2", url: "https://example.com" }
+        { title: "Publicación 1",  url: "https://example.com" },
+        { title: "Publicación 2",  url: "https://example.com" },
+        { title: "Publicación 3",  url: "https://example.com" }
       ]
     },
     {
       photo: "../src/assets/foto1.png",
       name: "Administrativo 2",
       role: "Administrativo",
-      contacto: "123456789",
+      correo: "123456789",
       titulo: "Ingeniero en Sistemas",
       publicaciones: [
-        { title: "Publicación 1", description: "Descripción breve", url: "https://example.com" },
-        { title: "Publicación 2", description: "Otra descripción", url: "https://example.com" },
-        { title: "Publicación 3", description: "Otra descripción 2", url: "https://example.com" }
+        { title: "Publicación 1",  url: "https://example.com" },
+        { title: "Publicación 2",  url: "https://example.com" },
+        { title: "Publicación 3",  url: "https://example.com" }
       ]
     },
     {
       photo: "../src/assets/foto1.png",
       name: "Administrativo 3",
       role: "Administrativo",
-      contacto: "123456789",
+      correo: "123456789",
       titulo: "Ingeniero en Sistemas",
       publicaciones: [
-        { title: "Publicación 1", description: "Descripción breve", url: "https://example.com" },
-        { title: "Publicación 2", description: "Otra descripción", url: "https://example.com" },
-        { title: "Publicación 3", description: "Otra descripción 2", url: "https://example.com" }
+        { title: "Publicación 1",  url: "https://example.com" },
+        { title: "Publicación 2",  url: "https://example.com" },
+        { title: "Publicación 3",  url: "https://example.com" }
       ]
     },
     {
       photo: "../src/assets/foto1.png",
       name: "Administrativo 4",
       role: "Administrativo",
-      contacto: "123456789",
+      correo: "123456789",
       titulo: "Ingeniero en Sistemas",
       publicaciones: [
-        { title: "Publicación 1", description: "Descripción breve", url: "https://example.com" },
-        { title: "Publicación 2", description: "Otra descripción", url: "https://example.com" },
-        { title: "Publicación 3", description: "Otra descripción 2", url: "https://example.com" }
+        { title: "Publicación 1",  url: "https://example.com" },
+        { title: "Publicación 2",  url: "https://example.com" },
+        { title: "Publicación 3",  url: "https://example.com" }
       ]
     }
   ]

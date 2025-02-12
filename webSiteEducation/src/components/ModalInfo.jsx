@@ -24,7 +24,7 @@ const ModalInfo = ({ isOpen, onClose, data }) => {
                     <h3 className="text-xl font-bold text-blue-900 border-b pb-2">Nombres Apellidos: {data.name}</h3>
 
                     <div className="mt-4">
-                        <h3 className="text-lg font-semibold text-gray-700 border-b pb-1">Contacto: {data.contacto}</h3>
+                        <h3 className="text-lg font-semibold text-gray-700 border-b pb-1">Correo: {data.correo}</h3>
                     </div>
 
                     <div className="mt-4">
@@ -40,7 +40,6 @@ const ModalInfo = ({ isOpen, onClose, data }) => {
                             <thead>
                                 <tr className="bg-gray-100">
                                     <th className="border border-gray-300 p-2">Título</th>
-                                    <th className="border border-gray-300 p-2">Descripción</th>
                                     <th className="border border-gray-300 p-2">URL</th>
                                 </tr>
                             </thead>
@@ -49,7 +48,6 @@ const ModalInfo = ({ isOpen, onClose, data }) => {
                                     data.publicaciones.map((pub, index) => (
                                         <tr key={index} className="text-center">
                                             <td className="border border-gray-300 p-2">{pub.title}</td>
-                                            <td className="border border-gray-300 p-2">{pub.description}</td>
                                             <td className="border border-gray-300 p-2">
                                                 <a href={pub.url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
                                                     Ver más

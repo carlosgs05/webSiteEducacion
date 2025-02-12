@@ -7,7 +7,7 @@ import DesarrolloProfesional from './page/desarrolloProfesional/DesarrolloProfes
 import Noticias from './page/novedades/Noticias'
 import DetalleNoticia from './page/novedades/DetalleNoticia'
 import MesaDePartes from './page/serviciosAdministrativos/MesaDePartes'
-
+import DocumentosTramites from './page/serviciosAdministrativos/DocumentosTramites'
 function App() {
   return (
     <BrowserRouter>
@@ -20,6 +20,7 @@ function App() {
         <Route path='/novedades/noticias' element={<Noticias />} />  
         <Route path="/novedades/noticia/:id" element={<DetalleNoticia />} />
        <Route path="/serviciosAdministrativos/mesa-de-partes" element={<MesaDePartes/>} /> 
+       <Route path="/serviciosAdministrativos/documentos-tramites" element={<DocumentosTramites/>} /> 
 
       </Routes>
     </BrowserRouter>
