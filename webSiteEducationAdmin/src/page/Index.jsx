@@ -5,7 +5,7 @@ const Index = () => {
     <div>
       <Layout>
         <div className="">
-            <h1 className="text-center ">BIENVENIDO</h1>
+            <h1 className="text-2xl text-center font-medium">BIENVENIDO</h1>
         </div>
         </Layout>
     </div>
