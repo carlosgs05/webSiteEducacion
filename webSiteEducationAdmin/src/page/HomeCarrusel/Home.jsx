@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Layout from "../../components/Layout";
 import AddImageSlider from "../../components/AddImageSlider";
 import Button from "../../components/Button";

@@ -10,6 +10,9 @@ const Sidebar = () => {
           <a href="/homeCarrusel">Home Carrusel</a>
         </li>
         <li className="text-gray-700 hover:text-blue-500 cursor-pointer">
+          <a href="/desarrolloProfesional"> Desarrollo Profesional</a>
+        </li>
+        <li className="text-gray-700 hover:text-blue-500 cursor-pointer">
           Authentication
         </li>
         <li className="text-gray-700 hover:text-blue-500 cursor-pointer">
