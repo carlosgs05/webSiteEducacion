@@ -11,10 +11,6 @@ class DesarrolloProfesional extends Model
     protected $table = 'desarrollo_profesional';
     protected $primaryKey = 'IdDesarrollo';
     public $timestamps = false;
-    protected $fillable = [
-        'Descripcion',
-        'Url',
-        'Tipo',
-        'Fecha'
-    ];
+    protected $fillable = ['Descripcion', 'Imagen', 'Url', 'Tipo', 'Fecha'];
+
 }
