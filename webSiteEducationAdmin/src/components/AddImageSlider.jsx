@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import propTypes from 'prop-types';
 const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
   // Inicializamos el state con las imágenes iniciales (las que vienen del backend)
