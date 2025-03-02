@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
+import LoadingIndicator from "../../components/LoadingIndicator";
 
 const RegistroModal = ({ onClose, editingRecord, tipo }) => {
+  const [loading, setLoading] = useState(false);
   const [descripcion, setDescripcion] = useState("");
   const [imagen, setImagen] = useState(null);
   const [url, setUrl] = useState("");
@@ -27,12 +29,11 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Mostrar indicador de carga
 
     const formData = new FormData();
     formData.append("Descripcion", descripcion);
-    if (imagen) {
-      formData.append("Imagen", imagen);
-    }
+    if (imagen) formData.append("Imagen", imagen);
     formData.append("Url", url);
     formData.append("Tipo", tipo);
     formData.append("Fecha", fecha);
@@ -55,16 +56,14 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
     } catch (error) {
       console.error("Error al enviar el formulario", error);
     }
+    setLoading(false); // Ocultar indicador de carga
   };
-
   return (
     // Fondo semitransparente que oscurece el contenido detrás
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       {/* Contenedor del modal más amplio */}
       <div className="bg-white p-6 rounded-2xl shadow-lg w-11/12 md:w-3/4 lg:w-3/4">
-        <h2 className="text-2xl font-semibold mb-4 text-gray-700">
-          Registro
-        </h2>
+        <h2 className="text-2xl font-semibold mb-4 text-gray-700">Registro</h2>
 
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           {/* Grid de 2 columnas */}
@@ -146,16 +145,25 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
           <div className="flex justify-center gap-2 mt-4">
             <button
               type="submit"
-              className="bg-[#262D73] text-white font-semibold px-4 py-2 rounded-lg 
-                         shadow-md transition duration-200"
+              disabled={loading}
+              className={`bg-[#262D73] text-white py-2 px-4 font-semibold rounded-lg ${
+                loading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#1F265F]"
+              }`}
             >
-              Guardar
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <LoadingIndicator />
+                  Guardando...
+                </div>
+              ) : (
+                "Guardar"
+              )}
             </button>
             <button
               type="button"
               onClick={onClose}
               className="bg-red-500 text-white font-semibold px-4 py-2 rounded-lg 
-                         shadow-md transition duration-200"
+                         shadow-md transition duration-200 hover:bg-red-600"
             >
               Cancelar
             </button>

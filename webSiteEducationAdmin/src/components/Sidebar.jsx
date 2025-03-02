@@ -85,15 +85,15 @@ const Sidebar = () => {
               href="#"
               className="block px-3 py-2 rounded hover:bg-[#E4BCD3] hover:text-[#545454] transition-colors"
             >
-              Buy Cars
+              Noticias
             </a>
           </li>
           <li>
             <a
-              href="#"
+              href="/documentos"
               className="block px-3 py-2 rounded hover:bg-[#E4BCD3] hover:text-[#545454] transition-colors"
             >
-              Messages
+              Documentos
             </a>
           </li>
           <li>

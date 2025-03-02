@@ -4,10 +4,11 @@ import Layout from "../../components/Layout";
 import Button from "../../components/Button";
 import RegistroModal from "./RegistroModal";
 import ConfirmModal from "../../components/ConfirmModal";
-import DescripcionModal from "./DescripcionModal";
+import DescripcionModal from "../../components/DescripcionModal";
 import ImagenModal from "./ImagenModal";
 import RegistrosTable from "./RegistrosTable";
-const Rsu = () => {
+import LoadingIndicator from "../../components/LoadingIndicator";
+const Pasantias = () => {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingRecord, setEditingRecord] = useState(null);
@@ -17,7 +18,7 @@ const Rsu = () => {
   const [imagenActual, setImagenActual] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   // Estados para paginación
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -25,19 +26,18 @@ const Rsu = () => {
   const activeSection = "rsu";
 
   const fetchData = async () => {
+    setLoading(true); // Activar el indicador de carga
     try {
       const response = await axios.get(
         "http://localhost:8000/api/desarrolloProfesional"
       );
-      const filtered = response.data.filter(
-        (item) => item.Tipo === activeSection
-      );
+      const filtered = response.data.filter((item) => item.Tipo === activeSection);
       setData(filtered);
     } catch (error) {
       console.error("Error al obtener los registros", error);
     }
+    setLoading(false); // Desactivar el indicador de carga
   };
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -102,6 +102,10 @@ const Rsu = () => {
           />
         </div>
 
+        {/* Indicador de carga */}
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
         <RegistrosTable
           data={currentItems}
           openDescripcionModal={openDescripcionModal}
@@ -109,7 +113,7 @@ const Rsu = () => {
           openEditModal={openEditModal}
           handleDelete={handleDelete}
         />
-
+      )}
         {/* Controles de paginación */}
         <div className="flex justify-center space-x-2 mt-4">
           {Array.from({ length: totalPages }, (_, index) => (
@@ -163,6 +167,6 @@ const Rsu = () => {
       </div>
     </Layout>
   );
-}
+};
 
-export default Rsu
+export default Pasantias;

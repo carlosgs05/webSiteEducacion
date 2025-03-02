@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarruselHomeController;
 use App\Http\Controllers\DesarrolloController;
+use App\Http\Controllers\DocumentoController;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -17,3 +18,9 @@ Route::post('/storeDesarrolloProfesional', [DesarrolloController::class, 'store'
 Route::get('/showDesarrolloProfesional/{id}', [DesarrolloController::class, 'show']);
 Route::put('/updateDesarrolloProfesional/{id}', [DesarrolloController::class, 'update']);
 Route::delete('/destroyDesarrolloProfesional/{id}', [DesarrolloController::class, 'destroy']);
+
+Route::get('/documentos', [DocumentoController::class, 'index']);
+Route::post('/storeDocumento', [DocumentoController::class, 'store']);
+Route::get('/showDocumento/{id}', [DocumentoController::class, 'show']);
+Route::put('/updateDocumento/{id}', [DocumentoController::class, 'update']);
+Route::delete('/destroyDocumento/{id}', [DocumentoController::class, 'destroy']);

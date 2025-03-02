@@ -4,6 +4,7 @@ import Index from './page/Index'
 import Pasantias from './page/DesarrolloProfesional/Pasantias'
 import Rsu from './page/DesarrolloProfesional/Rsu'
 import BolsaDeTrabajo from './page/DesarrolloProfesional/BolsaTrabajo'
+import Documentos from './page/Documentos/Documentos'
 function App() {
   return (
     <BrowserRouter>
@@ -13,6 +14,7 @@ function App() {
         <Route path='/desarrolloProfesional/pasantias' element={<Pasantias />} />
         <Route path='/desarrolloProfesional/rsu' element={<Rsu />} />
        <Route path='/desarrolloProfesional/bolsaDeTrabajo' element= {<BolsaDeTrabajo/>}/>
+        <Route path='/documentos' element= {<Documentos/>}/>
       </Routes>
     </BrowserRouter>
   )
