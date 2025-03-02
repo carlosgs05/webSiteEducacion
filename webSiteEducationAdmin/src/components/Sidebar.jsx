@@ -82,7 +82,7 @@ const Sidebar = () => {
           </li>
           <li>
             <a
-              href="#"
+              href="/noticias"
               className="block px-3 py-2 rounded hover:bg-[#E4BCD3] hover:text-[#545454] transition-colors"
             >
               Noticias

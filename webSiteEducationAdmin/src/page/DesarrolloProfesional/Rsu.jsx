@@ -5,7 +5,7 @@ import Button from "../../components/Button";
 import RegistroModal from "./RegistroModal";
 import ConfirmModal from "../../components/ConfirmModal";
 import DescripcionModal from "../../components/DescripcionModal";
-import ImagenModal from "./ImagenModal";
+import ImagenModal from "../../components/ImagenModal";
 import RegistrosTable from "./RegistrosTable";
 import LoadingIndicator from "../../components/LoadingIndicator";
 const Pasantias = () => {

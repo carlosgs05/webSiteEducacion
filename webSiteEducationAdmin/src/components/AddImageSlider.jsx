@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-
+import propTypes from 'prop-types';
 const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
   // Inicializamos el state con las imágenes iniciales (las que vienen del backend)
   // Se asume que estas imágenes ya se encuentran en public/imagenes.
@@ -152,6 +152,11 @@ const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
       </div>
     </div>
   );
+};
+
+AddImageSlider.propTypes = {
+  initialImages: propTypes.array,
+  onImagesChange: propTypes.func,
 };
 
 export default AddImageSlider;

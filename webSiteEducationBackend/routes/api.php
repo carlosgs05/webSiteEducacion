@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarruselHomeController;
 use App\Http\Controllers\DesarrolloController;
 use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\NoticiaController;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -24,3 +25,9 @@ Route::post('/storeDocumento', [DocumentoController::class, 'store']);
 Route::get('/showDocumento/{id}', [DocumentoController::class, 'show']);
 Route::put('/updateDocumento/{id}', [DocumentoController::class, 'update']);
 Route::delete('/destroyDocumento/{id}', [DocumentoController::class, 'destroy']);
+
+Route::get('/noticias', [NoticiaController::class, 'index']);
+Route::post('/storeNoticia', [NoticiaController::class, 'store']);
+Route::get('/showNoticia/{id}', [NoticiaController::class, 'show']);
+Route::put('/updateNoticia/{id}', [NoticiaController::class, 'update']);
+Route::delete('/destroyNoticia/{id}', [NoticiaController::class, 'destroy']);
