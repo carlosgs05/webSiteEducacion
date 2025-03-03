@@ -6,6 +6,8 @@ use App\Http\Controllers\CarruselHomeController;
 use App\Http\Controllers\DesarrolloController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\PersonaController;
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -13,6 +15,12 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/imagenesHomeCarrusel', [CarruselHomeController::class, 'getImagenes']);
 Route::post('/storeImagenesCarrusel', [CarruselHomeController::class, 'storeImagenes']);
+
+Route::get('/organizacion', [PersonaController::class, 'index']);
+Route::post('/storeOrganizacion', [PersonaController::class, 'store']);
+Route::put('/updateOrganizacion/{id}', [PersonaController::class, 'update']);
+Route::delete('/destroyOrganizacion/{id}', [PersonaController::class, 'destroy']);
+
 
 Route::get('/desarrolloProfesional', [DesarrolloController::class, 'index']);
 Route::post('/storeDesarrolloProfesional', [DesarrolloController::class, 'store']);

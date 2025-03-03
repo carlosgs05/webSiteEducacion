@@ -6,12 +6,19 @@ import Rsu from './page/DesarrolloProfesional/Rsu'
 import BolsaDeTrabajo from './page/DesarrolloProfesional/BolsaTrabajo'
 import Documentos from './page/Documentos/Documentos'
 import Noticias from './page/Noticias/Noticias'
+import Autoridades from './page/Organizacion/Autoridades'
+import PersonalDocente from './page/Organizacion/PersonalDocente'
+import PersonalAdministrativo from './page/Organizacion/PersonalAdministrativo'
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Index />} />
         <Route path='/homeCarrusel' element={<Home />} />
+        <Route path='/organizacion/autoridades' element={<Autoridades />} />
+        <Route path='/organizacion/personalDocente' element={<PersonalDocente />} />
+        <Route path='/organizacion/personalAdministrativo' element={<PersonalAdministrativo />} />
         <Route path='/desarrolloProfesional/pasantias' element={<Pasantias />} />
         <Route path='/desarrolloProfesional/rsu' element={<Rsu />} />
        <Route path='/desarrolloProfesional/bolsaDeTrabajo' element= {<BolsaDeTrabajo/>}/>
