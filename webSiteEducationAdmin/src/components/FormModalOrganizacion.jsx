@@ -290,7 +290,7 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
           </button>
 
           <h2 className="text-xl text-center font-semibold mb-5 text-gray-700 uppercase">
-            Registro {tipo}
+            {editingRecord ? `Edición ${tipo}` : `Registro ${tipo}`}
           </h2>
 
           <form onSubmit={handleSubmit} encType="multipart/form-data" className="text-sm">
@@ -342,7 +342,7 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
               <div className="flex flex-col justify-start">
                 <label className="block mb-1 text-gray-600 font-semibold">Foto</label>
                 <div
-                  className="relative w-full h-[270px] border-2 border-dashed border-gray-300 rounded-md overflow-hidden"
+                  className="relative w-full h-[270px] border-2 border-dashed border-gray-300 rounded-md overflow-hidden hover:bg-gray-50"
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
                 >
@@ -449,11 +449,10 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
                     <button
                       onClick={handlePrevPage}
                       disabled={currentPage === 1}
-                      className={`px-3 py-2 text-sm ${
-                        currentPage === 1
-                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                          : "bg-white text-gray-700 hover:bg-gray-100"
-                      } cursor-pointer`}
+                      className={`px-3 py-2 text-sm ${currentPage === 1
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "bg-white text-gray-700 hover:bg-gray-100"
+                        } cursor-pointer`}
                     >
                       &lt;
                     </button>
@@ -464,11 +463,10 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
                         <button
                           key={pageNum}
                           onClick={() => handlePageClick(pageNum)}
-                          className={`px-3 py-2 text-sm font-semibold ${
-                            isActive
-                              ? "bg-blue-500 text-white"
-                              : "bg-white text-gray-700 hover:bg-gray-100"
-                          } cursor-pointer`}
+                          className={`px-3 py-2 text-sm font-semibold ${isActive
+                            ? "bg-blue-500 text-white"
+                            : "bg-white text-gray-700 hover:bg-gray-100"
+                            } cursor-pointer`}
                         >
                           {pageNum}
                         </button>
@@ -477,11 +475,10 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
                     <button
                       onClick={handleNextPage}
                       disabled={currentPage === totalPages}
-                      className={`px-3 py-2 text-sm ${
-                        currentPage === totalPages
-                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                          : "bg-white text-gray-700 hover:bg-gray-100"
-                      } cursor-pointer`}
+                      className={`px-3 py-2 text-sm ${currentPage === totalPages
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "bg-white text-gray-700 hover:bg-gray-100"
+                        } cursor-pointer`}
                     >
                       &gt;
                     </button>
@@ -495,9 +492,8 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`bg-[#262D73] text-white py-2 px-5 font-semibold rounded transition duration-200 text-base ${
-                  loading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#1F265F]"
-                } cursor-pointer`}
+                className={`bg-[#262D73] text-white py-2 px-5 font-semibold rounded transition duration-200 text-base ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#1F265F]"
+                  } cursor-pointer`}
               >
                 {loading ? "Guardando..." : "Guardar"}
               </button>

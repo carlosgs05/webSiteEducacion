@@ -41,27 +41,26 @@ const Sidebar = () => {
           </div>
         </div>
 
-        {/* Enlace o título de Inicio */}
-        <a href="/" className="block mb-5">
-          <h2
-            className={`text-xl font-bold transition-colors ${
-              isActive("/") ? "bg-[#E4BCD3] text-[#545454]" : "hover:text-[#E4BCD3]"
-            }`}
-          >
-            INICIO
-          </h2>
-        </a>
-
         {/* Menú de navegación */}
         <ul className="space-y-2">
           <li>
             <a
+              href="/"
+              className={`block px-3 py-2 rounded transition-colors ${isActive("/")
+                ? "bg-[#E4BCD3] text-[#545454]"
+                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                }`}
+            >
+              INICIO
+            </a>
+          </li>
+          <li>
+            <a
               href="/homeCarrusel"
-              className={`block px-3 py-2 rounded transition-colors ${
-                isActive("/homeCarrusel")
-                  ? "bg-[#E4BCD3] text-[#545454]"
-                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-              }`}
+              className={`block px-3 py-2 rounded transition-colors ${isActive("/homeCarrusel")
+                ? "bg-[#E4BCD3] text-[#545454]"
+                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                }`}
             >
               Home Carrusel
             </a>
@@ -73,17 +72,15 @@ const Sidebar = () => {
                 e.preventDefault();
                 setOpenOrganizacion(!openOrganizacion);
               }}
-              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors ${
-                isActiveDropdown(organizacionPaths)
-                  ? "bg-[#E4BCD3] text-[#545454]"
-                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-              }`}
+              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors ${isActiveDropdown(organizacionPaths)
+                ? "bg-[#E4BCD3] text-[#545454]"
+                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                }`}
             >
               Organización
               <span
-                className={`transform transition-transform duration-300 ${
-                  openOrganizacion ? "rotate-180" : "rotate-0"
-                }`}
+                className={`transform transition-transform duration-300 ${openOrganizacion ? "rotate-180" : "rotate-0"
+                  }`}
               >
                 v
               </span>
@@ -91,18 +88,16 @@ const Sidebar = () => {
 
             {/* Menú desplegable para Organización */}
             <ul
-              className={`overflow-hidden transition-all duration-300 ${
-                openOrganizacion ? "max-h-40" : "max-h-0"
-              }`}
+              className={`overflow-hidden transition-all duration-300 ${openOrganizacion ? "max-h-40" : "max-h-0"
+                }`}
             >
               <li>
                 <a
                   href="/organizacion/autoridades"
-                  className={`block px-4 py-2 transition-colors ${
-                    isActive("/organizacion/autoridades")
-                      ? "bg-[#E4BCD3] text-[#545454]"
-                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                  }`}
+                  className={`block px-4 py-2 transition-colors ${isActive("/organizacion/autoridades")
+                    ? "bg-[#E4BCD3] text-[#545454]"
+                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                    }`}
                 >
                   Autoridades
                 </a>
@@ -110,25 +105,23 @@ const Sidebar = () => {
               <li>
                 <a
                   href="/organizacion/personalDocente"
-                  className={`block px-4 py-2 transition-colors ${
-                    isActive("/organizacion/personalDocente")
-                      ? "bg-[#E4BCD3] text-[#545454]"
-                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                  }`}
+                  className={`block px-4 py-2 transition-colors ${isActive("/organizacion/personalDocente")
+                    ? "bg-[#E4BCD3] text-[#545454]"
+                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                    }`}
                 >
-                Personal Docente
+                  Personal Docente
                 </a>
               </li>
               <li>
                 <a
                   href="/organizacion/personalAdministrativo"
-                  className={`block px-4 py-2 transition-colors ${
-                    isActive("/organizacion/personalAdministrativo")
-                      ? "bg-[#E4BCD3] text-[#545454]"
-                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                  }`}
+                  className={`block px-4 py-2 transition-colors ${isActive("/organizacion/personalAdministrativo")
+                    ? "bg-[#E4BCD3] text-[#545454]"
+                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                    }`}
                 >
-                Personal Administrativo
+                  Personal Administrativo
                 </a>
               </li>
             </ul>
@@ -140,17 +133,15 @@ const Sidebar = () => {
                 e.preventDefault();
                 setOpenDesarrollo(!openDesarrollo);
               }}
-              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors ${
-                isActiveDropdown(desarrolloPaths)
-                  ? "bg-[#E4BCD3] text-[#545454]"
-                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-              }`}
+              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors ${isActiveDropdown(desarrolloPaths)
+                ? "bg-[#E4BCD3] text-[#545454]"
+                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                }`}
             >
               Desarrollo Profesional
               <span
-                className={`transform transition-transform duration-300 ${
-                  openDesarrollo ? "rotate-180" : "rotate-0"
-                }`}
+                className={`transform transition-transform duration-300 ${openDesarrollo ? "rotate-180" : "rotate-0"
+                  }`}
               >
                 v
               </span>
@@ -158,18 +149,16 @@ const Sidebar = () => {
 
             {/* Menú desplegable para Desarrollo Profesional */}
             <ul
-              className={`overflow-hidden transition-all duration-300 ${
-                openDesarrollo ? "max-h-40" : "max-h-0"
-              }`}
+              className={`overflow-hidden transition-all duration-300 ${openDesarrollo ? "max-h-40" : "max-h-0"
+                }`}
             >
               <li>
                 <a
                   href="/desarrolloProfesional/pasantias"
-                  className={`block px-4 py-2 transition-colors ${
-                    isActive("/desarrolloProfesional/pasantias")
-                      ? "bg-[#E4BCD3] text-[#545454]"
-                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                  }`}
+                  className={`block px-4 py-2 transition-colors ${isActive("/desarrolloProfesional/pasantias")
+                    ? "bg-[#E4BCD3] text-[#545454]"
+                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                    }`}
                 >
                   Pasantias
                 </a>
@@ -177,11 +166,10 @@ const Sidebar = () => {
               <li>
                 <a
                   href="/desarrolloProfesional/rsu"
-                  className={`block px-4 py-2 transition-colors ${
-                    isActive("/desarrolloProfesional/rsu")
-                      ? "bg-[#E4BCD3] text-[#545454]"
-                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                  }`}
+                  className={`block px-4 py-2 transition-colors ${isActive("/desarrolloProfesional/rsu")
+                    ? "bg-[#E4BCD3] text-[#545454]"
+                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                    }`}
                 >
                   Rsu
                 </a>
@@ -189,11 +177,10 @@ const Sidebar = () => {
               <li>
                 <a
                   href="/desarrolloProfesional/bolsaDeTrabajo"
-                  className={`block px-4 py-2 transition-colors ${
-                    isActive("/desarrolloProfesional/bolsaDeTrabajo")
-                      ? "bg-[#E4BCD3] text-[#545454]"
-                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                  }`}
+                  className={`block px-4 py-2 transition-colors ${isActive("/desarrolloProfesional/bolsaDeTrabajo")
+                    ? "bg-[#E4BCD3] text-[#545454]"
+                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                    }`}
                 >
                   Bolsa de trabajo
                 </a>
@@ -202,12 +189,22 @@ const Sidebar = () => {
           </li>
           <li>
             <a
+              href="/mallaCurricular"
+              className={`block px-3 py-2 rounded transition-colors ${isActive("/mallaCurricular")
+                ? "bg-[#E4BCD3] text-[#545454]"
+                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                }`}
+            >
+              Malla Curricular
+            </a>
+          </li>
+          <li>
+            <a
               href="/noticias"
-              className={`block px-3 py-2 rounded transition-colors ${
-                isActive("/noticias")
-                  ? "bg-[#E4BCD3] text-[#545454]"
-                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-              }`}
+              className={`block px-3 py-2 rounded transition-colors ${isActive("/noticias")
+                ? "bg-[#E4BCD3] text-[#545454]"
+                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                }`}
             >
               Noticias
             </a>
@@ -215,11 +212,10 @@ const Sidebar = () => {
           <li>
             <a
               href="/documentos"
-              className={`block px-3 py-2 rounded transition-colors ${
-                isActive("/documentos")
-                  ? "bg-[#E4BCD3] text-[#545454]"
-                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-              }`}
+              className={`block px-3 py-2 rounded transition-colors ${isActive("/documentos")
+                ? "bg-[#E4BCD3] text-[#545454]"
+                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                }`}
             >
               Documentos
             </a>

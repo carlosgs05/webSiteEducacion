@@ -9,6 +9,7 @@ import Noticias from './page/Noticias/Noticias'
 import Autoridades from './page/Organizacion/Autoridades'
 import PersonalDocente from './page/Organizacion/PersonalDocente'
 import PersonalAdministrativo from './page/Organizacion/PersonalAdministrativo'
+import MallaCurricular from './page/InformacionAcademica/MallaCurricular'
 
 function App() {
   return (
@@ -21,9 +22,10 @@ function App() {
         <Route path='/organizacion/personalAdministrativo' element={<PersonalAdministrativo />} />
         <Route path='/desarrolloProfesional/pasantias' element={<Pasantias />} />
         <Route path='/desarrolloProfesional/rsu' element={<Rsu />} />
-       <Route path='/desarrolloProfesional/bolsaDeTrabajo' element= {<BolsaDeTrabajo/>}/>
-        <Route path='/documentos' element= {<Documentos/>}/>
-        <Route path='/noticias' element= {<Noticias/>}/>
+        <Route path='/desarrolloProfesional/bolsaDeTrabajo' element={<BolsaDeTrabajo />} />
+        <Route path='/mallaCurricular' element={<MallaCurricular />} />
+        <Route path='/noticias' element={<Noticias />} />
+        <Route path='/documentos' element={<Documentos />} />
       </Routes>
     </BrowserRouter>
   )

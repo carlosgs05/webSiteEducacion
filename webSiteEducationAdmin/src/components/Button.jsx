@@ -10,7 +10,7 @@ const Button = ({ name, link, onClick, isActive, target, bgColor }) => {
           onClick(); // Llama a la función si existe
         }
       }}
-      className={`w-40 h-14 flex items-center justify-center text-center px-4 py-2 text-white font-semibold rounded transition-all ${isActive ? "bg-[#545454] pointer-events-none" : `${bgColor} hover:bg-[#545454]`
+      className={`text-center p-2.5 text-white font-semibold rounded transition-all ${isActive ? "bg-[#545454] pointer-events-none" : `${bgColor} hover:bg-[#545454]`
         }`}
     >
       {name}

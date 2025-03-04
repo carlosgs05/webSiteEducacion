@@ -1,100 +1,102 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Layout from "../../components/Layout";
 import AddImageSlider from "../../components/AddImageSlider";
 import Button from "../../components/Button";
-import swal from 'sweetalert';
+import swal from "sweetalert";
+import LoadingIndicator from "../../components/LoadingIndicator";
 
 const Home = () => {
-    const [dbImages, setDbImages] = useState([]);
-    const [imagesState, setImagesState] = useState([]); // arreglo de objetos { preview, name, file }
+  const [dbImages, setDbImages] = useState([]);
+  const [imagesState, setImagesState] = useState([]); // { preview, name, file }
+  const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        // Reemplaza la URL con la de tu API
-        fetch('http://localhost:8000/api/imagenesHomeCarrusel')
-            .then(response => response.json())
-            .then(data => {
-                // Suponiendo que data es un arreglo de objetos con el atributo "imagen"
-                const images = data.map(item => item.imagen);
-                setDbImages(images);
-            })
-            .catch(error => {
-                console.error('Error al recuperar las imágenes:', error);
-            });
-    }, []);
+  const fetchImages = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get("http://localhost:8000/api/imagenesHomeCarrusel");
+      // Suponiendo que response.data es un arreglo de objetos con el atributo "imagen"
+      const images = response.data.map((item) => item.imagen);
+      setDbImages(images);
+    } catch (error) {
+      console.error("Error al recuperar las imágenes:", error);
+    }
+    setLoading(false);
+  };
 
-    // Recibe el array completo de objetos { preview, name, file } del hijo
-    const handleImagesChange = (imagesArray) => {
-        setImagesState(imagesArray);
-    };
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
-    const handleGuardar = () => {
-        // Validar que haya mínimo 2 imágenes
-        if (imagesState.length < 2) {
-            swal("Error", "Debe haber mínimo 2 imágenes", "error");
-            return;
-        }
+  // Recibe el array completo de objetos { preview, name, file } del hijo
+  const handleImagesChange = (imagesArray) => {
+    setImagesState(imagesArray);
+  };
 
-        // Creamos un FormData para enviar tanto los archivos nuevos como los nombres de imágenes existentes
-        const formData = new FormData();
-        const existingImages = [];
+  const handleGuardar = async () => {
+    // Validar que haya mínimo 2 imágenes
+    if (imagesState.length < 2) {
+      swal("Error", "Debe haber mínimo 2 imágenes", "error");
+      return;
+    }
 
-        imagesState.forEach(img => {
-            if (img.file) {
-                // Si la imagen tiene el objeto File, es una imagen nueva
-                formData.append('newImages[]', img.file);
-            } else {
-                // Si no tiene file, se asume que es una imagen ya existente y se envía su nombre
-                existingImages.push(img.name);
-            }
-        });
-        formData.append('existingImages', JSON.stringify(existingImages));
+    const formData = new FormData();
+    const existingImages = [];
 
-        fetch('http://localhost:8000/api/storeImagenesCarrusel', {
-            method: 'POST',
-            body: formData
-            // Al usar FormData, no es necesario definir el header 'Content-Type'
-        })
-            .then(response => response.json())
-            .then(data => {
-                swal("Éxito", data.message, "success")
-                    .then(() => {
-                        window.location.reload();
-                    });
-            })
-            .catch(error => {
-                console.error('Error al guardar las imágenes:', error);
-                swal("Error", "Hubo un error al guardar las imágenes", "error");
-            });
-    };
+    imagesState.forEach((img) => {
+      if (img.file) {
+        // Imagen nueva
+        formData.append("newImages[]", img.file);
+      } else {
+        // Imagen ya existente
+        existingImages.push(img.name);
+      }
+    });
+    formData.append("existingImages", JSON.stringify(existingImages));
 
-    return (
-        <Layout>
-            <div className="flex flex-col gap-y-4">
-                <h1 className="text-2xl text-center font-medium">IMÁGENES DEL CARRUSEL</h1>
-                <h3 className='text-lg'>Agregar las imágenes que se mostrarán en la página principal</h3>
-            </div>
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/storeImagenesCarrusel",
+        formData
+      );
+      swal("Éxito", response.data.message, "success").then(() => {
+        window.location.reload();
+      });
+    } catch (error) {
+      console.error("Error al guardar las imágenes:", error);
+      swal("Error", "Hubo un error al guardar las imágenes", "error");
+    }
+  };
 
+  return (
+    <Layout>
+      <div className="p-4">
+        <div className="flex flex-col gap-y-4">
+          <h1 className="text-xl text-center font-medium">IMÁGENES DEL CARRUSEL</h1>
+          <h3 className="text-base">
+            Agregar las imágenes que se mostrarán en la página principal
+          </h3>
+        </div>
+
+        {loading ? (
+          <LoadingIndicator />
+        ) : (
+          <div>
             <div className="py-8">
-                <AddImageSlider
-                    initialImages={dbImages}
-                    onImagesChange={handleImagesChange}
-                />
+              <AddImageSlider
+                initialImages={dbImages}
+                onImagesChange={handleImagesChange}
+              />
             </div>
-
             <div className="flex justify-center gap-x-10">
-                <Button
-                    name="Guardar"
-                    bgColor="bg-[#262D73]"
-                    onClick={handleGuardar}
-                />
-                <Button
-                    name="Cancelar"
-                    bgColor="bg-red-500"
-                    link="/"
-                />
+              <Button name="Guardar" bgColor="bg-[#262D73]" onClick={handleGuardar} />
+              <Button name="Cancelar" bgColor="bg-red-500" link="/" />
             </div>
-        </Layout>
-    );
+          </div>
+        )}
+      </div>
+    </Layout>
+  );
 };
 
 export default Home;
