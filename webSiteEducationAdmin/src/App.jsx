@@ -6,6 +6,7 @@ import Rsu from './page/DesarrolloProfesional/Rsu'
 import BolsaDeTrabajo from './page/DesarrolloProfesional/BolsaTrabajo'
 import Documentos from './page/Documentos/Documentos'
 import Noticias from './page/Noticias/Noticias'
+import NoticiasRegistro from './page/Noticias/RegistroModal'
 function App() {
   return (
     <BrowserRouter>
@@ -17,6 +18,7 @@ function App() {
        <Route path='/desarrolloProfesional/bolsaDeTrabajo' element= {<BolsaDeTrabajo/>}/>
         <Route path='/documentos' element= {<Documentos/>}/>
         <Route path='/noticias' element= {<Noticias/>}/>
+        <Route path='/noticias/registro' element= {<NoticiasRegistro/>}/>
       </Routes>
     </BrowserRouter>
   )

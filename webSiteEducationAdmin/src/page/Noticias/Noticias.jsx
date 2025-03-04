@@ -42,18 +42,6 @@ const Noticias = () => {
     fetchData();
   }, []);
 
-  // Abrir modal para crear nueva noticia
-  const openNewModal = () => {
-    setEditingRecord(null);
-    setShowModal(true);
-  };
-
-  // Abrir modal para editar noticia
-  const openEditModal = (record) => {
-    setEditingRecord(record);
-    setShowModal(true);
-  };
-
   // Manejo de eliminación
   const handleDelete = (id) => {
     setIdToDelete(id);
@@ -90,8 +78,8 @@ const Noticias = () => {
         <div className="mb-4">
           <Button
             name="Nueva Noticia"
-            onClick={openNewModal}
-            bgColor="bg-blue-500"
+            link='/noticias/registro'
+            bgColor="bg-[#545454]"
           />
         </div>
 
@@ -175,7 +163,7 @@ const Noticias = () => {
                     <td className="py-3 text-center align-middle">
                       <div className="flex gap-2 justify-center items-center">
                         <button
-                          onClick={() => openEditModal(item)}
+                          
                           className="bg-[#262D73] hover:bg-[#36395d] text-white px-3 py-2 rounded transition-colors"
                           title="Editar"
                         >
