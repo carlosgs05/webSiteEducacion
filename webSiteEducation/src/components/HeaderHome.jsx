@@ -15,7 +15,7 @@ const HeaderHome = () => {
       .then(response => response.json())
       .then(data => {
         // Se asume que "data" es un arreglo de objetos y que cada objeto tiene el atributo "imagen"
-        const headerImages = data.map(item => item.imagen);
+        const headerImages = data.map(item => item.Imagen);
         setImages(headerImages);
       })
       .catch(error => {

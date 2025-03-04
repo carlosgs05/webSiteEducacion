@@ -16,7 +16,7 @@ const Home = () => {
     try {
       const response = await axios.get("http://localhost:8000/api/imagenesHomeCarrusel");
       // Suponiendo que response.data es un arreglo de objetos con el atributo "imagen"
-      const images = response.data.map((item) => item.imagen);
+      const images = response.data.map((item) => item.Imagen);
       setDbImages(images);
     } catch (error) {
       console.error("Error al recuperar las imágenes:", error);
