@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
-import propTypes from 'prop-types';
+import { useState, useRef, useEffect } from "react";
+import PropTypes from "prop-types";
+
 const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
   // Inicializamos el state con las imágenes iniciales (las que vienen del backend)
   // Se asume que estas imágenes ya se encuentran en public/imagenes.
   const [images, setImages] = useState(
-    initialImages.map(img => ({
+    initialImages.map((img) => ({
       preview: `http://127.0.0.1:8000/imagenes/${img}`,
       name: img,
       file: null,
@@ -16,7 +17,7 @@ const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
   // Sincroniza el state cuando cambie initialImages
   useEffect(() => {
     setImages(
-      initialImages.map(img => ({
+      initialImages.map((img) => ({
         preview: `http://127.0.0.1:8000/imagenes/${img}`,
         name: img,
         file: null,
@@ -25,14 +26,13 @@ const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
   }, [initialImages]);
 
   // Notifica al componente padre cada vez que se actualiza el state.
-  // Se envía el array completo de objetos { preview, name, file }
   useEffect(() => {
     if (onImagesChange) {
       onImagesChange(images);
     }
   }, [images, onImagesChange]);
 
-  // Abre el input file al hacer click en el botón
+  // Abre el input file para agregar una nueva imagen
   const handleButtonClick = () => {
     if (images.length < MAX_IMAGES) {
       fileInputRef.current.click();
@@ -42,45 +42,61 @@ const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
   // Al seleccionar un archivo desde el input, se crea un preview y se guarda el objeto file
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
+    if (file && file.type.startsWith("image/")) {
       const newImage = {
         preview: URL.createObjectURL(file),
         name: file.name,
         file: file,
       };
-      setImages(prev => [...prev, newImage]);
+      setImages((prev) => [...prev, newImage]);
     }
+    e.target.value = "";
   };
 
-  // Maneja el evento de drop para arrastrar y soltar archivos
-  const handleDrop = (e) => {
+  // Función para agregar imagen mediante drop en el botón "Agregar imagen"
+  const handleAddDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-    if (file) {
+    if (file && file.type.startsWith("image/") && images.length < MAX_IMAGES) {
       const newImage = {
         preview: URL.createObjectURL(file),
         name: file.name,
         file: file,
       };
-      setImages(prev => [...prev, newImage]);
+      setImages((prev) => [...prev, newImage]);
     }
   };
 
-  // Evita el comportamiento por defecto cuando se arrastra sobre el área
+  // Función para reemplazar imagen en un div existente mediante drop
+  const handleReplaceImage = (index, e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const updatedImage = {
+        preview: URL.createObjectURL(file),
+        name: file.name,
+        file: file,
+      };
+      setImages((prev) =>
+        prev.map((img, i) => (i === index ? updatedImage : img))
+      );
+    }
+  };
+
   const handleDragOver = (e) => {
     e.preventDefault();
   };
 
   const handleRemoveImage = (index) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
+    setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
     <div>
-      {/* Input file oculto */}
+      {/* Input file oculto con accept para imágenes */}
       <input
         type="file"
-        accept=".png, .jpg, .jpeg"
+        accept="image/png, image/jpeg, image/jpg"
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"
@@ -91,6 +107,8 @@ const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
           <div
             key={index}
             className="relative w-full max-w-md aspect-video bg-gray-100 rounded-lg shadow-md overflow-hidden"
+            onDrop={(e) => handleReplaceImage(index, e)}
+            onDragOver={handleDragOver}
           >
             <img
               src={image.preview}
@@ -125,7 +143,7 @@ const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
         <button
           className="w-full max-w-md aspect-video border-2 border-dashed border-gray-300 flex flex-col items-center justify-center rounded-lg text-gray-500 hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           onClick={handleButtonClick}
-          onDrop={handleDrop}
+          onDrop={handleAddDrop}
           onDragOver={handleDragOver}
           disabled={images.length >= MAX_IMAGES}
         >
@@ -155,8 +173,8 @@ const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
 };
 
 AddImageSlider.propTypes = {
-  initialImages: propTypes.array,
-  onImagesChange: propTypes.func,
+  initialImages: PropTypes.array,
+  onImagesChange: PropTypes.func,
 };
 
 export default AddImageSlider;
