@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import ModalPortal from "./ModalPortal"; // Ajusta la ruta a tu archivo de portal
+import ModalPortal from "./ModalPortal"; // Ajusta la ruta si es necesario
 import axios from "axios";
 import Select from "react-select";
 
 // Icono (X) para cerrar
 const CloseIcon = () => (
   <svg
-    className="w-5 h-5"
+    className="w-5 h-5 cursor-pointer"
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
@@ -17,7 +17,7 @@ const CloseIcon = () => (
   </svg>
 );
 
-// Estilos para react-select
+// Estilos personalizados para react-select
 const customStyles = {
   menuList: (provided) => ({
     ...provided,
@@ -43,7 +43,7 @@ const customStyles = {
 
 const FormCursosModal = ({ onClose, onAccept }) => {
   const [nombre, setNombre] = useState("");
-  const [cicloSeleccionado, setCicloSeleccionado] = useState(null); 
+  const [cicloSeleccionado, setCicloSeleccionado] = useState(null);
   const [cicloOptions, setCicloOptions] = useState([]);
 
   // Cargar ciclos desde backend al montar
@@ -53,8 +53,8 @@ const FormCursosModal = ({ onClose, onAccept }) => {
         const res = await axios.get("http://localhost:8000/api/ciclos");
         // res.data debe ser un array de objetos { IdCiclo, Ciclo }
         const options = res.data.map((item) => ({
-          value: item.IdCiclo,    // o item.Ciclo, según cómo quieras guardarlo
-          label: item.Ciclo,
+          value: item.IdCiclo, // ID que se enviará al backend
+          label: item.Ciclo,   // Texto que se mostrará en la tabla
         }));
         setCicloOptions(options);
       } catch (error) {
@@ -65,11 +65,16 @@ const FormCursosModal = ({ onClose, onAccept }) => {
   }, []);
 
   const handleAccept = () => {
-    // Retornamos el nombre y el ciclo que el usuario eligió
-    // Podrías usar el label o el value según tu lógica
+    // Validar que se haya ingresado un nombre y un ciclo
+    if (!nombre.trim() || !cicloSeleccionado) {
+      alert("Por favor, complete todos los campos del curso.");
+      return;
+    }
+
+    // Se envía el objeto con nombre y el ciclo (objeto completo { value, label })
     onAccept({
       nombre,
-      ciclo: cicloSeleccionado ? cicloSeleccionado.label : "",
+      ciclo: cicloSeleccionado,
     });
     onClose();
   };
@@ -82,7 +87,7 @@ const FormCursosModal = ({ onClose, onAccept }) => {
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 cursor-pointer"
           >
             <CloseIcon />
           </button>
@@ -94,9 +99,7 @@ const FormCursosModal = ({ onClose, onAccept }) => {
           <div className="space-y-3 text-sm">
             {/* Nombre del curso */}
             <div>
-              <label className="block mb-1 text-gray-600 font-semibold">
-                Nombre del curso
-              </label>
+              <label className="block mb-1 text-gray-600 font-semibold">Nombre del curso</label>
               <input
                 type="text"
                 value={nombre}
@@ -107,12 +110,10 @@ const FormCursosModal = ({ onClose, onAccept }) => {
 
             {/* Ciclo */}
             <div>
-              <label className="block mb-1 text-gray-600 font-semibold">
-                Ciclo
-              </label>
+              <label className="block mb-1 text-gray-600 font-semibold">Ciclo</label>
               <Select
                 value={cicloSeleccionado}
-                onChange={(option) => setCicloSeleccionado(option)}
+                onChange={setCicloSeleccionado}
                 options={cicloOptions}
                 styles={customStyles}
                 placeholder="Seleccione un ciclo"
@@ -124,13 +125,13 @@ const FormCursosModal = ({ onClose, onAccept }) => {
           <div className="flex justify-center gap-4 mt-4">
             <button
               onClick={handleAccept}
-              className="bg-[#262D73] text-white py-2 px-5 font-semibold rounded transition duration-200 text-sm hover:bg-[#1F265F]"
+              className="bg-[#262D73] text-white py-2 px-5 font-semibold rounded transition duration-200 text-sm hover:bg-[#1F265F] cursor-pointer"
             >
               Aceptar
             </button>
             <button
               onClick={onClose}
-              className="bg-red-500 text-white font-semibold px-5 py-2 rounded shadow-md transition duration-200 text-sm hover:bg-red-600"
+              className="bg-red-500 text-white font-semibold px-5 py-2 rounded shadow-md transition duration-200 text-sm hover:bg-red-600 cursor-pointer"
             >
               Cancelar
             </button>

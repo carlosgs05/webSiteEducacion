@@ -1,22 +1,25 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import swal from "sweetalert";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Layout from "../../components/Layout";
 import LoadingIndicator from "../../components/LoadingIndicator";
-import FormCursosModal from "../../components/FormCursosModal"; // Asegúrate de la ruta
+import FormCursosModal from "../../components/FormCursosModal"; // Ajusta la ruta según tu estructura
 
 const MallaCurricular = () => {
-  const [malla, setMalla] = useState(null);
+  const [malla, setMalla] = useState(null); // Objeto o null
+  const [cursos, setCursos] = useState([]); // Todos los cursos
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+
   const [nombreMalla, setNombreMalla] = useState("");
-  const [pdfMalla, setPdfMalla] = useState(null);
-  const [cursos, setCursos] = useState([]);
+  const [pdfMalla, setPdfMalla] = useState(null); // PDF nuevo (si se selecciona)
+  const [pdfRemoved, setPdfRemoved] = useState(false); // Controla si se eliminó el PDF existente
   const [showCursosModal, setShowCursosModal] = useState(false);
 
-  // Paginación para cursos: 4 registros por página
+  // Paginación: 7 registros por página
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const itemsPerPage = 7;
   const totalPages = Math.ceil(cursos.length / itemsPerPage);
   const currentCursos = cursos.slice(
     (currentPage - 1) * itemsPerPage,
@@ -25,96 +28,129 @@ const MallaCurricular = () => {
 
   const pdfInputRef = useRef(null);
 
-  // Función para refrescar la malla desde el backend
+  // Al montar, obtener la malla y cursos del backend
   useEffect(() => {
-    const fetchMalla = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
         const response = await axios.get("http://localhost:8000/api/malla");
-        if (response.data && response.data.idMallaCurricular) {
-          setMalla(response.data);
-          setNombreMalla(response.data.nombreMalla || "");
-          setCursos(response.data.cursos || []);
-        } else {
-          setMalla(null);
+        const { malla: mallaData, cursos: cursosData } = response.data;
+        setMalla(mallaData || null);
+        setCursos(cursosData || []);
+        if (mallaData) {
+          setNombreMalla(mallaData.nombreMalla || "");
         }
       } catch (error) {
         console.error("Error obteniendo la malla:", error);
         setMalla(null);
+        setCursos([]);
       }
       setLoading(false);
     };
-    fetchMalla();
+    fetchData();
   }, []);
 
+  // Cuando se presiona "Registrar Malla" (si no existe malla)
   const handleRegistrar = () => {
     setIsEditing(true);
     setMalla(null);
     setNombreMalla("");
     setPdfMalla(null);
-    setCursos([]);
+    setPdfRemoved(false);
+    setCurrentPage(1);
   };
 
+  // Para editar la malla existente
   const handleEditar = () => {
     setIsEditing(true);
+    // Reiniciamos el flag en caso de que se hubiera eliminado el pdf anteriormente
+    setPdfRemoved(false);
   };
 
-  const handleEliminar = async () => {
+  // Eliminar la malla con confirmación usando SweetAlert
+  const handleEliminar = () => {
     if (!malla) return;
-    try {
-      await axios.delete(
-        `http://localhost:8000/api/malla/${malla.idMallaCurricular}`
-      );
-      setMalla(null);
-      setNombreMalla("");
-      setPdfMalla(null);
-      setCursos([]);
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error eliminando malla:", error);
-    }
+    swal({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará la malla curricular. ¡No podrás revertirla!",
+      icon: "warning",
+      buttons: ["Cancelar", "Sí, eliminar"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axios
+          .delete("http://localhost:8000/api/destroyMalla")
+          .then(() => {
+            swal("Eliminado", "La malla curricular ha sido eliminada.", "success").then(() => {
+              // Recargar la página para mostrar la opción de registrar una nueva malla
+              window.location.reload();
+            });
+          })
+          .catch((error) => {
+            console.error("Error eliminando malla:", error);
+            swal("Error", "Ocurrió un error al eliminar la malla curricular.", "error");
+          });
+      }
+    });
   };
 
+  // Guardar la malla (crear o actualizar)
   const handleGuardar = async () => {
     try {
       const formData = new FormData();
       formData.append("nombreMalla", nombreMalla);
+
+      // Convertir el arreglo de cursos al formato que espera el backend
+      const cursosParaBackend = cursos.map((c) => ({
+        Nombre: c.Nombre,
+        IdCiclo: c.ciclo?.IdCiclo || null,
+      }));
+      formData.append("cursos", JSON.stringify(cursosParaBackend));
+
+      // Si se cargó un PDF nuevo, se agrega; de lo contrario, si se eliminó el pdf existente,
+      // no se envía nada (o se puede enviar un flag adicional si el backend lo requiere)
       if (pdfMalla) {
         formData.append("pdfMalla", pdfMalla);
       }
+
       if (malla) {
+        // Actualizar malla
         await axios.post(
           `http://localhost:8000/api/malla/${malla.idMallaCurricular}?_method=PUT`,
           formData
         );
       } else {
-        await axios.post("http://localhost:8000/api/malla", formData);
+        // Crear nueva malla
+        await axios.post("http://localhost:8000/api/storeMalla", formData);
       }
+
+      // Recargar datos
       const res = await axios.get("http://localhost:8000/api/malla");
-      if (res.data && res.data.idMallaCurricular) {
-        setMalla(res.data);
-        setNombreMalla(res.data.nombreMalla || "");
-        setCursos(res.data.cursos || []);
-        setIsEditing(false);
-      } else {
-        setMalla(null);
-        setIsEditing(false);
+      const { malla: newMalla, cursos: newCursos } = res.data;
+      setMalla(newMalla || null);
+      setCursos(newCursos || []);
+      if (newMalla) {
+        setNombreMalla(newMalla.nombreMalla || "");
       }
+      setIsEditing(false);
+      setPdfRemoved(false);
     } catch (error) {
       console.error("Error guardando la malla:", error);
+      swal("Error", "Ocurrió un error al guardar la malla.", "error");
     }
   };
 
+  // Cancelar edición: se reinician los estados y flag
   const handleCancelar = () => {
     if (malla) {
       setNombreMalla(malla.nombreMalla || "");
       setPdfMalla(null);
-      setCursos(malla.cursos || []);
+      setPdfRemoved(false);
       setIsEditing(false);
     } else {
       setNombreMalla("");
       setPdfMalla(null);
-      setCursos([]);
+      setPdfRemoved(false);
       setIsEditing(false);
     }
   };
@@ -124,28 +160,33 @@ const MallaCurricular = () => {
     setShowCursosModal(true);
   };
 
-  // Función para recibir el curso desde el modal
-  // Convertimos { nombre, ciclo } en { name, cycle } para que coincida con la tabla.
+  // Recibir curso desde el modal y ajustar la estructura para la tabla y backend
   const handleAddCursoModal = (curso) => {
     const nuevoCurso = {
-      name: curso.nombre,
-      cycle: curso.ciclo,
+      IdCurso: `temp-${Date.now()}`,
+      Nombre: curso.nombre,
+      ciclo: {
+        IdCiclo: curso.ciclo.value,
+        Ciclo: curso.ciclo.label,
+      },
     };
-    setCursos([...cursos, nuevoCurso]);
+    setCursos((prev) => [...prev, nuevoCurso]);
     setShowCursosModal(false);
   };
 
-  // PDF: Seleccionar archivo
+  // Manejo del PDF: file input y drag & drop
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type === "application/pdf") {
       setPdfMalla(file);
+      setPdfRemoved(false);
     }
     e.target.value = "";
   };
 
   const handleRemovePdf = () => {
     setPdfMalla(null);
+    setPdfRemoved(true);
   };
 
   const handleDragOver = (e) => {
@@ -161,6 +202,7 @@ const MallaCurricular = () => {
     const file = e.dataTransfer.files[0];
     if (file && file.type === "application/pdf") {
       setPdfMalla(file);
+      setPdfRemoved(false);
     }
   };
 
@@ -183,6 +225,7 @@ const MallaCurricular = () => {
     );
   }
 
+  // Si no hay malla y no estamos editando, mostrar opción para registrar
   if (!malla && !isEditing) {
     return (
       <Layout>
@@ -192,7 +235,7 @@ const MallaCurricular = () => {
             className="h-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md overflow-hidden gap-10 cursor-pointer"
             onClick={handleRegistrar}
           >
-            <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors">
+            <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors p-6">
               <span className="text-6xl font-light">+</span>
               <p className="text-lg text-center">Registrar Malla Curricular</p>
             </div>
@@ -202,11 +245,13 @@ const MallaCurricular = () => {
     );
   }
 
+  // Vista de registro/edición
   return (
     <Layout>
       <div className="p-4">
         <h1 className="text-xl font-medium text-center">MALLA CURRICULAR</h1>
 
+        {/* Mostrar datos y botones si existe malla y no se está editando */}
         {malla && !isEditing && (
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mt-6">
             <div className="text-gray-600">
@@ -231,11 +276,9 @@ const MallaCurricular = () => {
         )}
 
         <div className="space-y-4 mt-6">
-          {/* Nombre Malla */}
+          {/* Campo Nombre Malla */}
           <div>
-            <label className="block mb-1 font-semibold text-gray-700">
-              Nombre Malla
-            </label>
+            <label className="block mb-1 font-semibold text-gray-700">Nombre Malla</label>
             <input
               type="text"
               readOnly={!isEditing}
@@ -245,31 +288,30 @@ const MallaCurricular = () => {
             />
           </div>
 
-          {/* PDF */}
+          {/* Campo PDF */}
           <div>
             <label className="block mb-1 font-semibold text-gray-700">PDF</label>
             <div
-              className={`relative w-full h-14 border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center cursor-pointer ${
+              className={`relative w-full border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center cursor-pointer ${
                 !isEditing ? "pointer-events-none opacity-60" : ""
               }`}
+              style={{ height: "50px" }}
               onClick={() => {
-                if (isEditing && !pdfMalla) pdfInputRef.current.click();
+                if (isEditing && !pdfMalla && pdfRemoved === false && !(malla && malla.pdfMalla)) {
+                  pdfInputRef.current.click();
+                }
+                // Si se eliminó el pdf o no existe, se abre el input
+                if (isEditing && (!pdfMalla || pdfRemoved)) {
+                  pdfInputRef.current.click();
+                }
               }}
               onDragOver={handleDragOver}
               onDrop={handleDrop}
             >
-              {!pdfMalla ? (
-                <div className="text-gray-400 flex items-center gap-2">
-                  <span className="text-2xl">+</span>
-                  <p className="text-sm text-center">
-                    Agregar PDF o arrastrar y soltar
-                  </p>
-                </div>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center relative px-4">
-                  <p className="text-gray-600 text-sm truncate">
-                    {pdfMalla.name}
-                  </p>
+              {pdfMalla ? (
+                // Si se cargó un PDF local
+                <div className="w-full h-full flex items-center justify-center relative px-4 text-sm text-gray-600 truncate">
+                  {pdfMalla.name}
                   {isEditing && (
                     <button
                       type="button"
@@ -277,28 +319,41 @@ const MallaCurricular = () => {
                         e.stopPropagation();
                         handleRemovePdf();
                       }}
-                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition cursor-pointer"
+                      className="absolute top-3 right-3 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition cursor-pointer"
                       title="Eliminar PDF"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 
-                             01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V5a2 2 0 00-2-2H9a2 2 0 
-                             00-2 2v2m3 0h4"
-                        />
-                      </svg>
+                      <FaTrash />
                     </button>
                   )}
                 </div>
+              ) : (
+                // Si no hay PDF local, mostramos el PDF de la malla si existe y no se ha eliminado
+                <>
+                  {malla && malla.pdfMalla && !pdfRemoved ? (
+                    <div className="w-full h-full flex items-center justify-center relative px-4 text-sm text-gray-600 truncate">
+                      {malla.pdfMalla.replace(/^.*[\\/]/, "")}
+                      {isEditing && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemovePdf();
+                          }}
+                          className="absolute top-3 right-3 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition cursor-pointer"
+                          title="Eliminar PDF"
+                        >
+                          <FaTrash />
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    // Si no hay PDF (o fue eliminado) se muestra el placeholder
+                    <div className="text-gray-400 flex gap-2.5 items-center">
+                      <span className="text-2xl">+</span>
+                      <p className="text-sm text-center">Agregar PDF o arrastrar y soltar</p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
             <input
@@ -313,48 +368,42 @@ const MallaCurricular = () => {
 
           {/* CURSOS */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-lg font-semibold text-gray-700">CURSOS</h2>
-              {isEditing && (
-                <button
-                  onClick={handleAgregarCurso}
-                  className="bg-pink-300 hover:bg-pink-400 text-white px-4 py-2 rounded-md font-semibold transition-colors"
-                >
-                  Agregar
-                </button>
-              )}
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full border border-gray-200">
-                <thead className="bg-pink-100 text-gray-700 uppercase text-sm">
+            <h2 className="text-lg font-semibold text-gray-700 mb-2">CURSOS</h2>
+            {isEditing && (
+              <button
+                onClick={handleAgregarCurso}
+                className="bg-pink-300 hover:bg-pink-400 text-white px-4 py-2 rounded-md font-semibold transition-colors mb-3"
+              >
+                Agregar
+              </button>
+            )}
+
+            <div className="overflow-x-auto border border-gray-200 rounded-md">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-pink-100 text-gray-700 uppercase">
                   <tr>
                     <th className="px-4 py-2 border-b border-gray-200">Nombre</th>
                     <th className="px-4 py-2 border-b border-gray-200">Ciclo</th>
                     {isEditing && (
-                      <th className="px-4 py-2 border-b border-gray-200 text-center">
-                        Opciones
-                      </th>
+                      <th className="px-4 py-2 border-b border-gray-200 text-center">Opciones</th>
                     )}
                   </tr>
                 </thead>
                 <tbody>
-                  {cursos.length === 0 ? (
+                  {currentCursos.length === 0 ? (
                     <tr>
-                      <td
-                        colSpan={isEditing ? 3 : 2}
-                        className="text-center py-3 text-gray-500"
-                      >
+                      <td colSpan={isEditing ? 3 : 2} className="text-center py-3 text-gray-500">
                         Sin cursos
                       </td>
                     </tr>
                   ) : (
                     currentCursos.map((course, index) => (
-                      <tr key={index} className="hover:bg-pink-50">
+                      <tr key={course.IdCurso || index} className="hover:bg-pink-50">
                         <td className="px-4 py-2 border-b border-gray-200">
-                          {course.name}
+                          {course.Nombre}
                         </td>
                         <td className="px-4 py-2 border-b border-gray-200">
-                          {course.cycle}
+                          {course.ciclo ? course.ciclo.Ciclo : "Sin ciclo"}
                         </td>
                         {isEditing && (
                           <td className="px-4 py-2 border-b border-gray-200 text-center">
@@ -368,17 +417,15 @@ const MallaCurricular = () => {
                               className="text-red-500 hover:text-red-600"
                               title="Eliminar curso"
                               onClick={() => {
+                                const globalIndex = (currentPage - 1) * itemsPerPage + index;
                                 const newCourses = [...cursos];
-                                newCourses.splice(
-                                  (currentPage - 1) * itemsPerPage + index,
-                                  1
-                                );
+                                newCourses.splice(globalIndex, 1);
                                 setCursos(newCourses);
                                 if (
                                   newCourses.length <= (currentPage - 1) * itemsPerPage &&
                                   currentPage > 1
                                 ) {
-                                  setCurrentPage(currentPage - 1);
+                                  setCurrentPage((prev) => prev - 1);
                                 }
                               }}
                             >
@@ -404,7 +451,7 @@ const MallaCurricular = () => {
                       currentPage === 1
                         ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                         : "bg-white text-gray-700 hover:bg-gray-100"
-                    } cursor-pointer`}
+                    }`}
                   >
                     &lt;
                   </button>
@@ -442,13 +489,14 @@ const MallaCurricular = () => {
           </div>
         </div>
 
+        {/* Botones de Guardar / Cancelar solo si se está editando */}
         {isEditing && (
           <div className="flex justify-center gap-4 mt-6">
             <button
               onClick={handleGuardar}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-semibold transition-colors"
             >
-              GUARDAR
+              Guardar
             </button>
             <button
               onClick={handleCancelar}
