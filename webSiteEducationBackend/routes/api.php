@@ -28,6 +28,7 @@ Route::delete('/destroyOrganizacion/{id}', [PersonaController::class, 'destroy']
 Route::get('/malla', [MallaCurricularController::class, 'index']);
 Route::get('/ciclos', [CicloController::class, 'index']);
 Route::post('/storeMalla', [MallaCurricularController::class, 'store']);
+Route::post('/updateMalla', [MallaCurricularController::class, 'update']);
 Route::delete('/destroyMalla', [MallaCurricularController::class, 'destroy']);
 
 

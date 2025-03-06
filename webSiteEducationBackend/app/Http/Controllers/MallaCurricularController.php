@@ -33,12 +33,16 @@ class MallaCurricularController extends Controller
         $malla = new MallaCurricular();
         $malla->nombreMalla = $request->input('nombreMalla');
 
-        // Procesar el PDF
+        // Procesar el PDF:
+        // Si se envía un nuevo archivo, usarlo.
+        // Si no, pero se envía un campo "oldPdf", se utiliza ese valor.
         if ($request->hasFile('pdfMalla')) {
             $file = $request->file('pdfMalla');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('pdfs'), $fileName);
             $malla->pdfMalla = 'pdfs/' . $fileName;
+        } elseif ($request->input('oldPdf')) {
+            $malla->pdfMalla = $request->input('oldPdf');
         }
 
         // Guardar la malla
@@ -49,7 +53,6 @@ class MallaCurricularController extends Controller
             $cursosData = json_decode($request->input('cursos'), true);
             if (is_array($cursosData)) {
                 foreach ($cursosData as $cursoData) {
-                    // Crear cada curso y guardarlo
                     Curso::create([
                         'Nombre'  => $cursoData['Nombre'],
                         'IdCiclo' => $cursoData['IdCiclo'],
@@ -59,6 +62,24 @@ class MallaCurricularController extends Controller
         }
 
         return response()->json($malla, 201);
+    }
+
+    public function update(Request $request)
+    {
+        // Obtener la malla actual (asumimos que siempre existe un único registro)
+        $oldMalla = MallaCurricular::first();
+        // Si no se envía un nuevo PDF, conservar el actual
+        if (!$request->hasFile('pdfMalla') && $oldMalla && $oldMalla->pdfMalla) {
+            // Se agrega el campo "oldPdf" al request para que el método store lo use
+            $request->merge(['oldPdf' => $oldMalla->pdfMalla]);
+        }
+
+        // El update se realiza "simulando" una actualización:
+        // Primero se eliminan (truncate) los registros existentes...
+        $this->destroy();
+
+        // ...luego se crea un nuevo registro con los datos enviados (o preservando el PDF)
+        return $this->store($request);
     }
 
     public function destroy()

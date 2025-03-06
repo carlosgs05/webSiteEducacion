@@ -13,4 +13,10 @@ class Ciclo extends Model
     protected $fillable = [
         'Ciclo', // Campo con el nombre del ciclo
     ];
+
+    // Relación: Un ciclo tiene muchos cursos
+    public function cursos()
+    {
+        return $this->hasMany(Curso::class, 'IdCiclo', 'IdCiclo');
+    }
 }

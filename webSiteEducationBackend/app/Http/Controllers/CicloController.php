@@ -12,9 +12,7 @@ class CicloController extends Controller
      */
     public function index()
     {
-        $ciclos = Ciclo::all();
+        $ciclos = Ciclo::with('cursos')->get();
         return response()->json($ciclos, 200);
     }
-
-    // Otros métodos (store, update, destroy, etc.) si los necesitas...
 }

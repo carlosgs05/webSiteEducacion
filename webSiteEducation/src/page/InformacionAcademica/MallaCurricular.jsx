@@ -1,36 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Button from "../../components/Button";
 
 const MallaCurricular = () => {
-  const ciclos = [
-    {
-      titulo: "Ciclo I",
-      cursos: [
-        "Curso 1",
-        "Curso 2",
-        "Curso 3",
-        "Curso 4",
-        "Curso 5",
-        "Curso 6",
-      ],
-    },
-    {
-      titulo: "Ciclo II",
-      cursos: ["Curso 7", "Curso 8", "Curso 9", "Curso 10"],
-    },
-    {
-      titulo: "Ciclo III",
-      cursos: ["Curso 11", "Curso 12", "Curso 13", "Curso 14"],
-    },
-    {
-      titulo: "Ciclo IV",
-      cursos: ["Curso 15", "Curso 16", "Curso 17"],
-    },
-  ];
-
+  const [ciclos, setCiclos] = useState([]);
+  const [malla, setMalla] = useState("");
   const [activeIndex, setActiveIndex] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/ciclos");
+        setCiclos(response.data);
+        const responseMalla = await axios.get("http://localhost:8000/api/malla");
+        setMalla(responseMalla.data.malla.pdfMalla);
+      } catch (error) {
+        console.error("Error al obtener los datos de la malla:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const toggleAccordion = (index) => {
     setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -48,7 +40,7 @@ const MallaCurricular = () => {
         </div>
         <div>
           {ciclos.map((ciclo, index) => (
-            <div key={index} className="border-b last:border-none my-4">
+            <div key={ciclo.IdCiclo} className="border-b last:border-none my-4">
               <button
                 type="button"
                 className={`w-full text-left p-4 font-semibold text-[#262D73] text-lg uppercase ${
@@ -56,7 +48,7 @@ const MallaCurricular = () => {
                 }`}
                 onClick={() => toggleAccordion(index)}
               >
-                {ciclo.titulo}
+                {ciclo.Ciclo}
                 <span
                   className={`float-right transform transition-transform duration-700 ${
                     activeIndex === index ? "rotate-180" : "rotate-0"
@@ -72,13 +64,13 @@ const MallaCurricular = () => {
               >
                 <div className="p-4">
                   <ul>
-                    {ciclo.cursos.map((curso, idx) => (
+                    {ciclo.cursos.map((curso) => (
                       <li
-                        key={idx}
-                        className="text-[#868686] font-medium text-md py-2"
+                        key={curso.IdCurso}
+                        className="text-[#868686] font-medium text-md py-2 uppercase"
                       >
                         <span className="text-[#E4BCD3] mr-2">{">"}</span>
-                        {curso}
+                        {curso.Nombre}
                       </li>
                     ))}
                   </ul>
@@ -88,10 +80,11 @@ const MallaCurricular = () => {
           ))}
         </div>
         <div className="flex justify-center my-10">
-            <Button
-                name="Ver plan de estudios"
-                link="../src/assets/historia.pdf"
-                target="_blank" />
+          <Button
+            name="Ver plan de estudios"
+            link={`http://127.0.0.1:8000/${malla}`}
+            target="_blank"
+          />
         </div>
       </section>
       <Footer />

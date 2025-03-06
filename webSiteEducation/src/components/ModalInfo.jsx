@@ -9,7 +9,7 @@ const ModalInfo = ({ isOpen, onClose, data }) => {
 
                 {/* Imagen de perfil */}
                 <div className="w-1/3 flex items-center justify-center">
-                    <img src={data.photo} alt={data.name} className="rounded-lg w-full" />
+                    <img src={`http://127.0.0.1:8000/${data.Foto}`} alt={data.NombreCompleto} className="rounded-lg w-full" />
                 </div>
 
                 {/* Contenido del modal */}
@@ -21,16 +21,16 @@ const ModalInfo = ({ isOpen, onClose, data }) => {
                     >X
                     </button>
 
-                    <h3 className="text-xl font-bold text-blue-900 border-b pb-2">Nombres Apellidos: {data.name}</h3>
+                    <h3 className="text-xl font-bold text-blue-900 border-b pb-2">Nombres Apellidos: {data.NombreCompleto}</h3>
 
                     <div className="mt-4">
-                        <h3 className="text-lg font-semibold text-gray-700 border-b pb-1">Correo: {data.correo}</h3>
+                        <h3 className="text-lg font-semibold text-gray-700 border-b pb-1">Correo: {data.Correo}</h3>
                     </div>
 
                     <div className="mt-4">
                         <h3 className="text-lg font-semibold text-gray-700 border-b pb-1">Título:</h3>
                         <p>
-                            {data.titulo}
+                            {data.Titulo}
                         </p>
                     </div>
 
@@ -47,10 +47,10 @@ const ModalInfo = ({ isOpen, onClose, data }) => {
                                 {data.publicaciones.length > 0 ? (
                                     data.publicaciones.map((pub, index) => (
                                         <tr key={index} className="text-center">
-                                            <td className="border border-gray-300 p-2">{pub.title}</td>
+                                            <td className="border border-gray-300 p-2">{pub.Titulo}</td>
                                             <td className="border border-gray-300 p-2">
-                                                <a href={pub.url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
-                                                    Ver más
+                                                <a href={pub.Url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                                                    Ver publicación
                                                 </a>
                                             </td>
                                         </tr>

@@ -41,7 +41,7 @@ const customStyles = {
   }),
 };
 
-const FormCursosModal = ({ onClose, onAccept }) => {
+const FormCursosModal = ({ onClose, onAccept, cursoToEdit }) => {
   const [nombre, setNombre] = useState("");
   const [cicloSeleccionado, setCicloSeleccionado] = useState(null);
   const [cicloOptions, setCicloOptions] = useState([]);
@@ -54,7 +54,7 @@ const FormCursosModal = ({ onClose, onAccept }) => {
         // res.data debe ser un array de objetos { IdCiclo, Ciclo }
         const options = res.data.map((item) => ({
           value: item.IdCiclo, // ID que se enviará al backend
-          label: item.Ciclo,   // Texto que se mostrará en la tabla
+          label: item.Ciclo,   // Texto que se mostrará
         }));
         setCicloOptions(options);
       } catch (error) {
@@ -63,6 +63,25 @@ const FormCursosModal = ({ onClose, onAccept }) => {
     };
     fetchCiclos();
   }, []);
+
+  // Si estamos en modo edición, inicializar los campos con los datos del curso
+  useEffect(() => {
+    if (cursoToEdit) {
+      setNombre(cursoToEdit.Nombre || "");
+      if (cursoToEdit.ciclo) {
+        setCicloSeleccionado({
+          value: cursoToEdit.ciclo.IdCiclo,
+          label: cursoToEdit.ciclo.Ciclo,
+        });
+      } else {
+        setCicloSeleccionado(null);
+      }
+    } else {
+      // Si no hay curso a editar (modo "nuevo"), limpiamos
+      setNombre("");
+      setCicloSeleccionado(null);
+    }
+  }, [cursoToEdit]);
 
   const handleAccept = () => {
     // Validar que se haya ingresado un nombre y un ciclo
@@ -76,6 +95,7 @@ const FormCursosModal = ({ onClose, onAccept }) => {
       nombre,
       ciclo: cicloSeleccionado,
     });
+    // Cerramos el modal
     onClose();
   };
 
@@ -93,7 +113,7 @@ const FormCursosModal = ({ onClose, onAccept }) => {
           </button>
 
           <h2 className="text-base font-semibold mb-4 text-gray-700 text-center uppercase">
-            Agregar Curso
+            {cursoToEdit ? "Editar Curso" : "Agregar Curso"}
           </h2>
 
           <div className="space-y-3 text-sm">
@@ -145,6 +165,7 @@ const FormCursosModal = ({ onClose, onAccept }) => {
 FormCursosModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   onAccept: PropTypes.func.isRequired,
+  cursoToEdit: PropTypes.object, // puede ser null o un objeto curso
 };
 
 export default FormCursosModal;

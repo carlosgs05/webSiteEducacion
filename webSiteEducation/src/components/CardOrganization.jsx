@@ -12,8 +12,8 @@ const CardOrganization = ({ data }) => {
         {/* Foto */}
         <div className="relative w-full h-64">
           <img
-            src={data.photo}
-            alt={data.name}
+            src={`http://127.0.0.1:8000/${data.Foto}`}
+            alt={data.NombreCompleto}
             className="w-full h-full object-cover rounded-md shadow-[6px_6px_10px_rgba(0,0,0,0.25)]"
           />
           {/* Botón de "+" */}
@@ -27,8 +27,8 @@ const CardOrganization = ({ data }) => {
 
         {/* Nombre y Cargo */}
         <div className="mt-4">
-          <h3 className="text-lg font-semibold text-[#262D73]">{data.name}</h3>
-          <p className="text-[#545454] font-semibold">{data.role}</p>
+          <h3 className="text-lg font-semibold text-[#262D73]">{data.NombreCompleto}</h3>
+          <p className="text-[#545454] font-semibold">{data.Cargo}</p>
         </div>
       </div>
 
