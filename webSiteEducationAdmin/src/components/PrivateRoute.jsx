@@ -1,4 +1,4 @@
-import { Navigate } from "react-dom";
+import { Navigate } from "react-router";
 import PropTypes from "prop-types";
 const PrivateRoute = ({ children }) => {
     const token = localStorage.getItem("token");

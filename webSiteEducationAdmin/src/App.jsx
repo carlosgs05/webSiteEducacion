@@ -18,6 +18,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/inicio" element={<PrivateRoute><Index /></PrivateRoute>} />
         <Route path='/homeCarrusel' element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path='/organizacion/autoridades' element={<PrivateRoute><Autoridades /></PrivateRoute>} />
         <Route path='/organizacion/personalDocente' element={<PrivateRoute><PersonalDocente /></PrivateRoute>} />
@@ -29,8 +31,6 @@ function App() {
         <Route path='/noticias' element={<PrivateRoute><Noticias /></PrivateRoute>} />
         <Route path='/noticias/registro' element={<PrivateRoute><NoticiasRegistro /></PrivateRoute>} />
         <Route path='/mallaCurricular' element={<PrivateRoute><MallaCurricular /></PrivateRoute>} />
-        <Route path="/" element={<Login />} />
-        <Route path="/inicio" element={<PrivateRoute><Index /></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   )
