@@ -72,7 +72,7 @@ const Home = () => {
     <Layout>
       <div className="p-4">
         <div className="flex flex-col gap-y-4">
-          <h1 className="text-xl text-center font-medium">IMÁGENES DEL CARRUSEL</h1>
+          <h1 className="text-2xl text-center font-medium text-blue-800">IMÁGENES DEL CARRUSEL</h1>
           <h3 className="text-base">
             Agregar las imágenes que se mostrarán en la página principal
           </h3>

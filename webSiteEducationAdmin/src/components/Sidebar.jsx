@@ -27,7 +27,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-64 p-5 bg-[#5c5c5c] text-white flex flex-col justify-between">
+    <aside className="w-64 p-5 bg-[#5c5c5c] text-white flex flex-col justify-between h-full">
       {/* Sección superior (Perfil, etc.) */}
       <div>
         {/* Pequeña tarjeta de usuario */}
@@ -46,10 +46,11 @@ const Sidebar = () => {
           <li>
             <a
               href="/"
-              className={`block px-3 py-2 rounded transition-colors ${isActive("/")
-                ? "bg-[#E4BCD3] text-[#545454]"
-                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                }`}
+              className={`block px-3 py-2 rounded transition-colors ${
+                isActive("/")
+                  ? "bg-[#E4BCD3] text-[#545454]"
+                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+              }`}
             >
               INICIO
             </a>
@@ -57,10 +58,11 @@ const Sidebar = () => {
           <li>
             <a
               href="/homeCarrusel"
-              className={`block px-3 py-2 rounded transition-colors ${isActive("/homeCarrusel")
-                ? "bg-[#E4BCD3] text-[#545454]"
-                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                }`}
+              className={`block px-3 py-2 rounded transition-colors ${
+                isActive("/homeCarrusel")
+                  ? "bg-[#E4BCD3] text-[#545454]"
+                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+              }`}
             >
               Home Carrusel
             </a>
@@ -72,32 +74,49 @@ const Sidebar = () => {
                 e.preventDefault();
                 setOpenOrganizacion(!openOrganizacion);
               }}
-              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors ${isActiveDropdown(organizacionPaths)
-                ? "bg-[#E4BCD3] text-[#545454]"
-                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                }`}
+              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors ${
+                isActiveDropdown(organizacionPaths)
+                  ? "bg-[#E4BCD3] text-[#545454]"
+                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+              }`}
             >
               Organización
               <span
-                className={`transform transition-transform duration-300 ${openOrganizacion ? "rotate-180" : "rotate-0"
-                  }`}
+                className={`transform transition-transform duration-300 ${
+                  openOrganizacion ? "rotate-180" : "rotate-0"
+                }`}
               >
-                v
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
               </span>
             </button>
 
             {/* Menú desplegable para Organización */}
             <ul
-              className={`overflow-hidden transition-all duration-300 ${openOrganizacion ? "max-h-40" : "max-h-0"
-                }`}
+              className={`overflow-hidden transition-all duration-300 ${
+                openOrganizacion ? "max-h-40" : "max-h-0"
+              }`}
             >
               <li>
                 <a
                   href="/organizacion/autoridades"
-                  className={`block px-4 py-2 transition-colors ${isActive("/organizacion/autoridades")
-                    ? "bg-[#E4BCD3] text-[#545454]"
-                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                    }`}
+                  className={`block px-4 py-2 transition-colors ${
+                    isActive("/organizacion/autoridades")
+                      ? "bg-[#E4BCD3] text-[#545454]"
+                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                  }`}
                 >
                   Autoridades
                 </a>
@@ -105,10 +124,11 @@ const Sidebar = () => {
               <li>
                 <a
                   href="/organizacion/personalDocente"
-                  className={`block px-4 py-2 transition-colors ${isActive("/organizacion/personalDocente")
-                    ? "bg-[#E4BCD3] text-[#545454]"
-                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                    }`}
+                  className={`block px-4 py-2 transition-colors ${
+                    isActive("/organizacion/personalDocente")
+                      ? "bg-[#E4BCD3] text-[#545454]"
+                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                  }`}
                 >
                   Personal Docente
                 </a>
@@ -116,10 +136,11 @@ const Sidebar = () => {
               <li>
                 <a
                   href="/organizacion/personalAdministrativo"
-                  className={`block px-4 py-2 transition-colors ${isActive("/organizacion/personalAdministrativo")
-                    ? "bg-[#E4BCD3] text-[#545454]"
-                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                    }`}
+                  className={`block px-4 py-2 transition-colors ${
+                    isActive("/organizacion/personalAdministrativo")
+                      ? "bg-[#E4BCD3] text-[#545454]"
+                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                  }`}
                 >
                   Personal Administrativo
                 </a>
@@ -133,32 +154,49 @@ const Sidebar = () => {
                 e.preventDefault();
                 setOpenDesarrollo(!openDesarrollo);
               }}
-              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors ${isActiveDropdown(desarrolloPaths)
-                ? "bg-[#E4BCD3] text-[#545454]"
-                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                }`}
+              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors ${
+                isActiveDropdown(desarrolloPaths)
+                  ? "bg-[#E4BCD3] text-[#545454]"
+                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+              }`}
             >
               Desarrollo Profesional
               <span
-                className={`transform transition-transform duration-300 ${openDesarrollo ? "rotate-180" : "rotate-0"
-                  }`}
+                className={`transform transition-transform duration-300 ${
+                  openDesarrollo ? "rotate-180" : "rotate-0"
+                }`}
               >
-                v
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
               </span>
             </button>
 
             {/* Menú desplegable para Desarrollo Profesional */}
             <ul
-              className={`overflow-hidden transition-all duration-300 ${openDesarrollo ? "max-h-40" : "max-h-0"
-                }`}
+              className={`overflow-hidden transition-all duration-300 ${
+                openDesarrollo ? "max-h-40" : "max-h-0"
+              }`}
             >
               <li>
                 <a
                   href="/desarrolloProfesional/pasantias"
-                  className={`block px-4 py-2 transition-colors ${isActive("/desarrolloProfesional/pasantias")
-                    ? "bg-[#E4BCD3] text-[#545454]"
-                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                    }`}
+                  className={`block px-4 py-2 transition-colors ${
+                    isActive("/desarrolloProfesional/pasantias")
+                      ? "bg-[#E4BCD3] text-[#545454]"
+                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                  }`}
                 >
                   Pasantias
                 </a>
@@ -166,10 +204,11 @@ const Sidebar = () => {
               <li>
                 <a
                   href="/desarrolloProfesional/rsu"
-                  className={`block px-4 py-2 transition-colors ${isActive("/desarrolloProfesional/rsu")
-                    ? "bg-[#E4BCD3] text-[#545454]"
-                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                    }`}
+                  className={`block px-4 py-2 transition-colors ${
+                    isActive("/desarrolloProfesional/rsu")
+                      ? "bg-[#E4BCD3] text-[#545454]"
+                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                  }`}
                 >
                   Rsu
                 </a>
@@ -177,10 +216,11 @@ const Sidebar = () => {
               <li>
                 <a
                   href="/desarrolloProfesional/bolsaDeTrabajo"
-                  className={`block px-4 py-2 transition-colors ${isActive("/desarrolloProfesional/bolsaDeTrabajo")
-                    ? "bg-[#E4BCD3] text-[#545454]"
-                    : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                    }`}
+                  className={`block px-4 py-2 transition-colors ${
+                    isActive("/desarrolloProfesional/bolsaDeTrabajo")
+                      ? "bg-[#E4BCD3] text-[#545454]"
+                      : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+                  }`}
                 >
                   Bolsa de trabajo
                 </a>
@@ -190,10 +230,11 @@ const Sidebar = () => {
           <li>
             <a
               href="/mallaCurricular"
-              className={`block px-3 py-2 rounded transition-colors ${isActive("/mallaCurricular")
-                ? "bg-[#E4BCD3] text-[#545454]"
-                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                }`}
+              className={`block px-3 py-2 rounded transition-colors ${
+                isActive("/mallaCurricular")
+                  ? "bg-[#E4BCD3] text-[#545454]"
+                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+              }`}
             >
               Malla Curricular
             </a>
@@ -201,10 +242,11 @@ const Sidebar = () => {
           <li>
             <a
               href="/noticias"
-              className={`block px-3 py-2 rounded transition-colors ${isActive("/noticias")
-                ? "bg-[#E4BCD3] text-[#545454]"
-                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                }`}
+              className={`block px-3 py-2 rounded transition-colors ${
+                isActive("/noticias")
+                  ? "bg-[#E4BCD3] text-[#545454]"
+                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+              }`}
             >
               Noticias
             </a>
@@ -212,10 +254,11 @@ const Sidebar = () => {
           <li>
             <a
               href="/documentos"
-              className={`block px-3 py-2 rounded transition-colors ${isActive("/documentos")
-                ? "bg-[#E4BCD3] text-[#545454]"
-                : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-                }`}
+              className={`block px-3 py-2 rounded transition-colors ${
+                isActive("/documentos")
+                  ? "bg-[#E4BCD3] text-[#545454]"
+                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
+              }`}
             >
               Documentos
             </a>
@@ -225,7 +268,7 @@ const Sidebar = () => {
               href="#"
               className="block px-3 py-2 rounded hover:bg-[#E4BCD3] hover:text-[#545454] transition-colors"
             >
-              Settings
+              Ajustes
             </a>
           </li>
         </ul>
