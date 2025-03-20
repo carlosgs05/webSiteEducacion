@@ -45,9 +45,9 @@ const Sidebar = () => {
         <ul className="space-y-2">
           <li>
             <a
-              href="/"
+              href="/inicio"
               className={`block px-3 py-2 rounded transition-colors ${
-                isActive("/")
+                isActive("/inicio")
                   ? "bg-[#E4BCD3] text-[#545454]"
                   : "hover:bg-[#E4BCD3] hover:text-[#545454]"
               }`}

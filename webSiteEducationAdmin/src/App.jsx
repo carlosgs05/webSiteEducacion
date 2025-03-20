@@ -12,13 +12,14 @@ import PersonalDocente from './page/Organizacion/PersonalDocente'
 import PersonalAdministrativo from './page/Organizacion/PersonalAdministrativo'
 import MallaCurricular from './page/InformacionAcademica/MallaCurricular'
 import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
 import Login from "./page/Login";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/inicio" element={<PrivateRoute><Index /></PrivateRoute>} />
         <Route path='/homeCarrusel' element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path='/organizacion/autoridades' element={<PrivateRoute><Autoridades /></PrivateRoute>} />
