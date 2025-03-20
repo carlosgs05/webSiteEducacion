@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import { FaUser, FaChevronDown } from "react-icons/fa";
 
 const Header = ({ onToggleSidebar, user }) => {
   const [profileOpen, setProfileOpen] = useState(false);
@@ -19,7 +20,7 @@ const Header = ({ onToggleSidebar, user }) => {
     };
   }, []);
 
-  const handleProfileClick = () => {
+  const toggleDropdown = () => {
     setProfileOpen(!profileOpen);
   };
 
@@ -32,25 +33,12 @@ const Header = ({ onToggleSidebar, user }) => {
 
       {/* Barra de iconos y botón hamburguesa */}
       <div className="flex items-center space-x-4">
-        {/* Contenedor para el dropdown de perfil que incluye ícono y datos */}
-        <div
-          className="relative flex items-center cursor-pointer"
-          onClick={handleProfileClick}
-          ref={dropdownRef}
-        >
-          {/* Ícono de perfil */}
-          <svg
-            className="w-8 h-8 text-white hover:text-[#E4BCD3] transition-colors"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fillRule="evenodd"
-              d="M18 14a6 6 0 10-12 0 7 7 0 00-2 4.9V21a1 1 0 001 1h14a1 1 0 001-1v-2.1a7 7 0 00-2-4.9zm-6-4a4 4 0 100-8 4 4 0 000 8z"
-              clipRule="evenodd"
-            />
-          </svg>
-          {/* Nombre y rol del usuario: se muestran desde pantallas pequeñas en adelante */}
+        {/* Contenedor para el perfil */}
+        <div className="relative flex items-center" ref={dropdownRef}>
+          {/* Ícono de perfil sin hover */}
+          <FaUser className="w-8 h-8 text-white" />
+
+          {/* Nombre y rol del usuario */}
           <div className="ml-2 hidden sm:flex flex-col">
             <span className="text-sm font-medium">
               {user?.name || "Cargando..."}
@@ -58,9 +46,18 @@ const Header = ({ onToggleSidebar, user }) => {
             <span className="text-xs text-[#E4BCD3]">Administrador</span>
           </div>
 
+          {/* Botón con la flechita para desplegar el dropdown */}
+          <button onClick={toggleDropdown} className="ml-3 focus:outline-none cursor-pointer">
+            <FaChevronDown
+              className={`w-5 h-5 text-white font-light transition-transform duration-200 transform ${
+                profileOpen ? "rotate-180" : "rotate-0"
+              }`}
+            />
+          </button>
+
           {/* Dropdown */}
           {profileOpen && (
-            <div className="absolute top-full right-0 mt-2 w-44 bg-white text-[#545454] rounded shadow-lg py-2 z-50">
+            <div className="absolute top-full right-0 mt-2 w-44 bg-[#545454] text-white rounded shadow-lg py-2 z-50 text-sm">
               <a
                 href="/perfil"
                 className="block px-4 py-2 hover:bg-[#E4BCD3] hover:text-[#545454]"
@@ -69,9 +66,8 @@ const Header = ({ onToggleSidebar, user }) => {
               </a>
               <button
                 type="button"
-                className="w-full text-left px-4 py-2 hover:bg-[#E4BCD3] hover:text-[#545454]"
+                className="w-full text-left px-4 py-2 hover:bg-[#E4BCD3] hover:text-[#545454] cursor-pointer"
                 onClick={() => {
-                  // Lógica para cerrar sesión
                   localStorage.removeItem("token");
                   window.location.href = "/";
                 }}
@@ -95,11 +91,7 @@ const Header = ({ onToggleSidebar, user }) => {
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
       </div>

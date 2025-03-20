@@ -74,7 +74,7 @@ const Sidebar = () => {
                 e.preventDefault();
                 setOpenOrganizacion(!openOrganizacion);
               }}
-              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors ${
+              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors cursor-pointer ${
                 isActiveDropdown(organizacionPaths)
                   ? "bg-[#E4BCD3] text-[#545454]"
                   : "hover:bg-[#E4BCD3] hover:text-[#545454]"
@@ -154,7 +154,7 @@ const Sidebar = () => {
                 e.preventDefault();
                 setOpenDesarrollo(!openDesarrollo);
               }}
-              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors ${
+              className={`flex items-center justify-between w-full px-3 py-2 rounded transition-colors cursor-pointer ${
                 isActiveDropdown(desarrolloPaths)
                   ? "bg-[#E4BCD3] text-[#545454]"
                   : "hover:bg-[#E4BCD3] hover:text-[#545454]"
