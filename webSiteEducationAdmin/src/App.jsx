@@ -11,24 +11,26 @@ import Autoridades from './page/Organizacion/Autoridades'
 import PersonalDocente from './page/Organizacion/PersonalDocente'
 import PersonalAdministrativo from './page/Organizacion/PersonalAdministrativo'
 import MallaCurricular from './page/InformacionAcademica/MallaCurricular'
+import PrivateRoute from "./components/PrivateRoute";
+import Login from "./page/Login";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Index />} />
-        <Route path='/homeCarrusel' element={<Home />} />
-        <Route path='/organizacion/autoridades' element={<Autoridades />} />
-        <Route path='/organizacion/personalDocente' element={<PersonalDocente />} />
-        <Route path='/organizacion/personalAdministrativo' element={<PersonalAdministrativo />} />
-        <Route path='/desarrolloProfesional/pasantias' element={<Pasantias />} />
-        <Route path='/desarrolloProfesional/rsu' element={<Rsu />} />
-        <Route path='/desarrolloProfesional/bolsaDeTrabajo' element= {<BolsaDeTrabajo/>}/>
-        <Route path='/documentos' element= {<Documentos/>}/>
-        <Route path='/noticias' element= {<Noticias/>}/>
-        <Route path='/noticias/registro' element= {<NoticiasRegistro/>}/>
-
-        <Route path='/mallaCurricular' element={<MallaCurricular />} />
+        <Route path='/homeCarrusel' element={<PrivateRoute><Home /></PrivateRoute>} />
+        <Route path='/organizacion/autoridades' element={<PrivateRoute><Autoridades /></PrivateRoute>} />
+        <Route path='/organizacion/personalDocente' element={<PrivateRoute><PersonalDocente /></PrivateRoute>} />
+        <Route path='/organizacion/personalAdministrativo' element={<PrivateRoute><PersonalAdministrativo /></PrivateRoute>} />
+        <Route path='/desarrolloProfesional/pasantias' element={<PrivateRoute><Pasantias /></PrivateRoute>} />
+        <Route path='/desarrolloProfesional/rsu' element={<PrivateRoute><Rsu /></PrivateRoute>} />
+        <Route path='/desarrolloProfesional/bolsaDeTrabajo' element={<PrivateRoute><BolsaDeTrabajo /></PrivateRoute>} />
+        <Route path='/documentos' element={<PrivateRoute><Documentos /></PrivateRoute>} />
+        <Route path='/noticias' element={<PrivateRoute><Noticias /></PrivateRoute>} />
+        <Route path='/noticias/registro' element={<PrivateRoute><NoticiasRegistro /></PrivateRoute>} />
+        <Route path='/mallaCurricular' element={<PrivateRoute><MallaCurricular /></PrivateRoute>} />
+        <Route path="/" element={<Login />} />
+        <Route path="/inicio" element={<PrivateRoute><Index /></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   )

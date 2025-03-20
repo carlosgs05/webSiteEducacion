@@ -9,11 +9,15 @@ use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\MallaCurricularController;
 use App\Http\Controllers\CicloController;
+use App\Http\Controllers\AuthController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
 
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
+Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::get('/imagenesHomeCarrusel', [CarruselHomeController::class, 'getImagenes']);
 Route::post('/storeImagenesCarrusel', [CarruselHomeController::class, 'storeImagenes']);

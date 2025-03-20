@@ -1,17 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
-const Header = ({ onToggleSidebar }) => {
+const Header = ({ onToggleSidebar, user }) => {
   const [profileOpen, setProfileOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   // Cierra el dropdown si se hace clic fuera de él
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setProfileOpen(false);
       }
     };
@@ -55,7 +52,9 @@ const Header = ({ onToggleSidebar }) => {
           </svg>
           {/* Nombre y rol del usuario: se muestran desde pantallas pequeñas en adelante */}
           <div className="ml-2 hidden sm:flex flex-col">
-            <span className="text-sm font-medium">Usuario</span>
+            <span className="text-sm font-medium">
+              {user?.name || "Cargando..."}
+            </span>
             <span className="text-xs text-[#E4BCD3]">Administrador</span>
           </div>
 
@@ -73,7 +72,8 @@ const Header = ({ onToggleSidebar }) => {
                 className="w-full text-left px-4 py-2 hover:bg-[#E4BCD3] hover:text-[#545454]"
                 onClick={() => {
                   // Lógica para cerrar sesión
-                  console.log("Cerrando sesión...");
+                  localStorage.removeItem("token");
+                  window.location.href = "/";
                 }}
               >
                 Cerrar Sesión
@@ -108,7 +108,10 @@ const Header = ({ onToggleSidebar }) => {
 };
 
 Header.propTypes = {
-  onToggleSidebar: PropTypes.func,
+  onToggleSidebar: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+  }),
 };
 
 export default Header;

@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect,useState } from "react";
 import PropTypes from "prop-types";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-
+import axios from "axios";
 const Layout = ({ children }) => {
   // Controla la visibilidad del Sidebar en pantallas menores a lg
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -11,10 +11,36 @@ const Layout = ({ children }) => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No hay token almacenado");
+          return;
+        }
+        const response = await axios.get("http://127.0.0.1:8000/api/user", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser(response.data);
+        console.log("Usuario obtenido:", response.data);
+      } catch (error) {
+        console.error("Error al obtener usuario", error.response || error);
+      }
+    };
+  
+    fetchUser();
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header con botón hamburguesa */}
-      <Header onToggleSidebar={handleToggleSidebar} />
+      <Header 
+      onToggleSidebar={handleToggleSidebar} 
+      user = {user}
+      />
 
       {/* Contenedor principal */}
       <div className="flex flex-1 relative">

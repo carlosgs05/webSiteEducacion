@@ -51,7 +51,7 @@ const Noticias = () => {
   const confirmDeleteRecord = async () => {
     try {
       // Ajusta la URL según tu ruta de eliminación, por ejemplo /api/noticias/{id}
-      await axios.delete(`http://localhost:8000/api/noticias/${idToDelete}`);
+      await axios.delete(`http://localhost:8000/api/destroyNoticia/${idToDelete}`);
       fetchData();
       setConfirmDelete(false);
       setIdToDelete(null);
