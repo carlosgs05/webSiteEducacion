@@ -7,6 +7,7 @@ import BolsaDeTrabajo from './page/DesarrolloProfesional/BolsaTrabajo'
 import Documentos from './page/Documentos/Documentos'
 import Noticias from './page/Noticias/Noticias'
 import NoticiasRegistro from './page/Noticias/RegistroModal'
+
 import Autoridades from './page/Organizacion/Autoridades'
 import PersonalDocente from './page/Organizacion/PersonalDocente'
 import PersonalAdministrativo from './page/Organizacion/PersonalAdministrativo'
@@ -31,6 +32,7 @@ function App() {
         <Route path='/documentos' element={<PrivateRoute><Documentos /></PrivateRoute>} />
         <Route path='/noticias' element={<PrivateRoute><Noticias /></PrivateRoute>} />
         <Route path='/noticias/registro' element={<PrivateRoute><NoticiasRegistro /></PrivateRoute>} />
+        <Route path='/noticias/editar/:id' element={<PrivateRoute><NoticiasRegistro /></PrivateRoute>} />
         <Route path='/mallaCurricular' element={<PrivateRoute><MallaCurricular /></PrivateRoute>} />
       </Routes>
     </BrowserRouter>

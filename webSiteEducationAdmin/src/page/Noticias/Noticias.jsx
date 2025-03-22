@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router";
 import Layout from "../../components/Layout";
 import Button from "../../components/Button";
-import RegistroModal from "./RegistroModal";      // Modal para crear/editar
 import ConfirmModal from "../../components/ConfirmModal"; 
 import DescripcionModal from "../../components/DescripcionModal"; // Modal para mostrar texto (Título, Encabezado, Descripción)
 import ImagenModal from "../../components/ImagenModal";           // Modal para mostrar la imagen de portada
@@ -11,8 +11,6 @@ import LoadingIndicator from "../../components/LoadingIndicator";
 
 const Noticias = () => {
   const [data, setData] = useState([]);
-  const [showModal, setShowModal] = useState(false);          // Modal Crear/Editar
-  const [editingRecord, setEditingRecord] = useState(null);
 
   const [showDescripcionModal, setShowDescripcionModal] = useState(false);
   const [textoActual, setTextoActual] = useState("");
@@ -24,6 +22,9 @@ const Noticias = () => {
   const [idToDelete, setIdToDelete] = useState(null);
 
   const [loading, setLoading] = useState(false);
+
+  // Hook para redireccionar
+  const navigate = useNavigate();
 
   // 1. Obtener registros desde la API
   const fetchData = async () => {
@@ -50,7 +51,7 @@ const Noticias = () => {
 
   const confirmDeleteRecord = async () => {
     try {
-      // Ajusta la URL según tu ruta de eliminación, por ejemplo /api/noticias/{id}
+      // Ajusta la URL según tu ruta de eliminación, por ejemplo /api/destroyNoticia/{id}
       await axios.delete(`http://localhost:8000/api/destroyNoticia/${idToDelete}`);
       fetchData();
       setConfirmDelete(false);
@@ -72,13 +73,20 @@ const Noticias = () => {
     setShowImagenModal(true);
   };
 
+  // Función para editar: redirige a la página de registro enviando los datos de la noticia a editar
+  const handleEdit = (item) => {
+    navigate(`/noticias/editar/${item.IdNoticia}`, { state: { editingRecord: item } });
+    console.log("item", item);
+  };
+
   return (
     <Layout>
       <div className="p-4">
         <div className="mb-4">
+          {/* Botón para crear nueva noticia */}
           <Button
             name="Nueva Noticia"
-            link='/noticias/registro'
+            link="/noticias/registro"
             bgColor="bg-[#545454]"
           />
         </div>
@@ -122,10 +130,10 @@ const Noticias = () => {
                       </button>
                     </td>
 
-                    {/* FECHA (se muestra directamente) */}
+                    {/* FECHA */}
                     <td className="py-3 text-center">{item.Fecha}</td>
 
-                    {/* IMAGEN PORTADA (abre modal de imagen) */}
+                    {/* IMAGEN PORTADA */}
                     <td className="py-3 text-center">
                       {item.ImagenPortada ? (
                         <button
@@ -139,7 +147,7 @@ const Noticias = () => {
                       )}
                     </td>
 
-                    {/* ENCABEZADO (abre modal de texto) */}
+                    {/* ENCABEZADO */}
                     <td className="py-3 text-center">
                       <button
                         onClick={() => openTextoModal(item.Encabezado)}
@@ -149,7 +157,7 @@ const Noticias = () => {
                       </button>
                     </td>
 
-                    {/* DESCRIPCIÓN (abre modal de texto) */}
+                    {/* DESCRIPCIÓN */}
                     <td className="py-3 text-center">
                       <button
                         onClick={() => openTextoModal(item.Descripcion)}
@@ -162,8 +170,9 @@ const Noticias = () => {
                     {/* OPCIONES: Editar / Eliminar */}
                     <td className="py-3 text-center align-middle">
                       <div className="flex gap-2 justify-center items-center">
+                        {/* Botón para editar: redirige a la página de registro con los datos del item */}
                         <button
-                          
+                          onClick={() => handleEdit(item)}
                           className="bg-[#262D73] hover:bg-[#36395d] text-white px-3 py-2 rounded transition-colors"
                           title="Editar"
                         >
@@ -185,19 +194,7 @@ const Noticias = () => {
           </table>
         )}
 
-        {/* Modal para crear/editar */}
-        {showModal && (
-          <RegistroModal
-            onClose={() => {
-              setShowModal(false);
-              setEditingRecord(null);
-              fetchData();
-            }}
-            editingRecord={editingRecord}
-          />
-        )}
-
-        {/* Modal de confirmación */}
+        {/* Modal de confirmación para eliminación */}
         {confirmDelete && (
           <ConfirmModal
             message="¿Está seguro que desea eliminar esta noticia?"
