@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
-import { FaUser, FaKey } from "react-icons/fa"; // Importamos los iconos necesarios
+import { FaUser, FaKey } from "react-icons/fa"; // Iconos necesarios
+import { Link } from "react-router";
 import LogoLogin from "../assets/fac_edu.jpg"; // Imagen para la columna izquierda
 import LoginFondo from "../assets/educacion_inicial.jpg"; // Imagen de fondo general
 
@@ -35,7 +36,7 @@ const Login = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center">
-      {/* Imagen de fondo general (capa inferior) */}
+      {/* Imagen de fondo general */}
       <div className="absolute inset-0 z-0">
         <img
           src={LoginFondo}
@@ -44,18 +45,16 @@ const Login = () => {
         />
       </div>
 
-      {/* Overlay marrón semitransparente para unificar tonos */}
+      {/* Overlay semitransparente */}
       <div className="absolute inset-0 bg-[#545454]/80 z-10"></div>
 
-      {/* Contenedor principal con sombra pronunciada */}
+      {/* Contenedor principal */}
       <div className="relative z-20 w-full max-w-5xl bg-white shadow-2xl shadow-black/90 overflow-hidden flex flex-col md:flex-row min-h-[600px] m-4">
-        {/* Columna Izquierda: Solo imagen adicional (ilustración) */}
+        {/* Columna Izquierda: Imagen adicional */}
         <div
           className="md:w-1/2 bg-cover bg-center"
           style={{ backgroundImage: `url(${LogoLogin})` }}
-        >
-          {/* Se muestra únicamente la imagen */}
-        </div>
+        ></div>
 
         {/* Columna Derecha: Formulario */}
         <div className="md:w-1/2 flex items-center justify-center p-6 bg-[#F3ECE6]">
@@ -111,6 +110,13 @@ const Login = () => {
               >
                 Iniciar Sesión
               </button>
+
+              {/* Enlace para Olvidaste tu contraseña */}
+              <div className="text-center">
+                <Link to="/forgot-password" className="text-sm text-[#262D73] hover:underline">
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </div>
             </form>
           </div>
         </div>

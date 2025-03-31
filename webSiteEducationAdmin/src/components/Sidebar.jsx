@@ -27,7 +27,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-64 p-5 bg-[#5c5c5c] text-white flex flex-col justify-between h-full">
+    <aside className="w-64 p-5 bg-[#5c5c5c] text-white flex flex-col justify-between">
       {/* Sección superior (Perfil, etc.) */}
       <div>
         {/* Pequeña tarjeta de usuario */}

@@ -14,12 +14,15 @@ import MallaCurricular from './page/InformacionAcademica/MallaCurricular'
 import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
 import Login from "./page/Login";
+import ForgotPassword from "./components/ForgotPassword";
+import Perfil from './page/Perfil/Perfil'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
         <Route path="/inicio" element={<PrivateRoute><Index /></PrivateRoute>} />
         <Route path='/homeCarrusel' element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path='/organizacion/autoridades' element={<PrivateRoute><Autoridades /></PrivateRoute>} />
@@ -32,6 +35,7 @@ function App() {
         <Route path='/noticias' element={<PrivateRoute><Noticias /></PrivateRoute>} />
         <Route path='/noticias/registro' element={<PrivateRoute><NoticiasRegistro /></PrivateRoute>} />
         <Route path='/mallaCurricular' element={<PrivateRoute><MallaCurricular /></PrivateRoute>} />
+        <Route path='/perfil' element={<PrivateRoute><Perfil /></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   )

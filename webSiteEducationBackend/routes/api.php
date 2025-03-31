@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarruselHomeController;
 use App\Http\Controllers\DesarrolloController;
@@ -11,13 +10,13 @@ use App\Http\Controllers\MallaCurricularController;
 use App\Http\Controllers\CicloController;
 use App\Http\Controllers\AuthController;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
 Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/profile/update', [AuthController::class, 'updateProfile']);
+Route::post('/profile/security', [AuthController::class, 'updateSecurity']);
+
 
 Route::get('/imagenesHomeCarrusel', [CarruselHomeController::class, 'getImagenes']);
 Route::post('/storeImagenesCarrusel', [CarruselHomeController::class, 'storeImagenes']);
