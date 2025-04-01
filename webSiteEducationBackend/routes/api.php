@@ -16,6 +16,10 @@ Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user'])
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/profile/update', [AuthController::class, 'updateProfile']);
 Route::post('/profile/security', [AuthController::class, 'updateSecurity']);
+Route::post('/password/forgot', [AuthController::class, 'forgot']);
+Route::post('/password/send-code', [AuthController::class, 'sendResetCode']);
+Route::post('/password/validate-code', [AuthController::class, 'validateResetCode']);
+Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 
 
 Route::get('/imagenesHomeCarrusel', [CarruselHomeController::class, 'getImagenes']);

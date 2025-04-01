@@ -16,6 +16,9 @@ import PublicRoute from "./components/PublicRoute";
 import Login from "./page/Login";
 import ForgotPassword from "./components/ForgotPassword";
 import Perfil from './page/Perfil/Perfil'
+import ConfirmReset from './components/ConfirmReset'
+import ValidateResetCode from './components/ValidateResetCode'
+import ResetPassword from './components/ResetPassword'
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
       <Routes>
         <Route path="/" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
+        <Route path="/confirm-reset" element={<PublicRoute><ConfirmReset /></PublicRoute>} />
+        <Route path="/validate-code" element={<PublicRoute><ValidateResetCode /></PublicRoute>} />
+        <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
         <Route path="/inicio" element={<PrivateRoute><Index /></PrivateRoute>} />
         <Route path='/homeCarrusel' element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path='/organizacion/autoridades' element={<PrivateRoute><Autoridades /></PrivateRoute>} />

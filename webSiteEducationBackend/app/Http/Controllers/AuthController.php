@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Mail\ResetPasswordMail;
+use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -99,10 +101,12 @@ class AuthController extends Controller
                 return response()->json(['success' => false, 'message' => 'La contraseña es obligatoria'], 422);
             }
 
-            // Hashea la contraseña y actualiza el usuario
-            $user->password = Hash::make($password);
-            // Se guarda la longitud de la contraseña original
-            $user->password_length = $request->input('passwordLength');
+            // Guardar la longitud de la contraseña
+            $passwordLength = strlen($request->password);
+
+            // Actualizar la contraseña
+            $user->password = Hash::make($request->password);
+            $user->password_length = $passwordLength;
             $user->save();
 
             return response()->json(['success' => true, 'user' => $user]);
@@ -116,5 +120,105 @@ class AuthController extends Controller
                 'message' => 'Error interno en el servidor'
             ], 500);
         }
+    }
+
+    // Método para buscar usuario por correo y devolver sus datos
+    public function forgot(Request $request)
+    {
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+
+        // Retornamos datos relevantes del usuario (ej. nombre y foto)
+        return response()->json([
+            'user' => [
+                'email' => $user->email,
+                'name'  => $user->name,
+                'photo' => $user->photo,
+            ]
+        ], 200);
+    }
+
+    // Método para enviar el código de restablecimiento de contraseña
+    public function sendResetCode(Request $request)
+    {
+        // Validar si el email existe
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json(["message" => "El correo no está registrado."], 404);
+        }
+
+        // Generar código de 6 dígitos
+        $code = mt_rand(100000, 999999);
+
+        // Guardar código y su expiración (ejemplo: expira en 15 minutos)
+        $user->reset_code = $code;
+        $user->reset_code_expires_at = Carbon::now()->addMinutes(15);
+        $user->save();
+
+        // Enviar correo con la plantilla mejorada
+        Mail::to($request->email)->send(new ResetPasswordMail($user, $code));
+
+        return response()->json(["message" => "Código enviado."], 200);
+    }
+
+    // Método para validar el código de restablecimiento
+    public function validateResetCode(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || $user->reset_code !== (int) $request->code) {
+            return response()->json(["success" => false, "message" => "Código incorrecto."], 400);
+        }
+
+        if (Carbon::now()->greaterThan($user->reset_code_expires_at)) {
+            return response()->json(["success" => false, "message" => "El código ha expirado."], 400);
+        }
+
+        return response()->json(["success" => true, "message" => "Código válido."], 200);
+    }
+
+    // Método para restablecer la contraseña
+    public function resetPassword(Request $request)
+    {
+        // Validación de campos y requisitos de la contraseña
+        $request->validate([
+            'email' => 'required|email',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
+            ],
+            'password_confirmation' => 'required|same:password',
+        ], [
+            'password.regex' => 'La contraseña debe tener al menos una mayúscula, una minúscula y un número.',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(["message" => "Usuario no encontrado."], 404);
+        }
+
+        // Verificar que la nueva contraseña no sea igual a la anterior
+        if (Hash::check($request->password, $user->password)) {
+            return response()->json(["message" => "La nueva contraseña no puede ser igual a la anterior."], 422);
+        }
+
+        // Guardar la longitud de la contraseña
+        $passwordLength = strlen($request->password);
+
+        // Actualizar la contraseña y eliminar el código de restablecimiento
+        $user->password = Hash::make($request->password);
+        $user->password_length = $passwordLength;
+        $user->reset_code = null;
+        $user->reset_code_expires_at = null;
+        $user->save();
+
+        return response()->json(["success" => true, "message" => "Contraseña restablecida con éxito."], 200);
     }
 }
