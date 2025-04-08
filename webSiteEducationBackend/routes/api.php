@@ -50,6 +50,7 @@ Route::put('/updateDocumento/{id}', [DocumentoController::class, 'update']);
 Route::delete('/destroyDocumento/{id}', [DocumentoController::class, 'destroy']);
 
 Route::get('/noticias', [NoticiaController::class, 'index']);
+Route::get('/noticiasActuales', [NoticiaController::class, 'noticiasActuales']);
 Route::post('/storeNoticia', [NoticiaController::class, 'store']);
 Route::get('/showNoticia/{id}', [NoticiaController::class, 'show']);
 Route::put('/updateNoticia/{id}', [NoticiaController::class, 'update']);

@@ -18,7 +18,7 @@ function App() {
         <Route path='/informacionAcademica/mallaCurricular' element={<MallaCurricular />} />
         <Route path='/desarrolloProfesional' element={<DesarrolloProfesional />} />
         <Route path='/novedades/noticias' element={<Noticias />} />  
-        <Route path="/novedades/noticia/:id" element={<DetalleNoticia />} />
+        <Route path="/novedades/noticias/:id" element={<DetalleNoticia />} />
        <Route path="/serviciosAdministrativos/mesa-de-partes" element={<MesaDePartes/>} /> 
        <Route path="/serviciosAdministrativos/documentos-tramites" element={<DocumentosTramites/>} /> 
 

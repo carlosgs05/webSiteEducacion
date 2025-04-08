@@ -1,56 +1,73 @@
 import { Link } from "react-router";
-const noticias = [
-    {
-      id: 1,
-      imagen: "../src/assets/noticia1.jpeg",
-      titulo: "Noticia 1",
-      fecha: "10 de Febrero, 2025",
-      url: "/novedades/noticia/1",
-    },
-    {
-      id: 2,
-      imagen: "../src/assets/noticia2.jpeg",
-      titulo: "Noticia 2",
-      fecha: "11 de Febrero, 2025",
-      url: "/novedades/noticia/2",
+import PropTypes from "prop-types";
 
-    },
-    {
-      id: 3,
-      imagen: "../src/assets/noticia3.jpeg",
-      titulo: "Noticia 3",
-      fecha: "12 de Febrero, 2025",
-      url: "/novedades/noticia/3",
+const PortadaNoticias = ({ data }) => {
+  if (!data || data.length < 3) {
+    return <p>No hay suficientes noticias para mostrar.</p>;
+  }
+  const noticiaPrincipal = data[0];
+  const noticiasSecundarias = data.slice(1, 3);
 
-    },
-  ];
-  
-const PortadaNoticias = () => {
-    return (
-        <div className="grid gap-4">
-          {/* Noticia Principal */}
-          <Link to={noticias[0].url} className="relative group block overflow-hidden border border-blue-300 rounded-lg">
-            <img src={noticias[0].imagen} alt={noticias[0].titulo} className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300" />
-            <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-end p-4">
-              <h2 className="text-white text-xl font-bold mt-2">{noticias[0].titulo}</h2>
-              <p className="text-gray-300 text-base mt-1">{noticias[0].fecha}</p>
+  return (
+    <div className="grid gap-4">
+      {/* Noticia Principal */}
+      <Link
+        to={`/novedades/noticias/${noticiaPrincipal.IdNoticia}`}
+        className="relative group block overflow-hidden border border-blue-300 rounded-lg"
+      >
+        <img
+          src={`http://localhost:8000/${noticiaPrincipal.ImagenPortada}`}
+          alt={noticiaPrincipal.Nombre}
+          className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-end p-4">
+          <h2 className="text-white text-xl font-bold mt-2">
+            {noticiaPrincipal.Nombre}
+          </h2>
+          <p className="text-gray-300 text-base mt-1">
+            {noticiaPrincipal.Fecha}
+          </p>
+        </div>
+      </Link>
+
+      {/* Noticias Secundarias */}
+      <div className="grid grid-cols-2 gap-4">
+        {noticiasSecundarias.map((item) => (
+          <Link
+            key={item.id}
+            to={`/novedades/noticias/${item.IdNoticia}`}
+            className="relative group block overflow-hidden border border-blue-300 rounded-lg"
+          >
+            <img
+              src={`http://localhost:8000/${item.ImagenPortada}`}
+              alt={item.Nombre}
+              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2">
+              <h3 className="text-white text-base font-semibold">
+                {item.Nombre}
+              </h3>
+              <p className="text-gray-300 text-sm">{item.Fecha}</p>
             </div>
           </Link>
-          
-          {/* Noticias Secundarias */}
-          <div className="grid grid-cols-2 gap-4">
-            {noticias.slice(1).map((noticia) => (
-              <Link key={noticia.id} to={noticia.url} className="relative group block overflow-hidden border border-blue-300 rounded-lg">
-                <img src={noticia.imagen} alt={noticia.titulo} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-2">
-                  <h3 className="text-white text-base font-semibold">{noticia.titulo}</h3>
-                  <p className="text-gray-300 text-sm">{noticia.fecha}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      );
-}
-
-export default PortadaNoticias
+        ))}
+      </div>
+    </div>
+  );
+};
+PortadaNoticias.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      IdNoticia: PropTypes.number.isRequired, 
+      url: PropTypes.string.isRequired,
+      ImagenPortada: PropTypes.string.isRequired,
+      Titulo: PropTypes.string.isRequired,
+      Nombre: PropTypes.string.isRequired,
+      Fecha: PropTypes.string.isRequired,
+    })
+  ),
+};
+PortadaNoticias.defaultProps = {
+  data: [],
+};
+export default PortadaNoticias;

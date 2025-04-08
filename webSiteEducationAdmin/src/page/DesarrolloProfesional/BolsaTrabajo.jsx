@@ -3,11 +3,12 @@ import axios from "axios";
 import Layout from "../../components/Layout";
 import Button from "../../components/Button";
 import RegistroModal from "./RegistroModal";
-import ConfirmModal from "../../components/ConfirmModal";
 import DescripcionModal from "../../components/DescripcionModal";
 import ImagenModal from "../../components/ImagenModal";
 import RegistrosTable from "./RegistrosTable";
 import LoadingIndicator from "../../components/LoadingIndicator";
+import swal from "sweetalert";
+
 const Pasantias = () => {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -16,8 +17,6 @@ const Pasantias = () => {
   const [descripcionActual, setDescripcionActual] = useState("");
   const [showImagenModal, setShowImagenModal] = useState(false);
   const [imagenActual, setImagenActual] = useState("");
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [idToDelete, setIdToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
   // Estados para paginación
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,26 +52,37 @@ const Pasantias = () => {
   };
 
   const handleDelete = (id) => {
-    setIdToDelete(id);
-    setConfirmDelete(true);
-  };
-
-  const confirmDeleteRecord = async () => {
-    try {
-      await axios.delete(
-        `http://localhost:8000/api/destroyDesarrolloProfesional/${idToDelete}`
-      );
-      fetchData();
-      setConfirmDelete(false);
-      setIdToDelete(null);
-    } catch (error) {
-      console.error("Error eliminando el registro", error);
-    }
-  };
-
-  const cancelDelete = () => {
-    setConfirmDelete(false);
-    setIdToDelete(null);
+    swal({
+      title: "¿Estás seguro?",
+      text: "Una vez eliminado, no podrás recuperar esta noticia.",
+      icon: "warning",
+      buttons: {
+        cancel: "Cancelar",
+        confirm: {
+          text: "Eliminar",
+          closeModal: false,
+        },
+      },
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axios
+          .delete(`http://localhost:8000/api/destroyDesarrolloProfesional/${id}`)
+          .then(() => {
+            swal("El registro ha sido eliminada.", {
+              icon: "success",
+            });
+            fetchData();
+          })
+          .catch(() => {
+            swal("Error al eliminar el registro", {
+              icon: "error",
+            });
+          });
+      } else {
+        swal("El registro no se eliminó.");
+      }
+    });
   };
 
   const openDescripcionModal = (descripcion) => {
@@ -142,15 +152,6 @@ const Pasantias = () => {
             tipo={activeSection}
           />
         )}
-
-        {confirmDelete && (
-          <ConfirmModal
-            message="¿Está seguro que desea eliminar este registro?"
-            onConfirm={confirmDeleteRecord}
-            onCancel={cancelDelete}
-          />
-        )}
-
         {showDescripcionModal && (
           <DescripcionModal
             descripcion={descripcionActual}

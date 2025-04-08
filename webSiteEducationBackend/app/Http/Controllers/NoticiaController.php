@@ -14,6 +14,12 @@ class NoticiaController extends Controller
         return response()->json($noticias);
     }
 
+    public function noticiasActuales()
+{
+    $noticias = Noticia::orderBy('Fecha', 'desc')->with('imagenes')->get();
+    return response()->json($noticias);
+}
+
     public function store(Request $request)
     {
         // Creamos la noticia
