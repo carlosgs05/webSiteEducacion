@@ -30,7 +30,8 @@ const MallaCurricular = () => {
 
   return (
     <div>
-      <Header />
+      <Header
+        tittle="Malla Curricular" />
       <section className="my-6 mx-10 md:my-10 md:mx-16">
         <div className="flex flex-col items-start gap-2 mb-9">
           <div className="text-2xl font-semibold text-[#262D73]">

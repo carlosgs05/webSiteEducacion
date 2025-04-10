@@ -56,7 +56,8 @@ const DetalleNoticia = () => {
 
   return (
     <>
-      <Header />
+      <Header
+        tittle="Noticias" />
       <section className="grid grid-cols-1 md:grid-cols-3 gap-5 px-8 py-8">
         <div className="grid col-span-2 p-4">
           <p className="text-gray-500 text-sm">{noticia.Fecha}</p>

@@ -6,7 +6,8 @@ import InfoMediaSection from "../../components/InfoMediaSection";
 const Perfiles = () => {
   return (
     <>
-      <Header />
+      <Header
+        tittle="Perfiles" />
       <section>
         <div className="m-10 md:m-16">
           <Button name=" Ver Malla Curricular" link="/informacionAcademica/mallaCurricular" />

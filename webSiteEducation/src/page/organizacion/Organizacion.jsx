@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Button from "../../components/Button";
@@ -38,7 +38,8 @@ const Organizacion = () => {
 
   return (
     <>
-      <Header />
+      <Header 
+      tittle="Organización"/>
       {/* Botones de navegación */}
       <div className="mt-4 md:-translate-y-5 md:mt-0 flex flex-wrap items-center justify-center gap-4">
         <Button

@@ -33,7 +33,8 @@ const MesaDePartes = () => {
   };
   return (
     <div>
-      <Header />
+      <Header
+      tittle="Mesa de Partes" />
       <div className="flex flex-col px-20 gap-y-5 pb-10">
         <h1 className="text-3xl font-bold text-center mt-10 text-[#262D73]">
           Mesa de Partes - Escuela de Educación inicial

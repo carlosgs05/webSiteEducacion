@@ -22,7 +22,8 @@ const DesarrolloProfesional = () => {
 
   return (
     <>
-      <Header />
+      <Header
+        tittle="Desarrollo Profesional" />
       {/* Botones de navegación */}
       <div className="mt-4 md:-translate-y-5 md:mt-0 items-center justify-center flex flex-wrap gap-4">
         <Button

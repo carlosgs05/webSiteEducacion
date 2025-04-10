@@ -1,6 +1,6 @@
-import Navbar from './Navbar';
+import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
-import Slider from './Slider';
+import Slider from "./Slider";
 
 const HeaderHome = () => {
   const [images, setImages] = useState([]);
@@ -10,25 +10,22 @@ const HeaderHome = () => {
       window.initFlowbite();
     }
 
-    // Reemplaza la URL con la de tu API
-    fetch('http://localhost:8000/api/imagenesHomeCarrusel')
-      .then(response => response.json())
-      .then(data => {
-        // Se asume que "data" es un arreglo de objetos y que cada objeto tiene el atributo "imagen"
-        const headerImages = data.map(item => item.Imagen);
+    fetch("http://localhost:8000/api/imagenesHomeCarrusel")
+      .then((response) => response.json())
+      .then((data) => {
+        const headerImages = data.map((item) => item);
         setImages(headerImages);
       })
-      .catch(error => {
-        console.error('Error al recuperar las imágenes:', error);
+      .catch((error) => {
+        console.error("Error al recuperar las imágenes:", error);
       });
   }, []);
 
   return (
     <header className="relative h-72 sm:h-96 md:h-[500px] transition-all duration-500 ease-in-out">
-      <Slider images={images}/>
-      <Navbar/>
+      <Slider images={images} />
+      <Navbar />
     </header>
   );
 };
-
 export default HeaderHome;

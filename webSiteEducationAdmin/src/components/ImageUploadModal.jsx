@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import  { useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-
+import PropTypes from "prop-types";
 const ImageUploadModal = ({ isOpen, file, onClose, onImageSelected }) => {
   const [scale, setScale] = useState(1);
   const editorRef = useRef(null);
@@ -83,5 +83,10 @@ const ImageUploadModal = ({ isOpen, file, onClose, onImageSelected }) => {
     </div>
   );
 };
-
+ImageUploadModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  file: PropTypes.string,
+  onClose: PropTypes.func.isRequired,
+  onImageSelected: PropTypes.func.isRequired,
+};
 export default ImageUploadModal;
