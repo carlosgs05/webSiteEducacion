@@ -23,7 +23,7 @@ const Slider = ({ images }) => {
                         data-carousel-item
                     >
                         <img
-                            src={`http://127.0.0.1:8000/imagenes/${image}`}
+                            src={`http://127.0.0.1:8000/${image.Imagen}`}
                             className="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                             alt={`imagen ${index + 1}`}
                         />

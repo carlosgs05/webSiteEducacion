@@ -54,7 +54,8 @@ const CardSlider = ({ title, data }) => {
                 <div className="border border-gray-200 rounded-md flex flex-col justify-center shadow-lg">
                   <div className="flex flex-col relative">
                     <img
-                      src={`http://localhost:8000/${item.Imagen}`}
+                    
+                      src={`http://localhost:8000/${item.Imagen || item.ImagenPortada}`}
                       className="w-full relative z-10 max-h-80 rounded-t-md"
                       alt="imagen"
                     />
@@ -64,13 +65,13 @@ const CardSlider = ({ title, data }) => {
                       {item.Fecha}
                     </p>
                     <p className="text-base mb-3 line-clamp-3 hover:line-clamp-none text-gray-500">
-                      {item.Descripcion}
+                      {item.Nombre || item.Descripcion}
                     </p>
                   </div>
                   <div className="flex flex-row py-3 px-4 border-t border-gray-200">
                     <div className="w-1/2 flex flex-row text-[#262D73]">
                       <a
-                        href={item.Url}
+                        href={`/novedades/noticias/${item.IdNoticia}`}
                         target="_blank"
                         className="mr-1 cursor-pointer hover:text-[#E4BCD3]"
                       >

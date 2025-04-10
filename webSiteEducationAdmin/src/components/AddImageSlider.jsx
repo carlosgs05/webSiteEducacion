@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
+const AddImageSlider = ({ initialImages = [], onImagesChange },) => {
   // Inicializamos el state con las imágenes iniciales (las que vienen del backend)
   // Se asume que estas imágenes ya se encuentran en public/imagenes.
   const [images, setImages] = useState(
     initialImages.map((img) => ({
-      preview: `http://127.0.0.1:8000/imagenes/${img}`,
+      preview: `http://127.0.0.1:8000/${img}`,
       name: img,
       file: null,
     }))
@@ -18,7 +18,7 @@ const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
   useEffect(() => {
     setImages(
       initialImages.map((img) => ({
-        preview: `http://127.0.0.1:8000/imagenes/${img}`,
+        preview: `http://127.0.0.1:8000/${img}`,
         name: img,
         file: null,
       }))
@@ -118,6 +118,7 @@ const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
             <button
               className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition cursor-pointer"
               onClick={() => handleRemoveImage(index)}
+              type="button"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -146,6 +147,7 @@ const AddImageSlider = ({ initialImages = [], onImagesChange }) => {
           onDrop={handleAddDrop}
           onDragOver={handleDragOver}
           disabled={images.length >= MAX_IMAGES}
+          type="button"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -4,9 +4,9 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import Layout from "../../components/Layout";
 import Button from "../../components/Button";
 import RegistroModal from "./RegistroModal";
-import ConfirmModal from "../../components/ConfirmModal";
 import DescripcionModal from "../../components/DescripcionModal";
 import LoadingIndicator from "../../components/LoadingIndicator";
+import swal from "sweetalert";
 
 const Documentos = () => {
   const [data, setData] = useState([]);
@@ -14,8 +14,6 @@ const Documentos = () => {
   const [editingRecord, setEditingRecord] = useState(null);
   const [showDescripcionModal, setShowDescripcionModal] = useState(false);
   const [descripcionActual, setDescripcionActual] = useState("");
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [idToDelete, setIdToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
@@ -47,19 +45,37 @@ const Documentos = () => {
 
   // Manejo de eliminación
   const handleDelete = (id) => {
-    setIdToDelete(id);
-    setConfirmDelete(true);
-  };
-
-  const confirmDeleteRecord = async () => {
-    try {
-      await axios.delete(`http://localhost:8000/api/destroyDocumento/${idToDelete}`);
-      fetchData();
-      setConfirmDelete(false);
-      setIdToDelete(null);
-    } catch (error) {
-      console.error("Error eliminando el documento", error);
-    }
+    swal({
+      title: "¿Estás seguro?",
+      text: "Una vez eliminado, no podrás recuperar esta noticia.",
+      icon: "warning",
+      buttons: {
+        cancel: "Cancelar",
+        confirm: {
+          text: "Eliminar",
+          closeModal: false,
+        },
+      },
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axios
+          .delete(`http://localhost:8000/api/destroyDocumento/${id}`)
+          .then(() => {
+            swal("El registro ha sido eliminada.", {
+              icon: "success",
+            });
+            fetchData();
+          })
+          .catch(() => {
+            swal("Error al eliminar el registro", {
+              icon: "error",
+            });
+          });
+      } else {
+        swal("El registro no se eliminó.");
+      }
+    });
   };
 
   // Abrir modal para ver descripción
@@ -166,15 +182,6 @@ const Documentos = () => {
               fetchData();
             }}
             editingRecord={editingRecord}
-          />
-        )}
-
-        {/* Modal de confirmación */}
-        {confirmDelete && (
-          <ConfirmModal
-            message="¿Está seguro que desea eliminar este documento?"
-            onConfirm={confirmDeleteRecord}
-            onCancel={() => setConfirmDelete(false)}
           />
         )}
 

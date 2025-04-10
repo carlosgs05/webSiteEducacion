@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import LoadingIndicator from "../../components/LoadingIndicator";
-
+import swal from "sweetalert";
 const RegistroModal = ({ onClose, editingRecord, tipo }) => {
   const [loading, setLoading] = useState(false);
   const [descripcion, setDescripcion] = useState("");
@@ -49,8 +49,16 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
         await axios.post(
           "http://localhost:8000/api/storeDesarrolloProfesional",
           formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
         );
+        
+        if (tipo === "bolsa de trabajo") {
+          swal("Bolsa de trabajo registrado!", "Bolsa de trabajo ha sido registrada con éxito", "success");
+        } else if (tipo === "pasantias") {
+          swal("Pasantía registrada!", "La pasantía ha sido registrada con éxito", "success");
+        } else {
+          swal("Rsu registrado!", "Rsu ha sido registrada con éxito", "success");
+
+        }
       }
       onClose();
     } catch (error) {
