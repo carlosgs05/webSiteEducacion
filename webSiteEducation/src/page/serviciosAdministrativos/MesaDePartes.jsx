@@ -1,6 +1,8 @@
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import { useState } from "react";
+import TopButton from "../../components/TopButton";
+
 const MesaDePartes = () => {
   const [formData, setFormData] = useState({
     documentoIdentidad: "DNI",
@@ -33,6 +35,7 @@ const MesaDePartes = () => {
   };
   return (
     <div>
+      <TopButton />
       <Header
       tittle="Mesa de Partes" />
       <div className="flex flex-col px-20 gap-y-5 pb-10">

@@ -5,6 +5,7 @@ import Footer from "../../components/Footer";
 import Slider from "../../components/Slider";
 import ListaNoticias from "../../components/ListaNoticias";
 import axios from "axios";
+import TopButton from "../../components/TopButton";
 
 const DetalleNoticia = () => {
   const { id } = useParams();
@@ -51,13 +52,14 @@ const DetalleNoticia = () => {
     fetchNoticias();
   }, []);
 
+
   if (loading) return <p>Cargando noticia...</p>;
   if (!noticia) return <p>Noticia no encontrada</p>;
 
   return (
     <>
-      <Header
-        tittle="Noticias" />
+      <TopButton />
+      <Header tittle="Noticias" />
       <section className="grid grid-cols-1 md:grid-cols-3 gap-5 px-8 py-8">
         <div className="grid col-span-2 p-4">
           <p className="text-gray-500 text-sm">{noticia.Fecha}</p>

@@ -3,18 +3,20 @@ import axios from "axios";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Button from "../../components/Button";
+import TopButton from "../../components/TopButton";
 
 const MallaCurricular = () => {
   const [ciclos, setCiclos] = useState([]);
   const [malla, setMalla] = useState("");
   const [activeIndex, setActiveIndex] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:8000/api/ciclos");
         setCiclos(response.data);
-        const responseMalla = await axios.get("http://localhost:8000/api/malla");
+        const responseMalla = await axios.get(
+          "http://localhost:8000/api/malla"
+        );
         setMalla(responseMalla.data.malla.pdfMalla);
       } catch (error) {
         console.error("Error al obtener los datos de la malla:", error);
@@ -27,11 +29,10 @@ const MallaCurricular = () => {
   const toggleAccordion = (index) => {
     setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
   };
-
   return (
     <div>
-      <Header
-        tittle="Malla Curricular" />
+      <TopButton />
+      <Header tittle="Malla Curricular" />
       <section className="my-6 mx-10 md:my-10 md:mx-16">
         <div className="flex flex-col items-start gap-2 mb-9">
           <div className="text-2xl font-semibold text-[#262D73]">

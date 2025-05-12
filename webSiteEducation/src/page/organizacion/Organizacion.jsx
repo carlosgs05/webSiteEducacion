@@ -4,13 +4,13 @@ import Header from "../../components/Header";
 import Button from "../../components/Button";
 import CardOrganization from "../../components/CardOrganization";
 import axios from "axios";
+import TopButton from "../../components/TopButton";
 
 const Organizacion = () => {
   const [activeSection, setActiveSection] = useState("autoridades");
   const [autoridades, setAutoridades] = useState([]);
   const [docentes, setDocentes] = useState([]);
   const [administrativos, setAdministrativos] = useState([]);
-
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/organizacion")
@@ -34,10 +34,12 @@ const Organizacion = () => {
       .catch((error) => {
         console.error("Error al obtener la organización:", error);
       });
+      
   }, []);
 
   return (
     <>
+      <TopButton />
       <Header 
       tittle="Organización"/>
       {/* Botones de navegación */}

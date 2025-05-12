@@ -2,15 +2,20 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Button from "../../components/Button";
 import InfoMediaSection from "../../components/InfoMediaSection";
+import TopButton from "../../components/TopButton";
 
 const Perfiles = () => {
+ 
   return (
     <>
-      <Header
-        tittle="Perfiles" />
+      <TopButton />
+      <Header tittle="Perfiles" />
       <section>
         <div className="m-10 md:m-16">
-          <Button name=" Ver Malla Curricular" link="/informacionAcademica/mallaCurricular" />
+          <Button
+            name=" Ver Malla Curricular"
+            link="/informacionAcademica/mallaCurricular"
+          />
         </div>
 
         <div>

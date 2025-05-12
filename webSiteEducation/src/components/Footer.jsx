@@ -17,10 +17,10 @@ const Footer = () => {
               <h2 className="mb-6 text-lg font-bold text-[#262D73] uppercase">
                 Contacto
               </h2>
-              <ul className="text-[#868686] font-medium">
+              <ul className="text-[#868686] font-normal">
                 <li className="mb-4 flex gap-2">
                   <svg
-                    className="w-6 h-6 text-[#FCCC06]"
+                    className="w-6 h-6 text-[#262D73]"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -34,7 +34,7 @@ const Footer = () => {
                 </li>
                 <li className="mb-4 flex gap-2">
                   <svg
-                    className="w-6 h-6 text-[#FCCC06]"
+                    className="w-6 h-6 text-[#262D73]"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -49,7 +49,7 @@ const Footer = () => {
                 </li>
                 <li className="mb-4 flex gap-2 ">
                   <svg
-                    className="w-6 h-6 text-[#FCCC06]"
+                    className="w-6 h-6 text-[#262D73]"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -81,10 +81,10 @@ const Footer = () => {
               <h2 className="mb-6 text-lg font-bold text-[#262D73] uppercase">
                 Sobre este portal
               </h2>
-              <ul className="text-[#868686]  font-medium">
+              <ul className="text-[#868686]  font-normal">
                 <li className="mb-4 flex gap-2 ">
                   <svg
-                    className="w-6 h-6 text-[#FCCC06]"
+                    className="w-6 h-6 text-[#262D73]"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -103,7 +103,7 @@ const Footer = () => {
 
                   <a
                     href="https://maps.app.goo.gl/FymzZYL1eiHTYwHLA"
-                    className="hover:text-[#E4BCD3]"
+                    className="hover:text-[#c8e75b]"
                     target="_blank"
                   >
                     Mapa del sitio
@@ -118,7 +118,7 @@ const Footer = () => {
               <div className="flex mt-4 sm:mt-0 sm:gap-4">
                 <a
                   href="#"
-                  className="text-[#FCCC06] hover:text-[#E4BCD3]"
+                  className="text-[#262D73] hover:text-[#E4BCD3]"
                 >
                   <svg
                     className="w-4 h-4"
@@ -138,7 +138,7 @@ const Footer = () => {
                
                 <a
                   href="#"
-                  className="text-[#FCCC06] hover:text-[#E4BCD3]"
+                  className="text-[#262D73] hover:text-[#E4BCD3]"
                 >
                   <svg
                     className="w-4 h-4"
@@ -157,7 +157,7 @@ const Footer = () => {
                 </a>
                 <a
                   href="#"
-                  className="text-[#FCCC06] hover:text-[#E4BCD3]"
+                  className="text-[#262D73] hover:text-[#E4BCD3]"
                 >
                   <svg
                     className="w-4 h-4"
@@ -176,7 +176,7 @@ const Footer = () => {
                 </a>
                 <a
                   href="#"
-                  className="text-[#FCCC06] hover:text-[#E4BCD3]"
+                  className="text-[#262D73] hover:text-[#E4BCD3]"
                 >
                   <svg
                     className="w-4 h-4"
@@ -197,7 +197,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="bg-[#545454]/50 sm:flex sm:items-center sm:justify-between px-12 py-6">
+        <div className="bg-[#656565] sm:flex sm:items-center sm:justify-between px-12 py-6">
           <span className="text-sm text-white font-semibold sm:text-center">
             © 2024{" "}
             

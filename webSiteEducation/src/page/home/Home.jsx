@@ -4,11 +4,10 @@ import HeaderHome from "../../components/HeaderHome";
 import Footer from "../../components/Footer";
 import InfoMediaSection from "../../components/InfoMediaSection";
 import CardSlider from "../../components/CardSlider";
-
+import TopButton from "../../components/TopButton";
 const Home = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const fetch = async () => {
     setLoading(true);
     try {
@@ -26,6 +25,7 @@ const Home = () => {
 
   return (
     <>
+      <TopButton />
       <HeaderHome />
       <InfoMediaSection
         title="Presentación"
