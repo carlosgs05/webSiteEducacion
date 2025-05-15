@@ -60,16 +60,16 @@ const Footer = () => {
           <div>
             <h3 className="mb-4 font-semibold uppercase tracking-wide">Síguenos</h3>
             <div className="flex space-x-4">
-              <a href="#" aria-label="Facebook" className="hover:text-[#FFD700] transition">
+              <a href="https://www.facebook.com/InicialUNT" target="_blank"  aria-label="Facebook" className="hover:text-[#FFD700] transition">
                 <FaFacebook size={20} />
               </a>
-              <a href="#" aria-label="Twitter" className="hover:text-[#1DA1F2] transition">
+              <a href="#" aria-label="Twitter" target="_blank"  className="hover:text-[#1DA1F2] transition">
                 <FaTwitter size={20} />
               </a>
-              <a href="#" aria-label="YouTube" className="hover:text-red-600 transition">
+              <a href="#" aria-label="YouTube" target="_blank"  className="hover:text-red-600 transition">
                 <FaYoutube size={20} />
               </a>
-              <a href="#" aria-label="Instagram" className="hover:text-[#C13584] transition">
+              <a href="#" aria-label="Instagram" target="_blank"  className="hover:text-[#C13584] transition">
                 <FaInstagram size={20} />
               </a>
             </div>
