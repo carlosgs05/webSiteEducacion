@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import Layout from "../../components/Layout";
 import Button from "../../components/Button";
@@ -19,7 +18,6 @@ const Noticias = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Estados para paginación
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -87,10 +85,8 @@ const Noticias = () => {
     navigate(`/noticias/editar/${item.IdNoticia}`, {
       state: { editingRecord: item },
     });
-    console.log("item", item);
   };
 
-  // Lógica para paginación
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -99,110 +95,145 @@ const Noticias = () => {
   return (
     <Layout>
       <div className="p-4">
-        <div className="mb-4">
-          <Button
-            name="Nueva Noticia"
-            link="/noticias/registro"
-            bgColor="bg-[#545454]"
-          />
+        <div className="mb-9">
+          <h2 className="text-2xl text-center font-medium text-blue-800 uppercase">
+            Noticias
+          </h2>
+          <div className="my-6">
+            <Button
+              name="Nueva Noticia"
+              link="/noticias/registro"
+              bgColor="bg-[#4CAF50]"
+              className="cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-[#45A049] transition"
+            />
+          </div>
         </div>
+
         {loading ? (
           <LoadingIndicator />
         ) : (
-          <table className="w-full text-sm text-left rtl:text-right">
-            <thead className="text-xs text-white uppercase bg-[#545454]">
-              <tr>
-                <th className="px-6 py-3 text-center">TÍTULO</th>
-                <th className="px-6 py-3 text-center">FECHA</th>
-                <th className="px-6 py-3 text-center">IMAGEN PORTADA</th>
-                <th className="px-6 py-3 text-center">ENCABEZADO</th>
-                <th className="px-6 py-3 text-center">DESCRIPCIÓN</th>
-                <th className="px-6 py-3 text-center">OPCIONES</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.length === 0 ? (
-                <tr className="bg-white border-b border-gray-200">
-                  <td colSpan="6" className="py-3 text-center text-gray-500">
-                    SIN REGISTROS
-                  </td>
+          <div className="border border-gray-200 rounded-md overflow-hidden">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-[#545454] text-white uppercase text-xs">
+                <tr className="h-12">
+                  <th className="px-4 py-3 text-center">Título</th>
+                  <th className="px-4 py-3 text-center">Fecha</th>
+                  <th className="px-4 py-3 text-center">Imagen Portada</th>
+                  <th className="px-4 py-3 text-center">Encabezado</th>
+                  <th className="px-4 py-3 text-center">Descripción</th>
+                  <th className="px-4 py-3 text-center">Opciones</th>
                 </tr>
-              ) : (
-                currentItems.map((item, index) => (
-                  <tr
-                    key={item.IdNoticia}
-                    className={`border-b border-gray-200 hover:bg-gray-100 ${
-                      index % 2 === 0 ? "bg-white" : "bg-gray-100"
-                    }`}
-                  >
-                    <td className="py-3 text-center">
-                      <button
-                        onClick={() => openTextoModal(item.Nombre, "Título")}
-                        className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-2 py-2 rounded"
-                      >
-                        Ver Título
-                      </button>
-                    </td>
-                    <td className="py-3 text-center">{item.Fecha}</td>
-                    <td className="py-3 text-center">
-                      {item.ImagenPortada ? (
-                        <button
-                          onClick={() =>
-                            openImagenPortadaModal(
-                              `http://localhost:8000/${item.ImagenPortada}`
-                            )
-                          }
-                          className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-2 py-2 rounded"
-                        >
-                          Ver Portada
-                        </button>
-                      ) : (
-                        <span className="text-gray-500">Sin imagen</span>
-                      )}
-                    </td>
-                    <td className="py-3 text-center">
-                      <button
-                        onClick={() =>
-                          openTextoModal(item.Encabezado, "Encabezado")
-                        }
-                        className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-2 py-2 rounded"
-                      >
-                        Ver Encabezado
-                      </button>
-                    </td>
-                    <td className="py-3 text-center">
-                      <button
-                        onClick={() =>
-                          openTextoModal(item.Descripcion, "Descripción")
-                        }
-                        className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-2 py-2 rounded"
-                      >
-                        Ver Descripción
-                      </button>
-                    </td>
-                    <td className="py-3 text-center align-middle">
-                      <div className="flex gap-2 justify-center items-center">
-                        <button
-                          onClick={() => handleEdit(item)}
-                          className="bg-[#262D73] hover:bg-[#36395d] text-white px-3 py-2 rounded transition-colors"
-                          title="Editar"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item.IdNoticia)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded transition-colors"
-                          title="Eliminar"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
+              </thead>
+              <tbody>
+                {data.length === 0 ? (
+                  <tr className="bg-white border-b">
+                    <td colSpan="6" className="py-4 text-center text-gray-500">
+                      SIN REGISTROS
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  currentItems.map((item, index) => (
+                    <tr
+                      key={item.IdNoticia}
+                      className={`border-b ${
+                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                      } hover:bg-gray-100`}
+                    >
+                      <td className="py-2 px-4 text-center">
+                        <button
+                          onClick={() => openTextoModal(item.Nombre, "Título")}
+                          className="cursor-pointer bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded-md transition"
+                        >
+                          Ver Título
+                        </button>
+                      </td>
+                      <td className="py-2 px-4 text-center">{item.Fecha}</td>
+                      <td className="py-2 px-4 text-center">
+                        {item.ImagenPortada ? (
+                          <button
+                            onClick={() =>
+                              openImagenPortadaModal(
+                                `http://localhost:8000/${item.ImagenPortada}`
+                              )
+                            }
+                            className="cursor-pointer bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded-md transition"
+                          >
+                            Ver Portada
+                          </button>
+                        ) : (
+                          <span className="text-gray-400">—</span>
+                        )}
+                      </td>
+                      <td className="py-2 px-4 text-center">
+                        <button
+                          onClick={() =>
+                            openTextoModal(item.Encabezado, "Encabezado")
+                          }
+                          className="cursor-pointer bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded-md transition"
+                        >
+                          Ver Encabezado
+                        </button>
+                      </td>
+                      <td className="py-2 px-4 text-center">
+                        <button
+                          onClick={() =>
+                            openTextoModal(item.Descripcion, "Descripción")
+                          }
+                          className="cursor-pointer bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded-md transition"
+                        >
+                          Ver Descripción
+                        </button>
+                      </td>
+                      <td className="py-2 px-4 text-center">
+                        <div className="flex justify-center space-x-2">
+                          <button
+                            onClick={() => handleEdit(item)}
+                            className="cursor-pointer bg-[#262D73] hover:bg-[#36395d] p-1 rounded-md transition"
+                            title="Editar"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 text-white"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5m-1.414-6.414L16 3m0 0l-3 3m3-3L19 6"
+                              />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => handleDelete(item.IdNoticia)}
+                            className="cursor-pointer bg-red-500 hover:bg-red-600 p-1 rounded-md transition"
+                            title="Eliminar"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 text-white"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
 
         <div className="flex justify-center space-x-2 mt-4">
@@ -210,7 +241,7 @@ const Noticias = () => {
             <button
               key={index}
               onClick={() => setCurrentPage(index + 1)}
-              className={`px-3 py-1 rounded ${
+              className={`px-3 py-1 rounded-md cursor-pointer ${
                 currentPage === index + 1
                   ? "bg-blue-500 text-white"
                   : "bg-gray-300 hover:bg-gray-400"
@@ -220,6 +251,7 @@ const Noticias = () => {
             </button>
           ))}
         </div>
+
         {showDescripcionModal && (
           <DescripcionModal
             descripcion={textoActual}
@@ -237,4 +269,5 @@ const Noticias = () => {
     </Layout>
   );
 };
+
 export default Noticias;

@@ -6,7 +6,7 @@ import Rsu from './page/DesarrolloProfesional/Rsu'
 import BolsaDeTrabajo from './page/DesarrolloProfesional/BolsaTrabajo'
 import Documentos from './page/Documentos/Documentos'
 import Noticias from './page/Noticias/Noticias'
-import NoticiasRegistro from './page/Noticias/RegistroModal'
+import RegistroNoticias from './page/Noticias/RegistroNoticias'
 
 import Autoridades from './page/Organizacion/Autoridades'
 import PersonalDocente from './page/Organizacion/PersonalDocente'
@@ -40,8 +40,8 @@ function App() {
         <Route path='/desarrolloProfesional/bolsaDeTrabajo' element={<PrivateRoute><BolsaDeTrabajo /></PrivateRoute>} />
         <Route path='/documentos' element={<PrivateRoute><Documentos /></PrivateRoute>} />
         <Route path='/noticias' element={<PrivateRoute><Noticias /></PrivateRoute>} />
-        <Route path='/noticias/registro' element={<PrivateRoute><NoticiasRegistro /></PrivateRoute>} />
-        <Route path='/noticias/editar/:id' element={<PrivateRoute><NoticiasRegistro /></PrivateRoute>} />
+        <Route path='/noticias/registro' element={<PrivateRoute><RegistroNoticias /></PrivateRoute>} />
+        <Route path='/noticias/editar/:id' element={<PrivateRoute><RegistroNoticias /></PrivateRoute>} />
         <Route path='/mallaCurricular' element={<PrivateRoute><MallaCurricular /></PrivateRoute>} />
         <Route path='/perfil' element={<PrivateRoute><Perfil /></PrivateRoute>} />
       </Routes>

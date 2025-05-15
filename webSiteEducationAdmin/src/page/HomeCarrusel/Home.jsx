@@ -1,3 +1,4 @@
+// src/pages/Home.jsx
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
@@ -10,14 +11,18 @@ const Home = () => {
   const [dbImages, setDbImages] = useState([]);
   const [imagesState, setImagesState] = useState([]); // { preview, name, file }
   const [loading, setLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const fetchImages = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/imagenesHomeCarrusel");
-      // Suponiendo que response.data es un arreglo de objetos con el atributo "imagen"
+      const response = await axios.get(
+        "http://localhost:8000/api/imagenesHomeCarrusel"
+      );
       const images = response.data.map((item) => item.Imagen);
       setDbImages(images);
+      // Reset child state when re-fetching
+      setImagesState([]);
     } catch (error) {
       console.error("Error al recuperar las imágenes:", error);
     }
@@ -28,13 +33,11 @@ const Home = () => {
     fetchImages();
   }, []);
 
-  // Recibe el array completo de objetos { preview, name, file } del hijo
   const handleImagesChange = (imagesArray) => {
     setImagesState(imagesArray);
   };
 
   const handleGuardar = async () => {
-    // Validar que haya mínimo 2 imágenes
     if (imagesState.length < 2) {
       swal("Error", "Debe haber mínimo 2 imágenes", "error");
       return;
@@ -45,10 +48,8 @@ const Home = () => {
 
     imagesState.forEach((img) => {
       if (img.file) {
-        // Imagen nueva
         formData.append("newImages[]", img.file);
       } else {
-        // Imagen ya existente
         existingImages.push(img.name);
       }
     });
@@ -68,11 +69,18 @@ const Home = () => {
     }
   };
 
+  const handleCancelar = () => {
+    setIsEditing(false);
+    fetchImages();
+  };
+
   return (
     <Layout>
       <div className="p-4">
         <div className="flex flex-col gap-y-4">
-          <h1 className="text-2xl text-center font-medium text-blue-800">IMÁGENES DEL CARRUSEL</h1>
+          <h1 className="text-2xl text-center font-medium text-blue-800">
+            IMÁGENES DEL CARRUSEL
+          </h1>
           <h3 className="text-base">
             Agregar las imágenes que se mostrarán en la página principal
           </h3>
@@ -81,17 +89,37 @@ const Home = () => {
         {loading ? (
           <LoadingIndicator />
         ) : (
-          <div>
-            <div className="py-8">
-              <AddImageSlider
-                initialImages={dbImages}
-                onImagesChange={handleImagesChange}
-              />
-            </div>
-            <div className="flex justify-center gap-x-10">
-              <Button name="Guardar" bgColor="bg-[#262D73]" onClick={handleGuardar} />
-              <Button name="Cancelar" bgColor="bg-red-500" link="/" />
-            </div>
+          <div className="py-8">
+            <AddImageSlider
+              initialImages={dbImages}
+              onImagesChange={handleImagesChange}
+              isEditing={isEditing}
+            />
+
+            {!isEditing ? (
+              <div className="text-center mt-8">
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="text-indigo-600 hover:underline font-medium cursor-pointer"
+                  type="button"
+                >
+                  Editar imágenes
+                </button>
+              </div>
+            ) : (
+              <div className="flex justify-center gap-x-10 mt-6">
+                <Button
+                  name="Guardar"
+                  bgColor="bg-[#262D73]"
+                  onClick={handleGuardar}
+                />
+                <Button
+                  name="Cancelar"
+                  bgColor="bg-red-500"
+                  onClick={handleCancelar}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>

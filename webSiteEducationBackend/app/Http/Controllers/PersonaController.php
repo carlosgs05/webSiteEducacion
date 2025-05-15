@@ -4,50 +4,77 @@ namespace App\Http\Controllers;
 
 use App\Models\Persona;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class PersonaController extends Controller
 {
-    /**
-     * Muestra un listado de todas las personas con sus publicaciones.
-     */
+    /* Muestra un listado de todas las personas con sus publicaciones asociadas */
     public function index()
     {
         // Eager Loading de la relación 'publicaciones'
         $personas = Persona::with(relations: 'publicaciones')->get();
 
-        // O devolverlos como JSON (por ejemplo, en una API):
+        // devolverlos como JSON
         return response()->json($personas);
     }
 
-    /**
-     * Almacena una nueva persona y sus publicaciones (si las hay).
-     */ public function store(Request $request)
+    /* Registra una persona con sus publicaciones asociadas */
+    public function store(Request $request)
     {
-        // Crear una nueva instancia de Persona
-        $persona = new Persona();
+        // Reglas de validación incluyendo formato (regex)
+        $rules = [
+            'Nombres'         => ['required', 'string', 'max:255', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/'],
+            'Correo'          => ['required', 'email', 'max:255'],
+            'Cargo'           => ['required', 'string', 'max:50', 'regex:/^[A-Za-z0-9ÁÉÍÓÚáéíóúñÑ ]+$/'],
+            'TituloPersona'   => ['required', 'string', 'max:255'],
+            'RolPersona'      => ['required', Rule::in(['Autoridades', 'Personal Docente', 'Personal Administrativo'])],
+            'Foto'            => ['required', 'image', 'mimes:jpg,jpeg,png'],
+        ];
 
-        // Asignar los campos del request (mapeando Nombres a NombreCompleto, TituloPersona a Titulo)
-        $persona->NombreCompleto = $request->Nombres;
-        $persona->Correo = $request->Correo;
-        $persona->Cargo = $request->Cargo;
-        $persona->Titulo = $request->TituloPersona; // TituloPersona del frontend se guarda como Titulo
-        $persona->RolPersona = $request->RolPersona; // Se envía desde el frontend (valor de prop tipo)
+        $messages = [
+            'Nombres.required'       => 'El nombre es obligatorio.',
+            'Nombres.regex'          => 'El nombre solo puede contener letras y espacios',
+            'Correo.required'        => 'El correo es obligatorio',
+            'Correo.email'           => 'El correo debe tener un formato válido',
+            'Cargo.required'         => 'El cargo es obligatorio',
+            'Cargo.regex'            => 'El cargo solo puede contener letras, números y espacios',
+            'TituloPersona.required' => 'El título es obligatorio',
+            'RolPersona.in'          => 'El rol seleccionado no es válido',
+            'Foto.required'         => 'La foto es obligatoria',
+            'Foto.image'             => 'La foto debe ser una imagen',
+            'Foto.mimes'             => 'La foto debe ser jpg, jpeg o png',
+        ];
 
-        // Procesar la imagen si existe en el request
-        if ($request->hasFile('Foto')) {
-            $imagen = $request->file('Foto');
-            $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
-            // Mover la imagen a la carpeta 'imagenes' dentro del public
-            $imagen->move(public_path('imagenes'), $nombreImagen);
-            $persona->Foto = 'imagenes/' . $nombreImagen; // Guardar la ruta relativa
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Errores de validación',
+                'errors'  => $validator->errors(),
+            ], 422);
         }
 
-        // Guardar la persona en la base de datos
+        $data = $validator->validated();
+
+        $persona = new Persona();
+        $persona->NombreCompleto = $data['Nombres'];
+        $persona->Correo         = $data['Correo'];
+        $persona->Cargo          = $data['Cargo'];
+        $persona->Titulo         = $data['TituloPersona'];
+        $persona->RolPersona     = $data['RolPersona'];
+
+        if ($request->hasFile('Foto')) {
+            $imagen       = $request->file('Foto');
+            $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
+            $imagen->move(public_path('imagenes'), $nombreImagen);
+            $persona->Foto = 'imagenes/' . $nombreImagen;
+        }
+
         $persona->save();
 
-        // Si se enviaron publicaciones, recorrer el array y crearlas asociadas a la persona
-        if ($request->has('publicaciones')) {
-            foreach ($request->input('publicaciones') as $pubData) {
+        if (!empty($data['publicaciones'])) {
+            foreach ($data['publicaciones'] as $pubData) {
                 $persona->publicaciones()->create([
                     'Titulo' => $pubData['titulo'],
                     'Url'    => $pubData['url'],
@@ -55,45 +82,71 @@ class PersonaController extends Controller
             }
         }
 
-        // Devolver la persona creada como JSON
-        return response()->json($persona, 201);
+        return response()->json([
+            'message' => 'Persona creada con éxito.',
+            'data'    => $persona->load('publicaciones'),
+        ], 201);
     }
 
-    /**
-     * Actualiza una persona y sus publicaciones.
-     * Se borran todas las publicaciones previas y se crean las nuevas enviadas.
-     */
+    /* Edita una personas especídfica y sus publicaciones asociadas */
     public function update(Request $request, $id)
     {
-        // Buscar la persona por ID o fallar si no existe
         $persona = Persona::findOrFail($id);
 
-        // Actualizar los campos de la persona
-        $persona->NombreCompleto = $request->Nombres;
-        $persona->Correo = $request->Correo;
-        $persona->Cargo = $request->Cargo;
-        $persona->Titulo = $request->TituloPersona; // El campo del frontend TituloPersona se guarda como Titulo
-        $persona->RolPersona = $request->RolPersona; // Se envía desde el frontend (valor de prop tipo)
+        // Reglas de validación incluyendo formato (regex)
+        $rules = [
+            'Nombres'         => ['required', 'string', 'max:255', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/'],
+            'Correo'          => ['required', 'email', 'max:255'],
+            'Cargo'           => ['required', 'string', 'max:50', 'regex:/^[A-Za-z0-9ÁÉÍÓÚáéíóúñÑ ]+$/'],
+            'TituloPersona'   => ['required', 'string', 'max:255'],
+            'RolPersona'      => ['required', Rule::in(['Autoridades', 'Personal Docente', 'Personal Administrativo'])],
+            'Foto'            => ['required', 'image', 'mimes:jpg,jpeg,png'],
+        ];
 
-        // Procesar la imagen si se envía una nueva
-        if ($request->hasFile('Foto')) {
-            $imagen = $request->file('Foto');
-            $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
-            // Mover la imagen a la carpeta 'imagenes' dentro del public
-            $imagen->move(public_path('imagenes'), $nombreImagen);
-            $persona->Foto = 'imagenes/' . $nombreImagen; // Guardar la ruta relativa
+        $messages = [
+            'Nombres.required'       => 'El nombre es obligatorio.',
+            'Nombres.regex'          => 'El nombre solo puede contener letras y espacios',
+            'Correo.required'        => 'El correo es obligatorio',
+            'Correo.email'           => 'El correo debe tener un formato válido',
+            'Cargo.required'         => 'El cargo es obligatorio',
+            'Cargo.regex'            => 'El cargo solo puede contener letras, números y espacios',
+            'TituloPersona.required' => 'El título es obligatorio',
+            'RolPersona.in'          => 'El rol seleccionado no es válido',
+            'Foto.required'         => 'La foto es obligatoria',
+            'Foto.image'             => 'La foto debe ser una imagen',
+            'Foto.mimes'             => 'La foto debe ser jpg, jpeg o png',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Errores de validación',
+                'errors'  => $validator->errors(),
+            ], 422);
         }
 
-        // Guardar los cambios de la persona
+        $data = $validator->validated();
+
+        $persona->NombreCompleto = $data['Nombres'];
+        $persona->Correo         = $data['Correo'];
+        $persona->Cargo          = $data['Cargo'];
+        $persona->Titulo         = $data['TituloPersona'];
+        $persona->RolPersona     = $data['RolPersona'];
+
+        if ($request->hasFile('Foto')) {
+            $imagen       = $request->file('Foto');
+            $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
+            $imagen->move(public_path('imagenes'), $nombreImagen);
+            $persona->Foto = 'imagenes/' . $nombreImagen;
+        }
+
         $persona->save();
 
-        // Eliminar todas las publicaciones actuales asociadas a la persona
-        // (No usamos truncate para no eliminar datos de otras personas, se elimina solo mediante el modelo relacionado)
+        // Reemplazar publicaciones
         $persona->publicaciones()->delete();
-
-        // Si se enviaron publicaciones, recorrer el array y crearlas asociadas a la persona
-        if ($request->has('publicaciones')) {
-            foreach ($request->input('publicaciones') as $pubData) {
+        if (!empty($data['publicaciones'])) {
+            foreach ($data['publicaciones'] as $pubData) {
                 $persona->publicaciones()->create([
                     'Titulo' => $pubData['titulo'],
                     'Url'    => $pubData['url'],
@@ -101,13 +154,13 @@ class PersonaController extends Controller
             }
         }
 
-        // Devolver la persona actualizada como JSON
-        return response()->json($persona, 200);
+        return response()->json([
+            'message' => 'Persona actualizada con éxito.',
+            'data'    => $persona->load('publicaciones'),
+        ], 200);
     }
 
-    /**
-     * Elimina una persona y sus publicaciones.
-     */
+    /* Elimina una persona y sus publicaciones asociadas */
     public function destroy($id)
     {
         // Buscar la persona o lanzar excepción si no se encuentra

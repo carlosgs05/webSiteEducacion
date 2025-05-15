@@ -41,7 +41,7 @@ class CarruselHomeController extends Controller
         if ($request->hasFile('newImages')) {
             foreach ($request->file('newImages') as $file) {
                 // Generamos un nombre único para evitar colisiones.
-                $filename = time() . '_' . $file->getClientOriginalName();
+                $filename = 'imagenes/'.time() . '_' . $file->getClientOriginalName();
                 // Movemos el archivo a la carpeta "imagenes" dentro de public.
                 $file->move(public_path('imagenes'), $filename);
                 // Guardamos el nombre (con extensión) en la base de datos.

@@ -18,10 +18,10 @@ const PersonalAdministrativo = () => {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
-  // Estados para paginación
+  // Paginación
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  // Estados para modal de publicaciones
+  // Publicaciones modal
   const [showPublicacionesModal, setShowPublicacionesModal] = useState(false);
   const [publicacionesActual, setPublicacionesActual] = useState([]);
 
@@ -30,13 +30,14 @@ const PersonalAdministrativo = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/organizacion");
-      const filtered = response.data.filter(
-        (item) => item.RolPersona === activeSection
+      const response = await axios.get(
+        "http://localhost:8000/api/organizacion"
       );
-      setData(filtered);
+      setData(
+        response.data.filter((item) => item.RolPersona === activeSection)
+      );
     } catch (error) {
-      console.error("Error al obtener los registros", error);
+      console.error("Error al obtener registros", error);
     }
     setLoading(false);
   };
@@ -50,8 +51,8 @@ const PersonalAdministrativo = () => {
     setShowModal(true);
   };
 
-  const openEditModal = (record) => {
-    setEditingRecord(record);
+  const openEditModal = (rec) => {
+    setEditingRecord(rec);
     setShowModal(true);
   };
 
@@ -66,11 +67,11 @@ const PersonalAdministrativo = () => {
         `http://localhost:8000/api/destroyOrganizacion/${idToDelete}`
       );
       fetchData();
-      setConfirmDelete(false);
-      setIdToDelete(null);
     } catch (error) {
-      console.error("Error eliminando el registro", error);
+      console.error("Error eliminando registro", error);
     }
+    setConfirmDelete(false);
+    setIdToDelete(null);
   };
 
   const cancelDelete = () => {
@@ -78,37 +79,42 @@ const PersonalAdministrativo = () => {
     setIdToDelete(null);
   };
 
-  const openImagenModal = (imagen) => {
-    setImagenActual(imagen);
+  const openImagenModal = (img) => {
+    setImagenActual(img);
     setShowImagenModal(true);
   };
 
-  // Nuevo: abre el modal de publicaciones
-  const openTablePublicacionesModal = (publicaciones) => {
-    setPublicacionesActual(publicaciones);
+  const openTablePublicacionesModal = (pubs) => {
+    setPublicacionesActual(pubs);
     setShowPublicacionesModal(true);
   };
 
-  // Lógica para paginación
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const indexLast = currentPage * itemsPerPage;
+  const indexFirst = indexLast - itemsPerPage;
+  const currentItems = data.slice(indexFirst, indexLast);
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   return (
     <Layout>
       <div className="p-4">
-        <div className="mb-8">
-          <h2 className="text-xl text-center font-semibold mb-5 text-gray-700 uppercase">
+        <div className="mb-6">
+          <h2 className="text-2xl text-center font-medium text-blue-800 uppercase">
             {activeSection}
           </h2>
-          <Button name="Nuevo registro" onClick={openNewModal} bgColor="bg-[#E4BCD3]" />
+          <div className="flex mt-5 mb-7">
+            <Button
+              name="Nuevo registro"
+              onClick={openNewModal}
+              bgColor="bg-[#4CAF50]"
+              className="cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-[#45A049] transition"
+            />
+          </div>
         </div>
 
         {loading ? (
           <LoadingIndicator />
         ) : (
-          <div>
+          <div className="overflow-x-auto">
             <TableOrganizacion
               data={currentItems}
               openImagenModal={openImagenModal}
@@ -120,17 +126,17 @@ const PersonalAdministrativo = () => {
         )}
 
         <div className="flex justify-center space-x-2 mt-4">
-          {Array.from({ length: totalPages }, (_, index) => (
+          {Array.from({ length: totalPages }, (_, i) => (
             <button
-              key={index}
-              onClick={() => setCurrentPage(index + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === index + 1
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 rounded-md cursor-pointer ${
+                currentPage === i + 1
                   ? "bg-blue-500 text-white"
                   : "bg-gray-300 hover:bg-gray-400"
               }`}
             >
-              {index + 1}
+              {i + 1}
             </button>
           ))}
         </div>
@@ -156,7 +162,10 @@ const PersonalAdministrativo = () => {
         )}
 
         {showImagenModal && (
-          <ImagenModal imagen={imagenActual} onClose={() => setShowImagenModal(false)} />
+          <ImagenModal
+            imagen={imagenActual}
+            onClose={() => setShowImagenModal(false)}
+          />
         )}
 
         {showPublicacionesModal && (

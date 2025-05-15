@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "react-router";
+import { useMatch } from "react-router";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -25,6 +26,9 @@ const Sidebar = () => {
     "/desarrolloProfesional/rsu",
     "/desarrolloProfesional/bolsaDeTrabajo",
   ];
+
+    // Devuelve un objeto match si la ruta actual encaja, o null en caso contrario
+  const noticiasMatch = useMatch("/noticias/*");
 
   return (
     <aside className="w-64 p-5 bg-[#5c5c5c] text-white flex flex-col justify-between">
@@ -52,7 +56,7 @@ const Sidebar = () => {
                   : "hover:bg-[#E4BCD3] hover:text-[#545454]"
               }`}
             >
-              INICIO
+              Principal
             </a>
           </li>
           <li>
@@ -242,11 +246,11 @@ const Sidebar = () => {
           <li>
             <a
               href="/noticias"
-              className={`block px-3 py-2 rounded transition-colors ${
-                isActive("/noticias")
-                  ? "bg-[#E4BCD3] text-[#545454]"
-                  : "hover:bg-[#E4BCD3] hover:text-[#545454]"
-              }`}
+                        className={`block px-3 py-2 rounded transition-colors ${
+            noticiasMatch
+              ? "bg-[#E4BCD3] text-[#545454]"        // Pestaña activa
+              : "hover:bg-[#E4BCD3] hover:text-[#545454]" // Pestaña inactiva
+          }`}
             >
               Noticias
             </a>

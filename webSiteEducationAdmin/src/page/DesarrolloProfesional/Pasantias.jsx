@@ -21,22 +21,22 @@ const Pasantias = () => {
   // Estados para paginación
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const activeSection = "pasantias";
+  const activeSection = "Pasantías";
 
   const fetchData = async () => {
-    setLoading(true); // Activar el indicador de carga
+    setLoading(true);
     try {
       const response = await axios.get(
         "http://localhost:8000/api/desarrolloProfesional"
       );
       const filtered = response.data.filter(
-        (item) => item.Tipo === activeSection
+        (item) => item.Tipo === activeSection.toLowerCase()
       );
       setData(filtered);
     } catch (error) {
       console.error("Error al obtener los registros", error);
     }
-    setLoading(false); // Desactivar el indicador de carga
+    setLoading(false);
   };
   useEffect(() => {
     fetchData();
@@ -56,7 +56,7 @@ const Pasantias = () => {
   const handleDelete = (id) => {
     swal({
       title: "¿Estás seguro?",
-      text: "Una vez eliminado, no podrás recuperar esta noticia.",
+      text: "Una vez eliminado, no podrás recuperar este registro.",
       icon: "warning",
       buttons: {
         cancel: "Cancelar",
@@ -73,7 +73,7 @@ const Pasantias = () => {
             `http://localhost:8000/api/destroyDesarrolloProfesional/${id}`
           )
           .then(() => {
-            swal("El registro ha sido eliminada.", {
+            swal("El registro ha sido eliminado.", {
               icon: "success",
             });
             fetchData();
@@ -99,7 +99,7 @@ const Pasantias = () => {
     setShowImagenModal(true);
   };
 
-  // Lógica para paginación
+  // Paginación
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -108,15 +108,20 @@ const Pasantias = () => {
   return (
     <Layout>
       <div className="p-4">
-        <div className="mb-4">
-          <Button
-            name="Nuevo registro"
-            onClick={openNewModal}
-            bgColor="bg-[#E4BCD3]"
-          />
+        <div className="mb-6">
+          <h2 className="text-2xl text-center font-medium text-blue-800 uppercase">
+            {activeSection}
+          </h2>
+          <div className="flex mt-5 mb-7">
+            <Button
+              name="Nuevo registro"
+              onClick={openNewModal}
+              bgColor="bg-[#4CAF50]"
+              className="cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-[#45A049] transition"
+            />
+          </div>
         </div>
 
-        {/* Indicador de carga */}
         {loading ? (
           <LoadingIndicator />
         ) : (
@@ -128,13 +133,13 @@ const Pasantias = () => {
             handleDelete={handleDelete}
           />
         )}
-        {/* Controles de paginación */}
+
         <div className="flex justify-center space-x-2 mt-4">
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}
               onClick={() => setCurrentPage(index + 1)}
-              className={`px-3 py-1 rounded ${
+              className={`px-3 py-1 rounded-md cursor-pointer ${
                 currentPage === index + 1
                   ? "bg-blue-500 text-white"
                   : "bg-gray-300 hover:bg-gray-400"
@@ -153,7 +158,7 @@ const Pasantias = () => {
               fetchData();
             }}
             editingRecord={editingRecord}
-            tipo={activeSection}
+            tipo={activeSection.toLowerCase()}
           />
         )}
         {showDescripcionModal && (

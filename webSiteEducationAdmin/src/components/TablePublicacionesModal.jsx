@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import ModalPortal from "./ModalPortal";
 import { FaTimes } from "react-icons/fa";

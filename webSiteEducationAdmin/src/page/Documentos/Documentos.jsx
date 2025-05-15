@@ -31,19 +31,16 @@ const Documentos = () => {
     fetchData();
   }, []);
 
-  // Abrir modal para crear un nuevo documento
   const openNewModal = () => {
     setEditingRecord(null);
     setShowModal(true);
   };
 
-  // Abrir modal para editar un documento existente
   const openEditModal = (record) => {
     setEditingRecord(record);
     setShowModal(true);
   };
 
-  // Manejo de eliminación
   const handleDelete = (id) => {
     swal({
       title: "¿Estás seguro?",
@@ -62,7 +59,7 @@ const Documentos = () => {
         axios
           .delete(`http://localhost:8000/api/destroyDocumento/${id}`)
           .then(() => {
-            swal("El registro ha sido eliminada.", {
+            swal("El registro ha sido eliminado.", {
               icon: "success",
             });
             fetchData();
@@ -78,7 +75,6 @@ const Documentos = () => {
     });
   };
 
-  // Abrir modal para ver descripción
   const openDescripcionModal = (descripcion) => {
     setDescripcionActual(descripcion);
     setShowDescripcionModal(true);
@@ -87,93 +83,93 @@ const Documentos = () => {
   return (
     <Layout>
       <div className="p-4">
-        <div className="mb-4">
-          <Button
-            name="Nuevo Registro"
-            onClick={openNewModal}
-            bgColor="bg-[#E4BCD3]"
-          />
+        <div className="mb-9">
+          <h2 className="text-2xl text-center font-medium text-blue-800 uppercase">
+            Documentos
+          </h2>
+          <div className="my-6">
+            <Button
+              name="Nuevo Registro"
+              onClick={openNewModal}
+              bgColor="bg-[#4CAF50]"
+              className="cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-[#45A049] transition"
+            />
+          </div>
         </div>
 
         {loading ? (
           <LoadingIndicator />
         ) : (
-          <table className="w-full text-sm text-left rtl:text-right">
-            <thead className="text-xs text-white uppercase bg-[#545454]">
-              <tr>
-                <th className="px-6 py-3 text-center">TÍTULO</th>
-                <th className="px-6 py-3 text-center">DESCRIPCIÓN</th>
-                <th className="px-6 py-3 text-center">URL</th>
-                <th className="px-6 py-3 text-center">ACCIONES</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.length === 0 ? (
-                <tr className="bg-white border-b border-gray-200">
-                  <td colSpan="4" className="py-3 text-center text-gray-500">
-                    SIN REGISTROS
-                  </td>
+          <div className="border border-gray-200 rounded-md overflow-hidden">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-[#545454] text-white uppercase text-xs">
+                <tr className="h-12">
+                  <th className="px-4 py-3 text-center">Título</th>
+                  <th className="px-4 py-3 text-center">Descripción</th>
+                  <th className="px-4 py-3 text-center">URL</th>
+                  <th className="px-4 py-3 text-center">Opciones</th>
                 </tr>
-              ) : (
-                data.map((item, index) => (
-                  <tr
-                    key={item.IdDocumento}
-                    className={`border-b border-gray-200 hover:bg-gray-100 ${
-                      index % 2 === 0 ? "bg-white" : "bg-gray-100"
-                    }`}
-                  >
-                    {/* TÍTULO */}
-                    <td className="py-3 text-center">{item.Titulo}</td>
-  
-                    {/* DESCRIPCIÓN (abre modal con botón) */}
-                    <td className="py-3 text-center">
-                      <button
-                        onClick={() => openDescripcionModal(item.Descripcion)}
-                        className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-2 py-2 rounded"
-                      >
-                        Ver descripción
-                      </button>
-                    </td>
-  
-                    {/* URL */}
-                    <td className="py-3 text-black text-center">
-                      <a
-                        href={item.Url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:underline"
-                      >
-                        {item.Url}
-                      </a>
-                    </td>
-  
-                    {/* ACCIONES */}
-                    <td className="py-3 text-center align-middle">
-                      <div className="flex gap-2 justify-center items-center">
-                        <button
-                          onClick={() => openEditModal(item)}
-                          className="bg-[#262D73] hover:bg-[#36395d] text-white px-3 py-2 rounded transition-colors"
-                          title="Editar"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item.IdDocumento)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded transition-colors"
-                          title="Eliminar"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
+              </thead>
+              <tbody>
+                {data.length === 0 ? (
+                  <tr className="bg-white border-b">
+                    <td colSpan="4" className="py-4 text-center text-gray-500">
+                      SIN REGISTROS
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  data.map((item, index) => (
+                    <tr
+                      key={item.IdDocumento}
+                      className={`border-b ${
+                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                      } hover:bg-gray-100`}
+                    >
+                      <td className="py-2 px-4 text-center">{item.Titulo}</td>
+                      <td className="py-2 px-4 text-center">
+                        <button
+                          onClick={() => openDescripcionModal(item.Descripcion)}
+                          className="cursor-pointer bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded-md transition"
+                        >
+                          Ver Descripción
+                        </button>
+                      </td>
+                      <td className="py-2 px-4 text-center">
+                        <a
+                          href={item.Url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
+                          {item.Url}
+                        </a>
+                      </td>
+                      <td className="py-2 px-4 text-center">
+                        <div className="flex justify-center space-x-2">
+                          <button
+                            onClick={() => openEditModal(item)}
+                            className="cursor-pointer bg-[#262D73] hover:bg-[#36395d] p-1 rounded-md transition"
+                            title="Editar"
+                          >
+                            <FaEdit className="h-5 w-5 text-white" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(item.IdDocumento)}
+                            className="cursor-pointer bg-red-500 hover:bg-red-600 p-1 rounded-md transition"
+                            title="Eliminar"
+                          >
+                            <FaTrash className="h-5 w-5 text-white" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
 
-        {/* Modal para crear/editar */}
         {showModal && (
           <RegistroModal
             onClose={() => {
@@ -185,11 +181,11 @@ const Documentos = () => {
           />
         )}
 
-        {/* Modal para ver descripción */}
         {showDescripcionModal && (
           <DescripcionModal
             descripcion={descripcionActual}
             onClose={() => setShowDescripcionModal(false)}
+            nombre="Descripción"
           />
         )}
       </div>

@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import swal from "sweetalert";
-import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 import Layout from "../../components/Layout";
 import LoadingIndicator from "../../components/LoadingIndicator";
-import FormCursosModal from "../../components/FormCursosModal"; // Ajusta la ruta según tu estructura
+import FormCursosModal from "../../components/FormCursosModal";
 
 const MallaCurricular = () => {
   const [malla, setMalla] = useState(null);
@@ -17,11 +17,9 @@ const MallaCurricular = () => {
   const [pdfMalla, setPdfMalla] = useState(null);
   const [pdfRemoved, setPdfRemoved] = useState(false);
 
-  // Control del modal de cursos
   const [showCursosModal, setShowCursosModal] = useState(false);
   const [selectedCurso, setSelectedCurso] = useState(null);
 
-  // Paginación: 3 registros por página
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
   const totalPages = Math.ceil(cursos.length / itemsPerPage);
@@ -32,7 +30,6 @@ const MallaCurricular = () => {
 
   const pdfInputRef = useRef(null);
 
-  // Función para limpiar el nombre del PDF
   const getCleanPdfName = (fullPath) => {
     let name = fullPath.replace(/^.*[\\/]/, "");
     const underscoreIndex = name.indexOf("_");
@@ -42,7 +39,6 @@ const MallaCurricular = () => {
     return name;
   };
 
-  // Función para obtener la URL completa del PDF
   const getPdfUrl = () => {
     if (!malla || !malla.pdfMalla) return "";
     return malla.pdfMalla.startsWith("http")
@@ -50,7 +46,6 @@ const MallaCurricular = () => {
       : `http://127.0.0.1:8000/${malla.pdfMalla}`;
   };
 
-  // Obtener datos del backend
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -72,7 +67,6 @@ const MallaCurricular = () => {
     fetchData();
   }, []);
 
-  // Registrar malla (modo nuevo)
   const handleRegistrar = () => {
     setIsEditing(true);
     setIsNew(true);
@@ -83,14 +77,12 @@ const MallaCurricular = () => {
     setCurrentPage(1);
   };
 
-  // Activar modo edición para la malla existente
   const handleEditar = () => {
     setIsEditing(true);
     setIsNew(false);
     setPdfRemoved(false);
   };
 
-  // Eliminar la malla con confirmación
   const handleEliminar = () => {
     if (!malla) return;
     swal({
@@ -104,19 +96,26 @@ const MallaCurricular = () => {
         axios
           .delete("http://localhost:8000/api/destroyMalla")
           .then(() => {
-            swal("Eliminado", "La malla curricular ha sido eliminada.", "success").then(() => {
+            swal(
+              "Eliminado",
+              "La malla curricular ha sido eliminada.",
+              "success"
+            ).then(() => {
               window.location.reload();
             });
           })
           .catch((error) => {
             console.error("Error eliminando malla:", error);
-            swal("Error", "Ocurrió un error al eliminar la malla curricular.", "error");
+            swal(
+              "Error",
+              "Ocurrió un error al eliminar la malla curricular.",
+              "error"
+            );
           });
       }
     });
   };
 
-  // Guardar la malla: si isNew es true, registra (store); de lo contrario, actualiza (update)
   const handleGuardar = async () => {
     try {
       const formData = new FormData();
@@ -132,12 +131,20 @@ const MallaCurricular = () => {
 
       if (isNew) {
         await axios.post("http://localhost:8000/api/storeMalla", formData);
-        swal("Creado", "La malla curricular ha sido registrada con éxito.", "success").then(() => {
+        swal(
+          "Creado",
+          "La malla curricular ha sido registrada con éxito.",
+          "success"
+        ).then(() => {
           window.location.reload();
         });
       } else {
         await axios.post("http://localhost:8000/api/updateMalla", formData);
-        swal("Actualizado", "La malla curricular ha sido actualizada con éxito.", "success").then(() => {
+        swal(
+          "Actualizado",
+          "La malla curricular ha sido actualizada con éxito.",
+          "success"
+        ).then(() => {
           window.location.reload();
         });
       }
@@ -147,7 +154,6 @@ const MallaCurricular = () => {
     }
   };
 
-  // Cancelar edición
   const handleCancelar = () => {
     if (malla) {
       setNombreMalla(malla.nombreMalla || "");
@@ -162,19 +168,16 @@ const MallaCurricular = () => {
     }
   };
 
-  // Abrir modal para agregar un curso
   const handleAgregarCurso = () => {
     setSelectedCurso(null);
     setShowCursosModal(true);
   };
 
-  // Editar curso (abre modal)
   const handleEditarCurso = (course) => {
     setSelectedCurso(course);
     setShowCursosModal(true);
   };
 
-  // Recibir curso desde el modal (nuevo o editado)
   const handleAddOrUpdateCursoModal = (curso) => {
     if (!selectedCurso) {
       const nuevoCurso = {
@@ -188,7 +191,9 @@ const MallaCurricular = () => {
       setCursos((prev) => [...prev, nuevoCurso]);
     } else {
       const updatedCourses = [...cursos];
-      const indexToUpdate = updatedCourses.findIndex((c) => c.IdCurso === selectedCurso.IdCurso);
+      const indexToUpdate = updatedCourses.findIndex(
+        (c) => c.IdCurso === selectedCurso.IdCurso
+      );
       if (indexToUpdate !== -1) {
         updatedCourses[indexToUpdate].Nombre = curso.nombre;
         updatedCourses[indexToUpdate].ciclo = {
@@ -202,7 +207,6 @@ const MallaCurricular = () => {
     setSelectedCurso(null);
   };
 
-  // Manejo del PDF: file input y drag & drop
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type === "application/pdf") {
@@ -256,8 +260,13 @@ const MallaCurricular = () => {
     return (
       <Layout>
         <div className="h-full p-4 flex flex-col gap-5">
-          <h1 className="text-xl font-medium text-center">MALLA CURRICULAR</h1>
-          <div className="h-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md overflow-hidden gap-10 cursor-pointer" onClick={handleRegistrar}>
+          <h1 className="text-2xl text-center font-medium text-blue-800 uppercase">
+            MALLA CURRICULAR
+          </h1>
+          <div
+            className="h-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md overflow-hidden gap-10 cursor-pointer hover:border-gray-400 transition-colors"
+            onClick={handleRegistrar}
+          >
             <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors p-6">
               <span className="text-6xl font-light">+</span>
               <p className="text-lg text-center">Registrar Malla Curricular</p>
@@ -271,49 +280,56 @@ const MallaCurricular = () => {
   return (
     <Layout>
       <div className="p-4">
-        <h1 className="text-xl font-medium text-center">MALLA CURRICULAR</h1>
+        <h1 className="text-2xl text-center font-medium text-blue-800 uppercase">
+          MALLA CURRICULAR
+        </h1>
+
         {malla && !isEditing && (
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mt-6">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 m-4">
             <div className="text-gray-600">
-              <span className="font-semibold text-lg">INFORMACIÓN</span>
             </div>
             <div className="flex gap-3">
-              <button onClick={handleEditar} className="cursor-pointer bg-pink-300 hover:bg-pink-400 text-white font-semibold px-4 py-2 rounded-md transition-colors">
+              <button
+                onClick={handleEditar}
+                className="text-[#262D73] hover:text-[#363D8F] font-medium transition-colors cursor-pointer"
+              >
                 Editar malla
               </button>
-              <button onClick={handleEliminar} className="cursor-pointer bg-pink-300 hover:bg-pink-400 text-white font-semibold px-4 py-2 rounded-md transition-colors">
+              <button
+                onClick={handleEliminar}
+                className="text-red-600 hover:text-red-700 font-medium transition-colors cursor-pointer"
+              >
                 Eliminar malla
               </button>
             </div>
           </div>
         )}
-        <div className="space-y-4 mt-6">
+
+        <div className="space-y-4">
           <div>
-            <label className="block mb-1 font-semibold text-gray-700">Nombre Malla</label>
+            <label className="block mb-2 text-base font-medium text-gray-600">
+              Nombre Malla
+            </label>
             <input
               type="text"
               readOnly={!isEditing}
               value={nombreMalla}
               onChange={(e) => setNombreMalla(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#545454]"
             />
           </div>
-          {/* Campo PDF */}
+
           <div>
-            <label className="block mb-1 font-semibold text-gray-700">PDF</label>
+            <label className="block mb-2 text-base font-medium text-gray-600">
+              PDF
+            </label>
             <div
-              className={`relative w-full border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center cursor-pointer ${
-                isEditing ? "opacity-100" : "opacity-60"
-              }`}
+              className={`relative w-full border-2 border-dashed ${
+                isEditing ? "border-gray-400" : "border-gray-300"
+              } rounded-md flex items-center justify-center cursor-pointer transition-colors`}
               style={{ height: "50px" }}
               onClick={
-                isEditing
-                  ? () => {
-                      if ((!pdfMalla && pdfRemoved === false && !(malla && malla.pdfMalla)) || (isEditing && (!pdfMalla || pdfRemoved))) {
-                        pdfInputRef.current.click();
-                      }
-                    }
-                  : undefined
+                isEditing ? () => pdfInputRef.current.click() : undefined
               }
               onDragOver={handleDragOver}
               onDrop={handleDrop}
@@ -328,10 +344,22 @@ const MallaCurricular = () => {
                         e.stopPropagation();
                         handleRemovePdf();
                       }}
-                      className="cursor-pointer pointer-events-auto absolute top-3 right-3 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition"
-                      title="Eliminar PDF"
+                      className="absolute top-2 right-2 p-1 bg-red-500 hover:bg-red-600 text-white rounded-md cursor-pointer transition-colors"
                     >
-                      <FaTrash />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2"
+                        />
+                      </svg>
                     </button>
                   </div>
                 ) : malla && malla.pdfMalla && !pdfRemoved ? (
@@ -343,40 +371,49 @@ const MallaCurricular = () => {
                         e.stopPropagation();
                         handleRemovePdf();
                       }}
-                      className="cursor-pointer pointer-events-auto absolute top-3 right-3 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition"
-                      title="Eliminar PDF"
+                      className="absolute top-2 right-2 p-1 bg-red-500 hover:bg-red-600 text-white rounded-md cursor-pointer transition-colors"
                     >
-                      <FaTrash />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2"
+                        />
+                      </svg>
                     </button>
                   </div>
                 ) : (
-                  <div className="text-gray-400 flex gap-2.5 items-center">
+                  <div className="text-gray-400 flex gap-2 items-center">
                     <span className="text-2xl">+</span>
-                    <p className="text-sm text-center">Agregar PDF o arrastrar y soltar</p>
+                    <p className="text-sm">Agregar PDF o arrastrar y soltar</p>
                   </div>
                 )
+              ) : malla && malla.pdfMalla && !pdfRemoved ? (
+                <div className="w-full h-full flex items-center justify-center relative px-4 text-sm text-gray-600 truncate">
+                  {getCleanPdfName(malla.pdfMalla)}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      window.open(getPdfUrl(), "_blank");
+                      e.stopPropagation();
+                    }}
+                    className="absolute top-2 right-2 p-1 bg-gray-600 hover:bg-gray-700 text-white rounded-md cursor-pointer transition-colors"
+                  >
+                    <FaEye className="h-5 w-5" />
+                  </button>
+                </div>
               ) : (
-                malla && malla.pdfMalla && !pdfRemoved ? (
-                  <div className="w-full h-full flex items-center justify-center relative px-4 text-sm text-gray-600 truncate">
-                    {getCleanPdfName(malla.pdfMalla)}
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        window.open(getPdfUrl(), "_blank");
-                        e.stopPropagation();
-                      }}
-                      className="cursor-pointer pointer-events-auto absolute top-3 right-3 bg-blue-500 text-white p-1 rounded-full hover:bg-blue-600 transition"
-                      title="Ver PDF"
-                    >
-                      <FaEye />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="text-gray-400 flex gap-2.5 items-center">
-                    <span className="text-2xl">+</span>
-                    <p className="text-sm text-center">Agregar PDF o arrastrar y soltar</p>
-                  </div>
-                )
+                <div className="text-gray-400 flex gap-2 items-center">
+                  <span className="text-2xl">+</span>
+                  <p className="text-sm">Agregar PDF o arrastrar y soltar</p>
+                </div>
               )}
             </div>
             <input
@@ -388,51 +425,105 @@ const MallaCurricular = () => {
               onChange={handleFileChange}
             />
           </div>
-          {/* CURSOS */}
+
           <div>
-            <h2 className="text-lg font-semibold text-gray-700 mb-2">CURSOS</h2>
+            <h2 className="text-base font-medium text-gray-700 mb-3">CURSOS</h2>
             {isEditing && (
-              <button onClick={handleAgregarCurso} className="cursor-pointer bg-pink-300 hover:bg-pink-400 text-white px-4 py-2 rounded-md font-semibold transition-colors mb-3">
-                Agregar
+              <button
+                onClick={handleAgregarCurso}
+                className="mb-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer"
+              >
+                Agregar curso
               </button>
             )}
-            <div className="overflow-x-auto border border-gray-200 rounded-md">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-pink-100 text-gray-700 uppercase">
-                  <tr>
-                    <th className="px-4 py-2 border-b border-gray-200">Nombre</th>
-                    <th className="px-4 py-2 border-b border-gray-200">Ciclo</th>
-                    {isEditing && <th className="px-4 py-2 border-b border-gray-200 text-center">Opciones</th>}
+            <div className="border border-gray-200 rounded-md overflow-hidden">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-[#545454] text-white uppercase text-xs">
+                  <tr className="h-12">
+                    <th className="px-4 py-3">Nombre</th>
+                    <th className="px-4 py-3">Ciclo</th>
+                    {isEditing && (
+                      <th className="px-4 py-3 text-center">Acciones</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
                   {currentCursos.length === 0 ? (
-                    <tr>
-                      <td colSpan={isEditing ? 3 : 2} className="text-center py-3 text-gray-500">
-                        Sin cursos
+                    <tr className="bg-white border-b">
+                      <td
+                        colSpan={3}
+                        className="py-4 text-center text-gray-500"
+                      >
+                        SIN REGISTROS
                       </td>
                     </tr>
                   ) : (
                     currentCursos.map((course, index) => (
-                      <tr key={course.IdCurso || index} className="hover:bg-pink-50">
-                        <td className="px-4 py-2 border-b border-gray-200">{course.Nombre}</td>
-                        <td className="px-4 py-2 border-b border-gray-200">{course.ciclo ? course.ciclo.Ciclo : "Sin ciclo"}</td>
+                      <tr
+                        key={course.IdCurso || index}
+                        className={`border-b ${
+                          index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                        } hover:bg-gray-100`}
+                      >
+                        <td className="px-4 py-3">{course.Nombre}</td>
+                        <td className="px-4 py-3">
+                          {course.ciclo?.Ciclo || "Sin ciclo"}
+                        </td>
                         {isEditing && (
-                          <td className="px-4 py-2 border-b border-gray-200 text-center">
-                            <button className="cursor-pointer text-blue-500 hover:text-blue-600 mr-3" title="Editar curso" onClick={() => handleEditarCurso(course)}>
-                              <FaEdit />
-                            </button>
-                            <button className="cursor-pointer text-red-500 hover:text-red-600" title="Eliminar curso" onClick={() => {
-                              const globalIndex = (currentPage - 1) * itemsPerPage + index;
-                              const newCourses = [...cursos];
-                              newCourses.splice(globalIndex, 1);
-                              setCursos(newCourses);
-                              if (newCourses.length <= (currentPage - 1) * itemsPerPage && currentPage > 1) {
-                                setCurrentPage(prev => prev - 1);
-                              }
-                            }}>
-                              <FaTrash />
-                            </button>
+                          <td className="px-4 py-3 text-center">
+                            <div className="flex justify-center space-x-3">
+                              <button
+                                onClick={() => handleEditarCurso(course)}
+                                className="bg-[#262D73] hover:bg-[#36395d] text-white p-1 rounded-md transition-colors cursor-pointer"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5m-1.414-6.414L16 3m0 0l-3 3m3-3L19 6"
+                                  />
+                                </svg>
+                              </button>
+                              <button
+                                onClick={() => {
+                                  const globalIndex =
+                                    (currentPage - 1) * itemsPerPage + index;
+                                  const newCourses = [...cursos];
+                                  newCourses.splice(globalIndex, 1);
+                                  setCursos(newCourses);
+                                  if (
+                                    newCourses.length <=
+                                      (currentPage - 1) * itemsPerPage &&
+                                    currentPage > 1
+                                  ) {
+                                    setCurrentPage((prev) => prev - 1);
+                                  }
+                                }}
+                                className="bg-red-500 hover:bg-red-600 text-white p-1 rounded-md transition-colors cursor-pointer"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
                           </td>
                         )}
                       </tr>
@@ -441,21 +532,46 @@ const MallaCurricular = () => {
                 </tbody>
               </table>
             </div>
+
             {totalPages > 1 && (
               <div className="flex justify-center mt-4">
-                <div className="inline-flex items-center border rounded-md overflow-hidden">
-                  <button onClick={handlePrevPage} disabled={currentPage === 1} className={`cursor-pointer px-3 py-2 text-sm ${currentPage === 1 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-white text-gray-700 hover:bg-gray-100"}`}>
+                <div className="inline-flex items-center border border-gray-300 rounded-md overflow-hidden">
+                  <button
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1.5 text-sm ${
+                      currentPage === 1
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-white text-gray-700 hover:bg-gray-50 cursor-pointer"
+                    }`}
+                  >
                     &lt;
                   </button>
                   {Array.from({ length: totalPages }, (_, i) => {
                     const pageNum = i + 1;
                     return (
-                      <button key={pageNum} onClick={() => handlePageClick(pageNum)} className={`cursor-pointer px-3 py-2 text-sm font-semibold ${pageNum === currentPage ? "bg-blue-500 text-white" : "bg-white text-gray-700 hover:bg-gray-100"}`}>
+                      <button
+                        key={pageNum}
+                        onClick={() => handlePageClick(pageNum)}
+                        className={`px-3 py-1.5 text-sm ${
+                          pageNum === currentPage
+                            ? "bg-[#545454] text-white cursor-pointer"
+                            : "bg-white text-gray-700 hover:bg-gray-50 cursor-pointer"
+                        }`}
+                      >
                         {pageNum}
                       </button>
                     );
                   })}
-                  <button onClick={handleNextPage} disabled={currentPage === totalPages} className={`cursor-pointer px-3 py-2 text-sm ${currentPage === totalPages ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-white text-gray-700 hover:bg-gray-100"}`}>
+                  <button
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1.5 text-sm ${
+                      currentPage === totalPages
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-white text-gray-700 hover:bg-gray-50 cursor-pointer"
+                    }`}
+                  >
                     &gt;
                   </button>
                 </div>
@@ -463,27 +579,35 @@ const MallaCurricular = () => {
             )}
           </div>
         </div>
+
         {isEditing && (
           <div className="flex justify-center gap-4 mt-6">
-            <button onClick={handleGuardar} className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-semibold transition-colors">
+            <button
+              onClick={handleGuardar}
+              className="bg-[#262D73] hover:bg-[#36395d] text-white px-6 py-2 rounded-md font-medium transition-colors cursor-pointer"
+            >
               Guardar
             </button>
-            <button onClick={handleCancelar} className="cursor-pointer bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded font-semibold transition-colors">
+            <button
+              onClick={handleCancelar}
+              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-md font-medium transition-colors cursor-pointer"
+            >
               Cancelar
             </button>
           </div>
         )}
+
+        {showCursosModal && (
+          <FormCursosModal
+            cursoToEdit={selectedCurso}
+            onAccept={handleAddOrUpdateCursoModal}
+            onClose={() => {
+              setShowCursosModal(false);
+              setSelectedCurso(null);
+            }}
+          />
+        )}
       </div>
-      {isEditing && showCursosModal && (
-        <FormCursosModal
-          cursoToEdit={selectedCurso}
-          onAccept={handleAddOrUpdateCursoModal}
-          onClose={() => {
-            setShowCursosModal(false);
-            setSelectedCurso(null);
-          }}
-        />
-      )}
     </Layout>
   );
 };
