@@ -41,7 +41,7 @@ const CardSlider = ({ title, data }) => {
   };
 
   return (
-    <section className="my-6 mx-10 md:my-10 md:mx-16">
+    <section className="my-6 mx-10 md:mx-16">
       <div className="flex flex-col items-start gap-2 mb-9">
         <div className="text-2xl font-semibold text-[#262D73]">{title}</div>
         <div className="w-full h-1 bg-[#D9D9D9]"></div>
@@ -50,34 +50,36 @@ const CardSlider = ({ title, data }) => {
         <div className="w-full h-fit px-8">
           <Slider {...settings}>
             {data.map((item, index) => (
-              <div key={index} className="py-10 px-6">
-                <div className="border border-gray-200 rounded-md flex flex-col justify-center shadow-lg">
-                  <div className="flex flex-col relative">
+              <div key={index} className="px-4">
+                <div className="border border-gray-200 rounded-lg shadow-md bg-white overflow-hidden transform transition-all duration-500 ease-in-out hover:-translate-y-2 hover:shadow-xl">
+                  <div className="relative overflow-hidden group">
                     <img
-                    
-                      src={`http://localhost:8000/${item.Imagen || item.ImagenPortada}`}
-                      className="w-full relative z-10 max-h-80 rounded-t-md"
+                      src={`http://localhost:8000/${
+                        item.Imagen || item.ImagenPortada
+                      }`}
+                      className="w-full h-64 object-cover rounded-t-md transform transition-transform duration-700 ease-in-out group-hover:scale-105"
                       alt="imagen"
                     />
                   </div>
-                  <div className="flex flex-col px-4">
-                    <p className="text-base mt-3 mb-2 text-[#545454] font-semibold">
+                  <div className="flex flex-col px-4 py-3 transition-all duration-500 ease-in-out">
+                    <p className="text-sm text-[#262D73] font-semibold mb-1">
                       {item.Fecha}
                     </p>
-                    <p className="text-base mb-3 line-clamp-3 hover:line-clamp-none text-gray-500">
+                    <p className="text-base text-gray-600 mb-2 line-clamp-3 group-hover:line-clamp-none transition-all duration-500 ease-in-out">
                       {item.Nombre || item.Descripcion}
                     </p>
                   </div>
-                  <div className="flex flex-row py-3 px-4 border-t border-gray-200">
-                    <div className="w-1/2 flex flex-row text-[#262D73]">
-                      <a
-                        href={`/novedades/noticias/${item.IdNoticia}`}
-                        target="_blank"
-                        className="mr-1 cursor-pointer hover:text-[#E4BCD3]"
-                      >
-                        Leer más ➔
-                      </a>
-                    </div>
+                  <div className="px-4 py-3 border-t border-gray-200 flex justify-start">
+                    <a
+                      href={`/novedades/noticias/${item.IdNoticia}`}
+                      target="_blank"
+                      className="text-[#262D73] hover:text-[#E4BCD3] font-medium transition-all duration-500 ease-in-out flex items-center gap-1"
+                    >
+                      Leer más
+                      <span className="transition-transform duration-500 ease-in-out group-hover:translate-x-1">
+                        ➔
+                      </span>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -86,8 +88,8 @@ const CardSlider = ({ title, data }) => {
         </div>
       </div>
       {title === "Noticias" && (
-        <div className="flex justify-center mt-8">
-          <Button name="VER MÁS NOTICIAS" link={"/novedades/noticias"} />
+        <div className="flex justify-center">
+          <Button name="Ver mas noticias" link={"/novedades/noticias"} />
         </div>
       )}
     </section>

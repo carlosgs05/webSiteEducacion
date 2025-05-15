@@ -1,284 +1,149 @@
-import { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router";
+import { useState, useEffect } from 'react';
 
 const Navbar = () => {
-  const [isOpaque, setIsOpaque] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isDropdownOpen1, setIsDropdownOpen1] = useState(false);
-
-
-  const dropdownRef = useRef(null);
-  const dropdownRef2 = useRef(null);
-  const mobileMenuRef = useRef(null);
-  const location = useLocation(); // Hook para obtener la ruta actual
+  const [scrolled, setScrolled] = useState(false);
+  const [hoverNov, setHoverNov] = useState(false);
+  const [hoverServ, setHoverServ] = useState(false);
+  const [mobileNovOpen, setMobileNovOpen] = useState(false);
+  const [mobileServOpen, setMobileServOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const headerHeight = document.querySelector("header")?.offsetHeight || 0;
-
-      if (window.scrollY > headerHeight) {
-        setIsOpaque(true);
-      } else {
-        setIsOpaque(false);
-      }
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
     };
-
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-      }
-      if (dropdownRef2.current && !dropdownRef2.current.contains(event.target)) {
-        setIsDropdownOpen1(false);
-      }
-
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target)
-      ) {
-        setIsMobileMenuOpen(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Función para verificar si el enlace está activo
-  const isActive = (path) => location.pathname === path;
+  const enlaces = [
+    { label: 'Inicio', href: '/' },
+    { label: 'Organización', href: '/organizacion' },
+    { label: 'Información Académica', href: '/informacionAcademica/perfiles' },
+    { label: 'Desarrollo Profesional', href: '/desarrolloProfesional' },
+  ];
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full px-4 md:px-12 py-1 transition-colors duration-300 z-50 ${
-        isOpaque ? "bg-[#545454]" : "bg-[#545454]/80"
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 transform transition-transform duration-300
+        ${scrolled ? 'bg-[#303030]/40 backdrop-blur-md shadow-lg' : 'bg-[#303030]/20 backdrop-blur-sm'}
+        translate-y-0`}
     >
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <div className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a
-          href="#"
-          className="flex items-center space-x-3 rtl:space-x-reverse lg:py-4"
-        >
+        <a href="/" className="flex items-center">
           <img src="/assets/logo.png" className="h-10" alt="Logo" />
         </a>
 
-        {/* Hamburguesa */}
+        {/* Botón menú hamburguesa móvil */}
         <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          type="button"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-white rounded-lg lg:hidden hover:ring-2 hover:ring-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="lg:hidden text-gray-800 focus:outline-none"
         >
-          <span className="sr-only">Open main menu</span>
-          <svg
-            className="w-5 h-5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 17 14"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M1 1h15M1 7h15M1 13h15"
-            />
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {mobileMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+            )}
           </svg>
         </button>
 
-        {/* Opciones del menú */}
-        <div
-          ref={mobileMenuRef}
-          className={`${
-            isMobileMenuOpen ? "block" : "hidden"
-          } w-full lg:block lg:w-auto py-4`}
-        >
-          {/* Ajuste de espacio horizontal entre li */}
-          <ul className="flex flex-col font-medium p-4 lg:p-0 mt-4 border border-gray-100 rounded-lg lg:space-x-12 rtl:space-x-reverse lg:flex-row lg:mt-0 lg:border-0 lg:items-center">
-            <li>
-              <a
-                href="/"
-                className={`block py-2 px-3 rounded lg:p-0 ${
-                  isActive("/")
-                    ? "text-white bg-[#E4BCD3] lg:text-[#E4BCD3] lg:bg-transparent"
-                    : "text-white bg-transparent"
-                } hover:bg-[#E4BCD3] lg:hover:text-[#E4BCD3] lg:hover:bg-transparent`}
-              >
-                Inicio
+        {/* Menú escritorio */}
+        <ul className="hidden lg:flex space-x-8 text-white font-medium items-center">
+          {enlaces.map((it) => (
+            <li key={it.href}>
+              <a href={it.href} className="relative py-2 hover:text-purple-600 group">
+                {it.label}
+                <span className="absolute left-0 bottom-0 block h-0.5 w-0 bg-gradient-to-r from-pink-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
               </a>
             </li>
+          ))}
+          {/* Dropdown Novedades */}
+          <li className="relative" onMouseEnter={() => setHoverNov(true)} onMouseLeave={() => setHoverNov(false)}>
+            <button className="flex items-center space-x-1 py-2">
+              <span>Novedades</span>
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 10 6">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+              </svg>
+            </button>
+            {hoverNov && (
+              <div className="absolute top-full bg-white/90 backdrop-blur-sm shadow-lg rounded-lg w-44 text-gray-800">
+                <ul className="py-2">
+                  <li><a href="/novedades/noticias" className="block px-4 py-2 hover:bg-gray-100">Noticias</a></li>
+                  <li><a href="#" className="block px-4 py-2 hover:bg-gray-100">Publicaciones</a></li>
+                </ul>
+              </div>
+            )}
+          </li>
+          {/* Dropdown Servicios Adm. */}
+          <li className="relative" onMouseEnter={() => setHoverServ(true)} onMouseLeave={() => setHoverServ(false)}>
+            <button className="flex items-center space-x-1 py-2">
+              <span>Servicios Adm.</span>
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 10 6">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+              </svg>
+            </button>
+            {hoverServ && (
+              <div className="absolute top-full bg-white/90 backdrop-blur-sm shadow-lg rounded-lg w-48 text-gray-800">
+                <ul className="py-2">
+                  <li><a href="/serviciosAdministrativos/mesa-de-partes" className="block px-4 py-2 hover:bg-gray-100">Mesa de partes</a></li>
+                  <li><a href="https://transparencia-universitaria.unitru.edu.pe" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 hover:bg-gray-100">Portal de transparencia</a></li>
+                  <li><a href="https://reclamos.servicios.gob.pe" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 hover:bg-gray-100">Libro de reclamaciones</a></li>
+                  <li><a href="/serviciosAdministrativos/documentos-tramites" className="block px-4 py-2 hover:bg-gray-100">Documentación</a></li>
+                </ul>
+              </div>
+            )}
+          </li>
+        </ul>
+      </div>
 
-            <li>
-              <a
-                href="/organizacion"
-                className={`block py-2 px-3 rounded lg:p-0 ${
-                  isActive("/organizacion")
-                    ? "text-white bg-[#E4BCD3] lg:text-[#E4BCD3] lg:bg-transparent"
-                    : "text-white bg-transparent"
-                } hover:bg-[#E4BCD3] lg:hover:text-[#E4BCD3] lg:hover:bg-transparent`}
-              >
-                Organización
-              </a>
-            </li>
+      {/* Menú móvil*/}
+      {mobileMenuOpen && (
+        <div className="lg:hidden px-6 pb-4">
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-gray-800 font-medium">
+            {enlaces.map((it) => (
+              <li key={it.href}>
+                <a href={it.href} className="block py-2 text-center border-b border-gray-200">{it.label}</a>
+              </li>
+            ))}
 
-            <li>
-              <a
-                href="/informacionAcademica/perfiles"
-                className={`block py-2 px-3 rounded lg:p-0 ${
-                  ["/informacionAcademica/perfiles", "/informacionAcademica/mallaCurricular"].some(isActive)
-                    ? "text-white bg-[#E4BCD3] lg:text-[#E4BCD3] lg:bg-transparent"
-                    : "text-white bg-transparent"
-                } hover:bg-[#E4BCD3] lg:hover:text-[#E4BCD3] lg:hover:bg-transparent`}
-              >
-                <span className="block lg:hidden">Información Académica</span>
-                <span className="hidden lg:block">
-                  Información <br /> Académica
-                </span>
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="/desarrolloProfesional"
-                className={`block py-2 px-3 rounded lg:p-0 ${
-                  ["/desarrolloProfesional"].some(isActive)
-                    ? "text-white bg-[#E4BCD3] lg:text-[#E4BCD3] lg:bg-transparent"
-                    : "text-white bg-transparent"
-                } hover:bg-[#E4BCD3] lg:hover:text-[#E4BCD3] lg:hover:bg-transparent`}
-              >
-                <span className="block lg:hidden">Desarrollo Profesional</span>
-                <span className="hidden lg:block">
-                  Desarrollo <br /> Profesional
-                </span>
-              </a>
-            </li>
-
-            {/* Dropdown */}
-            <li className="relative">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center justify-between w-full py-2 px-3 lg:p-0 text-white rounded hover:bg-[#E4BCD3] lg:hover:bg-transparent lg:border-0 lg:hover:text-[#E4BCD3]"
-              >
-                Novedades
-                <svg
-                  className="w-2.5 h-2.5 ms-2.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
-                  />
+            {/* Dropdown Novedades */}
+            <li className="col-span-2">
+              <button onClick={() => setMobileNovOpen(!mobileNovOpen)} className="w-full flex justify-between items-center py-2 border-b border-gray-200">
+                <span>Novedades</span>
+                <svg className={`w-5 h-5 transform transition-transform ${mobileNovOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              {isDropdownOpen && (
-                <div
-                  ref={dropdownRef}
-                  className="absolute z-10 bg-[#545454]/90 text-white divide-y divide-gray-600 rounded-lg shadow w-44"
-                >
-                  <ul className="py-2 text-sm">
-                    <li>
-                      <a
-                        href="/novedades/noticias"
-                        className="block px-4 py-2 hover:bg-[#E4BCD3]"
-                      >
-                        Noticias
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-[#E4BCD3]"
-                      >
-                        Publicaciones
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+              {mobileNovOpen && (
+                <ul className="pl-4 space-y-1">
+                  <li><a href="/novedades/noticias" className="block py-1">Noticias</a></li>
+                  <li><a href="#" className="block py-1">Publicaciones</a></li>
+                </ul>
               )}
             </li>
 
-            {/* Dropdown SERVICIOS ADMINISTRATIVOS*/}
-
-            <li className="relative">
-              <button
-                onClick={() => setIsDropdownOpen1(!isDropdownOpen1)}
-                className="flex items-center justify-between w-full py-2 px-3 lg:p-0 text-white rounded hover:bg-[#E4BCD3] lg:hover:bg-transparent lg:border-0 lg:hover:text-[#E4BCD3]"
-              >
-                Servicios <br /> administrativos
-                <svg
-                  className="w-2.5 h-2.5 ms-2.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
-                  />
+            {/* Dropdown Servicios Adm. */}
+            <li className="col-span-2">
+              <button onClick={() => setMobileServOpen(!mobileServOpen)} className="w-full flex justify-between items-center py-2 border-b border-gray-200">
+                <span>Servicios Adm.</span>
+                <svg className={`w-5 h-5 transform transition-transform ${mobileServOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              {isDropdownOpen1 && (
-                <div
-                  ref={dropdownRef2}
-                  className="absolute z-10 bg-[#545454]/90 text-white divide-y divide-gray-600 rounded-lg shadow w-44"
-                >
-                  <ul className="py-2 text-sm">
-                    <li>
-                      <a
-                        href="/serviciosAdministrativos/mesa-de-partes"
-                        className="block px-4 py-2 hover:bg-[#E4BCD3]"
-                      >
-                        Mesa de partes
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://transparencia-universitaria.unitru.edu.pe"
-                        target="_blank"
-                        className="block px-4 py-2 hover:bg-[#E4BCD3]"
-                      >
-                        Portal de transparencia
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://reclamos.servicios.gob.pe"
-                        target="_blank"
-                        className="block px-4 py-2 hover:bg-[#E4BCD3]"
-                      >
-                        Libro de reclamaciones
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/serviciosAdministrativos/documentos-tramites"
-                        className="block px-4 py-2 hover:bg-[#E4BCD3]"
-                      >
-                        Documentación
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+              {mobileServOpen && (
+                <ul className="pl-4 space-y-1">
+                  <li><a href="/serviciosAdministrativos/mesa-de-partes" className="block py-1">Mesa de partes</a></li>
+                  <li><a href="https://transparencia-universitaria.unitru.edu.pe" target="_blank" rel="noopener noreferrer" className="block py-1">Portal de transparencia</a></li>
+                  <li><a href="https://reclamos.servicios.gob.pe" target="_blank" rel="noopener noreferrer" className="block py-1">Libro de reclamaciones</a></li>
+                  <li><a href="/serviciosAdministrativos/documentos-tramites" className="block py-1">Documentación</a></li>
+                </ul>
               )}
             </li>
           </ul>
         </div>
-      </div>
+      )}
     </nav>
   );
 };
