@@ -26,7 +26,7 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed inset-x-0 top-0 z-50 transform transition-transform duration-300
-        ${scrolled ? 'bg-white/40 backdrop-blur-md shadow-lg' : 'bg-white/20 backdrop-blur-sm'}
+        ${scrolled ? 'bg-[#303030]/40 backdrop-blur-md shadow-lg' : 'bg-[#303030]/20 backdrop-blur-sm'}
         translate-y-0`}
     >
       <div className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -50,7 +50,7 @@ const Navbar = () => {
         </button>
 
         {/* Menú escritorio */}
-        <ul className="hidden lg:flex space-x-8 text-gray-800 font-medium items-center">
+        <ul className="hidden lg:flex space-x-8 text-white font-medium items-center">
           {enlaces.map((it) => (
             <li key={it.href}>
               <a href={it.href} className="relative py-2 hover:text-purple-600 group">

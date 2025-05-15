@@ -9,7 +9,7 @@ const InfoMediaSection = ({
   mediaPosition,
 }) => {
   const { ref, inView } = useInView({
-    triggerOnce: true,
+    triggerOnce: false,
     rootMargin: "-50px",
   });
 

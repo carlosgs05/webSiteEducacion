@@ -13,7 +13,7 @@ const MesaDePartes = () => {
     correo: "",
     celular: "",
     fecha: "",
-    documentoEnviar: "FUT",
+    tipoDocumento: "FUT",
     asunto: "",
     archivo: null,
     aceptarPoliticas: false,
@@ -24,8 +24,7 @@ const MesaDePartes = () => {
     const { name, value, type, checked, files } = e.target;
     setFormData({
       ...formData,
-      [name]:
-        type === "checkbox" ? checked : type === "file" ? files[0] : value,
+      [name]: type === "checkbox" ? checked : type === "file" ? files[0] : value,
     });
   };
 
@@ -33,32 +32,27 @@ const MesaDePartes = () => {
     e.preventDefault();
     console.log(formData);
   };
-  return (
-    <div>
-      <TopButton />
-      <Header
-      tittle="Mesa de Partes" />
-      <div className="flex flex-col px-20 gap-y-5 pb-10">
-        <h1 className="text-3xl font-bold text-center mt-10 text-[#262D73]">
-          Mesa de Partes - Escuela de Educación inicial
-        </h1>
 
-        <p>
+  return (
+    <div className="w-full">
+      <TopButton />
+      <Header title="Mesa de Partes" />
+      <div className="px-4 sm:px-6 md:px-16 lg:px-24 py-10">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center text-[#262D73] mb-6">
+          Mesa de Partes - Escuela de Educación Inicial
+        </h1>
+        <p className="text-base sm:text-lg text-gray-700 text-justify mb-8">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta nulla
           temporibus architecto, nemo, minus quo doloribus perspiciatis est
           sapiente nesciunt numquam officia autem iure enim? Voluptas voluptatem
           quia adipisci sit!
         </p>
-        <div className="w-[900px] mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-          <form
-            onSubmit={handleSubmit}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8"
-          >
-            <div className="flex flex-col gap-6">
+        <div className="w-full max-w-4xl mr-4 sm:mx-auto bg-gray-100 rounded-lg shadow-md p-6">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Columna izquierda */}
+            <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium">
-                  Tipo de documento de identidad
-                </label>
+                <label className="block text-sm font-medium">Tipo de documento</label>
                 <select
                   name="documentoIdentidad"
                   value={formData.documentoIdentidad}
@@ -67,16 +61,16 @@ const MesaDePartes = () => {
                   required
                 >
                   <option value="DNI">DNI</option>
-                  <option value="Pasaporte">Carnet de extranjería</option>
+                  <option value="Carnet">Carnet de extranjería</option>
                   <option value="Pasaporte">Pasaporte</option>
-                  <option value="Pasaporte">Ruc 10 (Persona natural)</option>
-                  <option value="Pasaporte">Otros</option>
+                  <option value="RUC">RUC (Persona natural)</option>
+                  <option value="Otros">Otros</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium">Numero de documento de identidad</label>
+                <label className="block text-sm font-medium">Número de documento</label>
                 <input
-                  type="number"
+                  type="text"
                   name="numeroIdentidad"
                   value={formData.numeroIdentidad}
                   onChange={handleChange}
@@ -85,7 +79,7 @@ const MesaDePartes = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">Nombre</label>
+                <label className="block text-sm font-medium">Nombre(s)</label>
                 <input
                   type="text"
                   name="nombre"
@@ -95,40 +89,51 @@ const MesaDePartes = () => {
                   required
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium">
-                  Apellido Paterno
-                </label>
-                <input
-                  type="text"
-                  name="apellidoPaterno"
-                  value={formData.apellidoPaterno}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">
-                  Apellido Materno
-                </label>
-                <input
-                  type="text"
-                  name="apellidoMaterno"
-                  value={formData.apellidoMaterno}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded"
-                  required
-                />
+              <div className="flex flex-col sm:flex-row sm:space-x-4">
+                <div className="flex-1">
+                  <label className="block text-sm font-medium">Apellido Paterno</label>
+                  <input
+                    type="text"
+                    name="apellidoPaterno"
+                    value={formData.apellidoPaterno}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                    required
+                  />
+                </div>
+                <div className="flex-1 mt-4 sm:mt-0">
+                  <label className="block text-sm font-medium">Apellido Materno</label>
+                  <input
+                    type="text"
+                    name="apellidoMaterno"
+                    value={formData.apellidoMaterno}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                    required
+                  />
+                </div>
               </div>
             </div>
-            <div className="flex flex-col gap-6">
+
+            {/* Columna derecha */}
+            <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium">Celular</label>
                 <input
                   type="tel"
                   name="celular"
                   value={formData.celular}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Correo electrónico</label>
+                <input
+                  type="email"
+                  name="correo"
+                  value={formData.correo}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                   required
@@ -146,9 +151,7 @@ const MesaDePartes = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">
-                  Tipo y número de documento a enviar
-                </label>
+                <label className="block text-sm font-medium">Tipo Doc. a enviar</label>
                 <input
                   type="text"
                   name="tipoDocumento"
@@ -158,40 +161,35 @@ const MesaDePartes = () => {
                   required
                 />
               </div>
+            </div>
+
+            {/* Asunto y archivo */}
+            <div className="col-span-1 md:col-span-2 space-y-4">
               <div>
-                <label className="block text-sm font-medium">Correo</label>
+                <label className="block text-sm font-medium">Asunto</label>
+                <textarea
+                  name="asunto"
+                  value={formData.asunto}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded h-28"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Subir archivo</label>
                 <input
-                  type="email"
-                  name="correo"
-                  value={formData.correo}
+                  type="file"
+                  name="archivo"
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                   required
                 />
               </div>
             </div>
-            <div className="grid col-span-2">
-              <label className="block text-sm font-medium">Asunto</label>
-              <textarea
-                name="asunto"
-                value={formData.asunto}
-                onChange={handleChange}
-                className="w-full p-2 border rounded h-32"
-                required
-              ></textarea>
-            </div>
-            <div className="col-span-2">
-              <label className="block text-sm font-medium">Subir archivo</label>
-              <input
-                type="file"
-                name="archivo"
-                onChange={handleChange}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <div className=" grid col-span-2">
-              <div className="flex items-center">
+
+            {/* Checkboxes */}
+            <div className="col-span-1 md:col-span-2 flex flex-col space-y-2">
+              <label className="flex items-center">
                 <input
                   type="checkbox"
                   name="aceptarPoliticas"
@@ -200,11 +198,9 @@ const MesaDePartes = () => {
                   className="mr-2 checked:bg-[#262D73] checked:border-[#262D73]"
                   required
                 />
-                <label>Acepto la política de privacidad</label>
-              </div>
-            </div>
-            <div className="grid col-span-2">
-              <div className="flex items-center ">
+                Acepto la política de privacidad
+              </label>
+              <label className="flex items-center">
                 <input
                   type="checkbox"
                   name="aceptarDeclaracion"
@@ -213,14 +209,15 @@ const MesaDePartes = () => {
                   className="mr-2 checked:bg-[#262D73] checked:border-[#262D73]"
                   required
                 />
-                <label>Acepto la declaración jurada</label>
-              </div>
+                Acepto la declaración jurada
+              </label>
             </div>
 
-            <div className="grid col-span-2 justify-end">
+            {/* Botón enviar */}
+            <div className="col-span-1 md:col-span-2 flex justify-end">
               <button
                 type="submit"
-                className="w-40 bg-[#262D73] text-white p-2 rounded hover:bg-[#353e9c]"
+                className="bg-[#262D73] text-white px-6 py-2 rounded hover:bg-[#353e9c] transition"
               >
                 Continuar
               </button>
@@ -228,9 +225,8 @@ const MesaDePartes = () => {
           </form>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
-    
   );
 };
 

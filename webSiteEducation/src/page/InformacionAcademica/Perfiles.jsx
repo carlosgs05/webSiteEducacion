@@ -9,7 +9,7 @@ const Perfiles = () => {
   return (
     <>
       <TopButton />
-      <Header tittle="Perfiles" />
+      <Header title="Perfiles" />
       <section>
         <div className="m-10 md:m-16">
           <Button

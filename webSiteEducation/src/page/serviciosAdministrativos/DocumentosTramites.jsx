@@ -16,7 +16,7 @@ useEffect(() => {
     <div>
         <TopButton />
         <Header
-        tittle="Documentos"/>
+        title="Documentos"/>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-8 py-8 justify-center">
            {dataDocumentos.map((documento, index) => (  
             <CardDocumento key={index} 
@@ -27,5 +27,4 @@ useEffect(() => {
     </div>
   )
 }
-
 export default DocumentosTramites

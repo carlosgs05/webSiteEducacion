@@ -27,7 +27,7 @@ const Noticias = () => {
   return (
     <>
       <TopButton />
-      <Header tittle="Noticias" />
+      <Header title="Noticias" />
       <section className="grid grid-cols-1 md:grid-cols-3 gap-10 px-10 py-12">
         <div className="grid col-span-2">
           <PortadaNoticias data={data} />
