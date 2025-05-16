@@ -3,7 +3,7 @@ import { FaFacebook, FaTwitter, FaYoutube, FaInstagram, FaPhone, FaEnvelope, FaG
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="bg-gradient-to-r from-[#262D73] to-[#4B5E9E] text-white pt-12 pb-4">
+    <footer className="bg-gradient-to-r from-[#f899de] to-[#a05d8e] text-white pt-12 pb-4">
       <div className="container mx-auto px-6 lg:px-0 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Logo */}
         <div className="flex justify-center md:justify-start mb-4">

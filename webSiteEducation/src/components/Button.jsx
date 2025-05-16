@@ -11,7 +11,7 @@ const Button = ({ name, link, onClick, isActive,target }) => {
         }
       }}
       className={`w-40 h-14 flex items-center justify-center text-center px-4 py-2 text-white font-semibold rounded transition-all ${
-        isActive ? "bg-[#545454] pointer-events-none" : "bg-[#E4BCD3] hover:bg-[#545454]"
+        isActive ? "bg-[#545454] pointer-events-none" : "bg-[#575556] hover:bg-[#545454]"
       }`}
     >
       {name}
