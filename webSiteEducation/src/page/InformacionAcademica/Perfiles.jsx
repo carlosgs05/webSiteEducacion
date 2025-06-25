@@ -5,7 +5,6 @@ import InfoMediaSection from "../../components/InfoMediaSection";
 import TopButton from "../../components/TopButton";
 
 const Perfiles = () => {
- 
   return (
     <>
       <TopButton />
@@ -21,7 +20,12 @@ const Perfiles = () => {
         <div>
           <InfoMediaSection
             title="Perfil del ingresante"
-            content="Lorem ipsum dolor sit amet consectetur adipiscing, elit feugiat vivamus fringilla ultricies, nec per dignissim nullam aliquam. Cras faucibus sociosqu placerat euismod urna tempor integer nascetur metus nunc mattis duis viverra, accumsan est in curae dui vehicula hendrerit ut senectus facilisis tortor. Purus posuere urna tristique nibh sem proin quam habitant suscipit, a libero vehicula lacus fusce vivamus arcu."
+            content={[
+              "Utiliza conocimientos matemáticos para resolver problemas.",
+              "Aplica conocimientos de ciencias sociales y tecnología.",
+              "Muestra habilidades comunicativas en distintos contextos.",
+              "Demuestra habilidades artísticas y motrices.",
+            ]}
             media="../src/assets/perfil1.png"
             mediaType="image"
             mediaPosition="left"
@@ -30,7 +34,16 @@ const Perfiles = () => {
         <div>
           <InfoMediaSection
             title="Perfil del egresado"
-            content="Lorem ipsum dolor sit amet consectetur adipiscing, elit feugiat vivamus fringilla ultricies, nec per dignissim nullam aliquam. Cras faucibus sociosqu placerat euismod urna tempor integer nascetur metus nunc mattis duis viverra, accumsan est in curae dui vehicula hendrerit ut senectus facilisis tortor. Purus posuere urna tristique nibh sem proin quam habitant suscipit, a libero vehicula lacus fusce vivamus arcu."
+            content="El egresado de la Escuela profesional de educación inicial es un profesional competente, crítico,
+              ético y de calidad, que gestiona los procesos de aprendizaje de los niños menores de 6 años,
+              participa en la gestión de programas, proyectos y otros de atención infantil en forma articulada a
+              la comunidad educativa para el logro de las competencias de EBR de educación inicial, demostrando
+              compromiso e iniciativa, desarrollo del pensamiento crítico, capacidades comunicativas y
+              pensamiento cuantitativo; en relación a su desarrollo personal y profesional, promoviendo la
+              investigación que genere un conocimiento científico, tecnológico, humanístico e innovador y con
+              responsabilidad a la diversidad cultural, social y desarrollo sostenible. Asimismo, investiga a partir
+              de su práctica y experiencia pedagógica que respondan a la problemática de región de La Libertad
+              y del país."
             media="../src/assets/perfil1.png"
             mediaType="image"
             mediaPosition="right"

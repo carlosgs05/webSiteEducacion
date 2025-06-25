@@ -13,6 +13,22 @@ const InfoMediaSection = ({
     rootMargin: "-50px",
   });
 
+  // Función para renderizar contenido según sea string o array
+  const renderContent = () => {
+    if (Array.isArray(content)) {
+      return (
+        <ul className="list-disc pl-6 text-gray-600 space-y-2">
+          {content.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    // Si es string
+    return <p className="text-gray-600 leading-relaxed">{content}</p>;
+  };
+
   return (
     <section
       ref={ref}
@@ -56,16 +72,20 @@ const InfoMediaSection = ({
             mediaPosition === "right" ? "order-2 md:order-1" : "order-2"
           }`}
         >
-          <p className="text-gray-600 leading-relaxed">{content}</p>
+          {renderContent()}
         </div>
       </div>
     </section>
   );
 };
 
+// Actualiza los propTypes para aceptar string o array
 InfoMediaSection.propTypes = {
   title: PropTypes.string.isRequired,
-  content: PropTypes.string,
+  content: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]).isRequired,
   media: PropTypes.string.isRequired,
   mediaType: PropTypes.string.isRequired,
   mediaPosition: PropTypes.string.isRequired,

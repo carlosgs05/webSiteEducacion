@@ -38,17 +38,15 @@ const Home = () => {
       <InfoMediaSection
         title="Presentación"
         content="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
-                "
-        media="https://www.youtube.com/embed/2pqfLDEoVK4?si=5QaHOZTKUvFfIPkl"
+        ¡Bienvenidos a la Carrera de Educación Inicial! En este espacio educativo, 
+        nos sumergiremos en las maravillosas dimensiones de la formación temprana. 
+        Prepárate para iniciar un viaje significativo donde desarrollarás habilidades 
+        esenciales y descubrirás el impacto transformador de guiar los primeros pasos 
+        en el aprendizaje. Estamos emocionados de ser parte de tu travesía educativa, 
+        impulsando tu crecimiento y contribuyendo al desarrollo integral de los más pequeños. 
+        ¡Empecemos este camino hacia un futuro lleno de descubrimientos y aprendizaje!
+        "
+        media="https://www.youtube.com/embed/Kem4_phe6Xc"
         mediaType="video"
         mediaPosition="right"
       />
@@ -63,19 +61,19 @@ const Home = () => {
           <div>
             <h2 className="font-bold text-xl text-[#262D73]">Misión</h2>
             <p className="text-white text-base pt-3">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Accusantium cumque dignissimos tempore obcaecati velit, enim,
-              repellendus similique, facere itaque nam dolorum officiis expedita
-              accusamus? Delectus consequatur neque incidunt eligendi assumenda.
+            Somos una unidad académica profesional, formamos profesionales competentes en la educación infantil,
+            con calidad humana, con capacidades, habilidades y actitudes; desarrollamos investigación científica,
+            responsabilidad social y una adecuada gestión educativa, para el desarrollo sostenible de la localidad, la
+            región y el país.
             </p>
           </div>
           <div>
             <h2 className="font-bold text-xl text-[#262D73]">Visión</h2>
             <p className="text-white text-base pt-3">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste,
-              harum quasi neque aliquid aspernatur facere saepe repellendus
-              ducimus minima tenetur eligendi commodi corrupti necessitatibus
-              assumenda laudantium? Amet est omnis quis?
+              Al 2025, líder y acreditada a nivel nacional e internacional, reconocida por su calidad, por su vocación
+              democrática, por la formación de profesionales en la educación infantil, la investigación científica y
+              responsabilidad social; manteniendo vínculos con los grupos de interés y contribuyendo al desarrollo local,
+              regional y nacional
             </p>
           </div>
         </div>
