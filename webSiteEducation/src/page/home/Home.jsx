@@ -66,7 +66,7 @@ const Home = () => {
         ref={ref}
         className={`transition-all duration-1000 ${
           inView ? "translate-y-0" : "opacity-0 translate-y-10"
-        } bg-[url('../src/assets/fondoSection.png')] h-auto bg-cover bg-center bg-no-repeat w-full`}
+        } bg-[url('../assets/fondoSection.png')] h-auto bg-cover bg-center bg-no-repeat w-full`}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-12 px-4 sm:px-6 md:px-24">
           <div>

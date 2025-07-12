@@ -1,5 +1,5 @@
 import Organizacion from './page/organizacion/organizacion'
-import { BrowserRouter, Routes, Route } from 'react-router'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './page/home/Home'
 import Perfiles from './page/InformacionAcademica/Perfiles'
 import MallaCurricular from './page/InformacionAcademica/MallaCurricular'

@@ -30,10 +30,10 @@ const Navbar = () => {
         ${scrolled ? 'bg-[#303030]/40 backdrop-blur-md shadow-lg' : 'bg-[#303030]/20 backdrop-blur-sm'}
         translate-y-0`}
     >
-      <div className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-screen-xl mx-auto p-6 flex items-center justify-between">
         {/* Logo */}
         <a href="/webSiteEducacion" className="flex items-center">
-          <img src="/assets/logo.png" className="h-10" alt="Logo" />
+          <img src="/webSiteEducacion/assets/logo.png" className="h-10" alt="Logo" />
         </a>
 
         {/* Botón menú hamburguesa móvil */}

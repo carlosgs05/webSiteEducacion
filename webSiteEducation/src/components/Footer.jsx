@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="flex justify-center md:justify-start mb-4">
           <a href="/webSiteEducacion" className="flex items-center space-x-6">
             <img
-              src="/assets/logo.png"
+              src="/webSiteEducacion/assets/logo.png"
               alt="UNT - Educación Inicial"
               className="h-10 w-auto"
             />
