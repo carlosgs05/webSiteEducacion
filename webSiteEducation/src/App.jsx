@@ -1,4 +1,4 @@
-import Organizacion from './page/organizacion/organizacion'
+import Organizacion from './page/organizacion/Organizacion'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './page/home/Home'
 import Perfiles from './page/InformacionAcademica/Perfiles'
@@ -21,7 +21,6 @@ function App() {
         <Route path="/novedades/noticias/:id" element={<DetalleNoticia />} />
        <Route path="/serviciosAdministrativos/mesa-de-partes" element={<MesaDePartes/>} /> 
        <Route path="/serviciosAdministrativos/documentos-tramites" element={<DocumentosTramites/>} /> 
-
       </Routes>
     </BrowserRouter>
   )

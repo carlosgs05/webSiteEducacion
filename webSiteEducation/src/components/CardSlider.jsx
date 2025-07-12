@@ -89,7 +89,7 @@ const CardSlider = ({ title, data }) => {
       </div>
       {title === "Noticias" && (
         <div className="flex justify-center">
-          <Button name="Ver mas noticias" link={"/novedades/noticias"} />
+          <Button name="Ver mas noticias" link={"/webSiteEducacion/novedades/noticias"} />
         </div>
       )}
     </section>

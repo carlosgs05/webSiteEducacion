@@ -6,7 +6,7 @@ const Header = ({ title }) => (
     {/* Imagen de fondo */}
     <div className="w-full h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] xl:h-[80vh]">
       <img
-        src="/assets/portada-inicial.jpg"
+        src="/webSiteEducacion/assets/portada-inicial.jpg"
         alt="Portada inicial"
         className="w-full h-full object-cover"
       />
