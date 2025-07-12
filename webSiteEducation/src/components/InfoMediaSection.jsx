@@ -29,9 +29,10 @@ const InfoMediaSection = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
         {/* Media */}
         <div
-          className={`${
-            mediaPosition === "right" ? "order-1 md:order-2" : "order-1"
-          } flex justify-center`}
+          className={`
+            ${mediaPosition === "right" ? "order-1 md:order-2" : "order-1"}
+            flex justify-center
+          `}
         >
           {mediaType === "image" ? (
             <img
@@ -52,9 +53,9 @@ const InfoMediaSection = ({
 
         {/* Text */}
         <div
-          className={`${
-            mediaPosition === "right" ? "order-2 md:order-1" : "order-2"
-          }`}
+          className={`
+            ${mediaPosition === "right" ? "order-2 md:order-1" : "order-2"}
+          `}
         >
           <p className="text-gray-600 leading-relaxed">{content}</p>
         </div>

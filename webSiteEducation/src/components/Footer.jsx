@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container mx-auto px-6 lg:px-0 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Logo */}
         <div className="flex justify-center md:justify-start mb-4">
-          <a href="/" className="flex items-center space-x-6">
+          <a href="/webSiteEducacion" className="flex items-center space-x-6">
             <img
               src="/assets/logo.png"
               alt="UNT - Educación Inicial"
@@ -49,10 +49,10 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:underline">Acerca de</a>
+                <a href="/webSiteEducacion/acerca-de" className="hover:underline">Acerca de</a>
               </li>
               <li>
-                <a href="#" className="hover:underline">Ayuda</a>
+                <a href="/webSiteEducacion/ayuda" className="hover:underline">Ayuda</a>
               </li>
             </ul>
           </div>

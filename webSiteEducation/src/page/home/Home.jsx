@@ -10,10 +10,14 @@ import { useInView } from "react-intersection-observer";
 const Home = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // Fetch the news data from the API
   const fetch = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("https://pagina-educacion-backend-production.up.railway.app/api/noticias");
+      const response = await axios.get(
+        "https://pagina-educacion-backend-production.up.railway.app/api/noticias"
+      );
       setData(response.data);
     } catch (error) {
       console.error("Error al obtener las noticias:", error);
@@ -24,21 +28,25 @@ const Home = () => {
   useEffect(() => {
     fetch();
   }, []);
+
+  // Intersection Observer hooks
   const { ref, inView } = useInView({
     triggerOnce: false,
   });
+
   const { ref: sliderRef, inView: sliderInView } = useInView({
     triggerOnce: false,
   });
+
   return (
     <>
       <TopButton />
       <HeaderHome />
 
+      {/* Info Section with Media */}
       <InfoMediaSection
         title="Presentación"
         content="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
@@ -53,6 +61,7 @@ const Home = () => {
         mediaPosition="right"
       />
 
+      {/* Misión and Visión Section */}
       <section
         ref={ref}
         className={`transition-all duration-1000 ${
@@ -81,6 +90,7 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Card Slider for News */}
       <div
         ref={sliderRef}
         className={`transition-all duration-1000 ease-out ${
@@ -91,6 +101,8 @@ const Home = () => {
       >
         <CardSlider title="Noticias" data={data} loading={loading} />
       </div>
+
+      {/* Footer */}
       <Footer />
     </>
   );

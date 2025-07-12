@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -17,10 +18,10 @@ const Navbar = () => {
   }, []);
 
   const enlaces = [
-    { label: 'Inicio', href: '/' },
-    { label: 'Organización', href: '/organizacion' },
-    { label: 'Información Académica', href: '/informacionAcademica/perfiles' },
-    { label: 'Desarrollo Profesional', href: '/desarrolloProfesional' },
+    { label: 'Inicio', href: '/webSiteEducacion/' },
+    { label: 'Organización', href: '/webSiteEducacion/organizacion' },
+    { label: 'Información Académica', href: '/webSiteEducacion/informacionAcademica/perfiles' },
+    { label: 'Desarrollo Profesional', href: '/webSiteEducacion/desarrolloProfesional' },
   ];
 
   return (
@@ -31,7 +32,7 @@ const Navbar = () => {
     >
       <div className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="/" className="flex items-center">
+        <a href="/webSiteEducacion" className="flex items-center">
           <img src="/assets/logo.png" className="h-10" alt="Logo" />
         </a>
 
@@ -70,7 +71,7 @@ const Navbar = () => {
             {hoverNov && (
               <div className="absolute top-full bg-white/90 backdrop-blur-sm shadow-lg rounded-lg w-44 text-gray-800">
                 <ul className="py-2">
-                  <li><a href="/novedades/noticias" className="block px-4 py-2 hover:bg-gray-100">Noticias</a></li>
+                  <li><a href="/webSiteEducacion/novedades/noticias" className="block px-4 py-2 hover:bg-gray-100">Noticias</a></li>
                   <li><a href="#" className="block px-4 py-2 hover:bg-gray-100">Publicaciones</a></li>
                 </ul>
               </div>
@@ -87,10 +88,10 @@ const Navbar = () => {
             {hoverServ && (
               <div className="absolute top-full bg-white/90 backdrop-blur-sm shadow-lg rounded-lg w-48 text-gray-800">
                 <ul className="py-2">
-                  <li><a href="/serviciosAdministrativos/mesa-de-partes" className="block px-4 py-2 hover:bg-gray-100">Mesa de partes</a></li>
+                  <li><a href="/webSiteEducacion/serviciosAdministrativos/mesa-de-partes" className="block px-4 py-2 hover:bg-gray-100">Mesa de partes</a></li>
                   <li><a href="https://transparencia-universitaria.unitru.edu.pe" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 hover:bg-gray-100">Portal de transparencia</a></li>
                   <li><a href="https://reclamos.servicios.gob.pe" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 hover:bg-gray-100">Libro de reclamaciones</a></li>
-                  <li><a href="/serviciosAdministrativos/documentos-tramites" className="block px-4 py-2 hover:bg-gray-100">Documentación</a></li>
+                  <li><a href="/webSiteEducacion/serviciosAdministrativos/documentos-tramites" className="block px-4 py-2 hover:bg-gray-100">Documentación</a></li>
                 </ul>
               </div>
             )}
@@ -118,7 +119,7 @@ const Navbar = () => {
               </button>
               {mobileNovOpen && (
                 <ul className="pl-4 space-y-1">
-                  <li><a href="/novedades/noticias" className="block py-1">Noticias</a></li>
+                  <li><a href="/webSiteEducacion/novedades/noticias" className="block py-1">Noticias</a></li>
                   <li><a href="#" className="block py-1">Publicaciones</a></li>
                 </ul>
               )}
@@ -134,10 +135,10 @@ const Navbar = () => {
               </button>
               {mobileServOpen && (
                 <ul className="pl-4 space-y-1">
-                  <li><a href="/serviciosAdministrativos/mesa-de-partes" className="block py-1">Mesa de partes</a></li>
+                  <li><a href="/webSiteEducacion/serviciosAdministrativos/mesa-de-partes" className="block py-1">Mesa de partes</a></li>
                   <li><a href="https://transparencia-universitaria.unitru.edu.pe" target="_blank" rel="noopener noreferrer" className="block py-1">Portal de transparencia</a></li>
                   <li><a href="https://reclamos.servicios.gob.pe" target="_blank" rel="noopener noreferrer" className="block py-1">Libro de reclamaciones</a></li>
-                  <li><a href="/serviciosAdministrativos/documentos-tramites" className="block py-1">Documentación</a></li>
+                  <li><a href="/webSiteEducacion/serviciosAdministrativos/documentos-tramites" className="block py-1">Documentación</a></li>
                 </ul>
               )}
             </li>
