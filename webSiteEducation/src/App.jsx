@@ -10,7 +10,7 @@ import MesaDePartes from './page/serviciosAdministrativos/MesaDePartes'
 import DocumentosTramites from './page/serviciosAdministrativos/DocumentosTramites'
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/webSiteEducacion">
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/organizacion' element={<Organizacion />} />

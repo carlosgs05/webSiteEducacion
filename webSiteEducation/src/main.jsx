@@ -6,8 +6,6 @@ import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter basename="/webSiteEducacion">
       <App />
-    </BrowserRouter>
   </StrictMode>
 );
