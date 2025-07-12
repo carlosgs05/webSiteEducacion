@@ -54,7 +54,7 @@ const CardSlider = ({ title, data }) => {
                 <div className="border border-gray-200 rounded-lg shadow-md bg-white overflow-hidden transform transition-all duration-500 ease-in-out hover:-translate-y-2 hover:shadow-xl">
                   <div className="relative overflow-hidden group">
                     <img
-                      src={`http://localhost:8000/${
+                      src={`https://pagina-educacion-backend-production.up.railway.app/${
                         item.Imagen || item.ImagenPortada
                       }`}
                       className="w-full h-64 object-cover rounded-t-md transform transition-transform duration-700 ease-in-out group-hover:scale-105"

@@ -16,7 +16,7 @@ const PortadaNoticias = ({ data }) => {
         className="relative group block overflow-hidden border border-blue-300 rounded-lg"
       >
         <img
-          src={`http://localhost:8000/${noticiaPrincipal.ImagenPortada}`}
+          src={`https://pagina-educacion-backend-production.up.railway.app/${noticiaPrincipal.ImagenPortada}`}
           alt={noticiaPrincipal.Nombre}
           className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
         />
@@ -39,7 +39,7 @@ const PortadaNoticias = ({ data }) => {
             className="relative group block overflow-hidden border border-blue-300 rounded-lg"
           >
             <img
-              src={`http://localhost:8000/${item.ImagenPortada}`}
+              src={`https://pagina-educacion-backend-production.up.railway.app/${item.ImagenPortada}`}
               alt={item.Nombre}
               className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
             />

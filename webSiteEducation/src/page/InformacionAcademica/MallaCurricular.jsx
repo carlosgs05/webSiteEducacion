@@ -13,9 +13,9 @@ const MallaCurricular = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/ciclos");
+        const response = await axios.get("https://pagina-educacion-backend-production.up.railway.app/api/ciclos");
         setCiclos(response.data);
-        const responseMalla = await axios.get("http://localhost:8000/api/malla");
+        const responseMalla = await axios.get("https://pagina-educacion-backend-production.up.railway.app/api/malla");
         setMalla(responseMalla.data.malla.pdfMalla);
       } catch (error) {
         console.error("Error al obtener los datos de la malla:", error);
@@ -91,7 +91,7 @@ const MallaCurricular = () => {
         <div className="flex justify-center mt-8 mb-12 px-4 sm:px-6 md:px-16">
           <Button
             name="Ver plan de estudios"
-            link={`http://127.0.0.1:8000/${malla}`}
+            link={`https://pagina-educacion-backend-production.up.railway.app/${malla}`}
             target="_blank"
           />
         </div>

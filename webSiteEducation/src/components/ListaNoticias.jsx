@@ -13,7 +13,7 @@ const ListaNoticias = ({ data }) => {
             className="flex items-center gap-2 p-2 border-b border-gray-300"
           >
             <img
-              src={`http://localhost:8000/${item.ImagenPortada}`}
+              src={`https://pagina-educacion-backend-production.up.railway.app/${item.ImagenPortada}`}
               alt={item.Nombre}
               className="w-32 h-32  object-cover rounded-md "
             />

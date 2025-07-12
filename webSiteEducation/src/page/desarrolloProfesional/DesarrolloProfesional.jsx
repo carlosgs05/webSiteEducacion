@@ -12,7 +12,7 @@ const DesarrolloProfesional = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/desarrolloProfesional")
+      .get("https://pagina-educacion-backend-production.up.railway.app/api/desarrolloProfesional")
       .then((response) => setDataDesarrollo(response.data))
       .catch((error) => console.error("Error al obtener los datos:", error));
    

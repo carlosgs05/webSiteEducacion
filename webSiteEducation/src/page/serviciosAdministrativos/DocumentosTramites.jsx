@@ -8,7 +8,7 @@ import TopButton from "../../components/TopButton";
 const DocumentosTramites = () => {
     const [dataDocumentos, setDataDocumentos] = useState([]);
 useEffect(() => {
-    axios.get("http://localhost:8000/api/documentos")
+    axios.get("https://pagina-educacion-backend-production.up.railway.app/api/documentos")
       .then((response) => setDataDocumentos(response.data))
       .catch((error) => console.error("Error al obtener los datos:", error));
   }, []);

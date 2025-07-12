@@ -13,7 +13,7 @@ const Home = () => {
   const fetch = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/noticias");
+      const response = await axios.get("https://pagina-educacion-backend-production.up.railway.app/api/noticias");
       setData(response.data);
     } catch (error) {
       console.error("Error al obtener las noticias:", error);

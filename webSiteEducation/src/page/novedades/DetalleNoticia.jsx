@@ -16,7 +16,7 @@ const DetalleNoticia = () => {
     const fetchNoticia = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/showNoticia/${id}`
+          `https://pagina-educacion-backend-production.up.railway.app/api/showNoticia/${id}`
         );
 
         if (!response.ok) {
@@ -40,7 +40,7 @@ const DetalleNoticia = () => {
   const fetchNoticias = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/noticiasActuales"
+        "https://pagina-educacion-backend-production.up.railway.app/api/noticiasActuales"
       );
       setData(response.data);
     } catch (error) {

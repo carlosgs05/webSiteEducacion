@@ -18,7 +18,7 @@ const ModalInfo = ({ isOpen, onClose, data }) => {
         {/* Imagen de perfil */}
         <div className="w-full md:w-1/3 flex items-center justify-center mb-4 md:mb-0">
           <img
-            src={`http://127.0.0.1:8000/${data.Foto}`}
+            src={`https://pagina-educacion-backend-production.up.railway.app/${data.Foto}`}
             alt={data.NombreCompleto}
             className="rounded-lg w-full h-auto object-cover"
           />

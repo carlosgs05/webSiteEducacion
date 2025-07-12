@@ -14,7 +14,7 @@ const Organizacion = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/organizacion")
+      .get("https://pagina-educacion-backend-production.up.railway.app/api/organizacion")
       .then((response) => {
         const data = response.data;
         setAutoridades(data.filter(persona => persona.RolPersona === "Autoridades"));

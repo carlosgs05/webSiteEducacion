@@ -23,7 +23,7 @@ const CardOrganization = ({ data }) => {
                      transition-transform duration-500 ease-in-out hover:scale-105"
         >
           <img
-            src={`http://127.0.0.1:8000/${data.Foto}`}
+            src={`https://pagina-educacion-backend-production.up.railway.app/${data.Foto}`}
             alt={data.NombreCompleto}
             className="absolute inset-0 w-full h-full object-cover group-hover:brightness-90 transition duration-500"
           />

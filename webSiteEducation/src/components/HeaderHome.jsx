@@ -10,7 +10,7 @@ const HeaderHome = () => {
       window.initFlowbite();
     }
 
-    fetch("http://localhost:8000/api/imagenesHomeCarrusel")
+    fetch("https://pagina-educacion-backend-production.up.railway.app/api/imagenesHomeCarrusel")
       .then((response) => response.json())
       .then((data) => {
         const headerImages = data.map((item) => item);

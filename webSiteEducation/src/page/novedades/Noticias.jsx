@@ -12,7 +12,7 @@ const Noticias = () => {
   const fetch = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/noticiasActuales"
+        "https://pagina-educacion-backend-production.up.railway.app/api/noticiasActuales"
       );
       setData(response.data);
       console.log("Noticias:", response.data);
