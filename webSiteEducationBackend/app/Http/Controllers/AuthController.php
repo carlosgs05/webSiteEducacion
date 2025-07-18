@@ -14,15 +14,24 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
         $user = User::where('email', $request->email)->first();
 
-        if (
-            !$user ||
-            !Hash::check($request->password, (string) $user->password)
-        ) {
+        if (!$user) {
             return response()->json([
+                'success' => false,
+                'message' => 'Credenciales incorrectas'
+            ], 401);
+        }
+
+        // Verificación de contraseña corregida
+        if (!Hash::check($request->password, $user->getAuthPassword())) {
+            return response()->json([
+                'success' => false,
                 'message' => 'Credenciales incorrectas'
             ], 401);
         }
@@ -30,14 +39,20 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
+            'success' => true,
             'access_token' => $token,
-            'token_type'   => 'Bearer',
+            'token_type' => 'Bearer',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'last_name' => $user->last_name,
+                'email' => $user->email,
+                'photo' => $user->photo,
+                'gender' => $user->gender,
+                'date_birth' => $user->date_birth,
+                'phone_number' => $user->phone_number,
+            ]
         ]);
-    }
-
-    public function user(Request $request)
-    {
-        return response()->json($request->user());
     }
 
     public function logout(Request $request)
