@@ -20,7 +20,9 @@ const Layout = ({ children }) => {
           console.error("No hay token almacenado");
           return;
         }
-        const response = await axios.get("https://pagina-educacion-backend-production.up.railway.app/api/user");
+        const response = await axios.get("https://pagina-educacion-backend-production.up.railway.app/api/user", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setUser(response.data);
       } catch (error) {
         console.error("Error al obtener usuario", error.response || error);

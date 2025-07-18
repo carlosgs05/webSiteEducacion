@@ -35,25 +35,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function user($id)
+    public function user(Request $request)
     {
-        try {
-            $usuario = User::findOrFail($id);
-            return response()->json([
-                'success' => true,
-                'data' => $usuario
-            ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Usuario no encontrado'
-            ], 404);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error en el servidor'
-            ], 500);
-        }
+        return response()->json($request->user());
     }
 
     public function logout(Request $request)
