@@ -50,7 +50,7 @@ const FormCursosModal = ({ onClose, onAccept, cursoToEdit }) => {
   useEffect(() => {
     const fetchCiclos = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/ciclos");
+        const res = await axios.get("https://pagina-educacion-backend-production.up.railway.app/api/ciclos");
         // res.data debe ser un array de objetos { IdCiclo, Ciclo }
         const options = res.data.map((item) => ({
           value: item.IdCiclo, // ID que se enviará al backend

@@ -18,7 +18,10 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (
+            !$user ||
+            !Hash::check($request->password, (string) $user->password)
+        ) {
             return response()->json([
                 'message' => 'Credenciales incorrectas'
             ], 401);
@@ -32,9 +35,25 @@ class AuthController extends Controller
         ]);
     }
 
-    public function user(Request $request)
+    public function user($id)
     {
-        return response()->json($request->user());
+        try {
+            $usuario = User::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'data' => $usuario
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Usuario no encontrado'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error en el servidor'
+            ], 500);
+        }
     }
 
     public function logout(Request $request)
@@ -205,7 +224,7 @@ class AuthController extends Controller
         }
 
         // Verificar que la nueva contraseña no sea igual a la anterior
-        if (Hash::check($request->password, $user->password)) {
+        if (Hash::check($request->password, (string) $user->password)) {
             return response()->json(["message" => "La nueva contraseña no puede ser igual a la anterior."], 422);
         }
 

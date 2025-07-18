@@ -27,7 +27,7 @@ const Pasantias = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/desarrolloProfesional"
+        "https://pagina-educacion-backend-production.up.railway.app/api/desarrolloProfesional"
       );
       const filtered = response.data.filter(
         (item) => item.Tipo === activeSection.toLowerCase()
@@ -70,7 +70,7 @@ const Pasantias = () => {
       if (willDelete) {
         axios
           .delete(
-            `http://localhost:8000/api/destroyDesarrolloProfesional/${id}`
+            `https://pagina-educacion-backend-production.up.railway.app/api/destroyDesarrolloProfesional/${id}`
           )
           .then(() => {
             swal("El registro ha sido eliminado.", {

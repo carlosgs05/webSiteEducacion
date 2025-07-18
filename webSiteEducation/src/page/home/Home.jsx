@@ -56,7 +56,7 @@ const Home = () => {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla ultricies.
                 "
-        media="https://www.youtube.com/embed/2pqfLDEoVK4?si=5QaHOZTKUvFfIPkl"
+        media="/webSiteEducacion/assets/Video Ac. Educacion Inicial.mp4"
         mediaType="video"
         mediaPosition="right"
       />

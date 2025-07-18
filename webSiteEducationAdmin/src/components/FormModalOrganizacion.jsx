@@ -189,7 +189,7 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
       setTituloPersona(editingRecord.Titulo || "");
       setPreviewFoto(
         editingRecord.Foto
-          ? `http://localhost:8000/${editingRecord.Foto}`
+          ? `https://pagina-educacion-backend-production.up.railway.app/${editingRecord.Foto}`
           : null
       );
       setPublicaciones(editingRecord.publicaciones || []);
@@ -304,8 +304,8 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
     try {
       const url =
         editingRecord && editingRecord.IdPersona
-          ? `http://localhost:8000/api/updateOrganizacion/${editingRecord.IdPersona}`
-          : "http://localhost:8000/api/storeOrganizacion";
+          ? `https://pagina-educacion-backend-production.up.railway.app/api/updateOrganizacion/${editingRecord.IdPersona}`
+          : "https://pagina-educacion-backend-production.up.railway.app/api/storeOrganizacion";
       const resp = await axios.post(url, formData);
       swal("¡Éxito!", resp.data.message, "success");
       onClose();

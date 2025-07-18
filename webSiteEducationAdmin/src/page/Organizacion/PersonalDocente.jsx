@@ -32,7 +32,7 @@ const PersonalDocente = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/organizacion"
+        "https://pagina-educacion-backend-production.up.railway.app/api/organizacion"
       );
       setData(
         response.data.filter((item) => item.RolPersona === activeSection)
@@ -65,7 +65,7 @@ const PersonalDocente = () => {
   const confirmDeleteRecord = async () => {
     try {
       await axios.delete(
-        `http://localhost:8000/api/destroyOrganizacion/${idToDelete}`
+        `https://pagina-educacion-backend-production.up.railway.app/api/destroyOrganizacion/${idToDelete}`
       );
       fetchData();
     } catch (error) {

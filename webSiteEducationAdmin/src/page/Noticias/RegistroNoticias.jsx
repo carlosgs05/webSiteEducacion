@@ -30,10 +30,10 @@ const RegistroNoticias = (props) => {
       setFecha(editingRecord.Fecha || "");
       setEncabezado(editingRecord.Encabezado || "");
       setDescripcion(editingRecord.Descripcion || "");
-      setPortadaPreview(`http://localhost:8000/${editingRecord.ImagenPortada}`);
+      setPortadaPreview(`https://pagina-educacion-backend-production.up.railway.app/${editingRecord.ImagenPortada}`);
       setAdditionalImages(
         (editingRecord.imagenes || []).map((img) => ({
-          preview: `http://localhost:8000/${img.Imagen}`,
+          preview: `https://pagina-educacion-backend-production.up.railway.app/${img.Imagen}`,
           name: img.Imagen,
           file: null,
         }))
@@ -87,7 +87,7 @@ const RegistroNoticias = (props) => {
     try {
       if (editingRecord) {
         await axios.post(
-          `http://localhost:8000/api/updateNoticia/${editingRecord.IdNoticia}?_method=PUT`,
+          `https://pagina-educacion-backend-production.up.railway.app/api/updateNoticia/${editingRecord.IdNoticia}?_method=PUT`,
           formData
         );
         swal(
@@ -97,7 +97,7 @@ const RegistroNoticias = (props) => {
         );
         window.location.href = "/noticias";
       } else {
-        await axios.post("http://localhost:8000/api/storeNoticia", formData);
+        await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/storeNoticia", formData);
         swal(
           "¡Noticia registrada!",
           "La noticia ha sido registrada con éxito",

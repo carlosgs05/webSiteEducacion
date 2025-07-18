@@ -33,12 +33,12 @@ const RegistroModal = ({ onClose, editingRecord }) => {
     try {
       if (editingRecord) {
         await axios.post(
-          `http://localhost:8000/api/updateDocumento/${editingRecord.IdDocumento}?_method=PUT`,
+          `https://pagina-educacion-backend-production.up.railway.app/api/updateDocumento/${editingRecord.IdDocumento}?_method=PUT`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
       } else {
-        await axios.post("http://localhost:8000/api/storeDocumento", formData, {
+        await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/storeDocumento", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }

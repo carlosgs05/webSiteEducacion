@@ -24,7 +24,7 @@ const Noticias = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/noticias");
+      const response = await axios.get("https://pagina-educacion-backend-production.up.railway.app/api/noticias");
       setData(response.data);
     } catch (error) {
       console.error("Error al obtener las noticias:", error);
@@ -52,7 +52,7 @@ const Noticias = () => {
     }).then((willDelete) => {
       if (willDelete) {
         axios
-          .delete(`http://localhost:8000/api/destroyNoticia/${id}`)
+          .delete(`https://pagina-educacion-backend-production.up.railway.app/api/destroyNoticia/${id}`)
           .then(() => {
             swal("La noticia ha sido eliminada.", {
               icon: "success",
@@ -153,7 +153,7 @@ const Noticias = () => {
                           <button
                             onClick={() =>
                               openImagenPortadaModal(
-                                `http://localhost:8000/${item.ImagenPortada}`
+                                `https://pagina-educacion-backend-production.up.railway.app/${item.ImagenPortada}`
                               )
                             }
                             className="cursor-pointer bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded-md transition"

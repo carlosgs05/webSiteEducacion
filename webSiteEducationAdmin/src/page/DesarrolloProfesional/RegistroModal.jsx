@@ -85,7 +85,7 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
       setDescripcion(editingRecord.Descripcion || "");
       setPreview(
         editingRecord.Imagen
-          ? `http://localhost:8000/${editingRecord.Imagen}`
+          ? `https://pagina-educacion-backend-production.up.railway.app/${editingRecord.Imagen}`
           : null
       );
     } else {
@@ -171,8 +171,8 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
 
     try {
       const endpoint = editingRecord
-        ? `http://localhost:8000/api/updateDesarrolloProfesional/${editingRecord.IdDesarrollo}?_method=PUT`
-        : "http://localhost:8000/api/storeDesarrolloProfesional";
+        ? `https://pagina-educacion-backend-production.up.railway.app/api/updateDesarrolloProfesional/${editingRecord.IdDesarrollo}?_method=PUT`
+        : "https://pagina-educacion-backend-production.up.railway.app/api/storeDesarrolloProfesional";
 
       await axios.post(endpoint, formData, {
         headers: { "Content-Type": "multipart/form-data" },

@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useInView } from "react-intersection-observer";
+import VideoPlayer from "./VideoPlayer";
 
 const InfoMediaSection = ({
   title,
@@ -41,13 +42,9 @@ const InfoMediaSection = ({
               className="w-full h-auto max-w-md rounded-lg shadow-md"
             />
           ) : (
-            <iframe
-              src={media}
-              title="YouTube video player"
-              className="w-full h-[370px] rounded-lg shadow-md"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            <div className="w-full max-w-2xl">
+              <VideoPlayer src={media} />
+            </div>
           )}
         </div>
 

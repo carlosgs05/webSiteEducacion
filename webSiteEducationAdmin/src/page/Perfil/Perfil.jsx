@@ -170,7 +170,7 @@ const Perfil = () => {
     }
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/profile/update", data);
+      await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/profile/update", data);
       setEditing(false);
       setDeletePhoto(false);
       setSelectedFile(null);
@@ -226,7 +226,7 @@ const Perfil = () => {
       passwordLength: securityData.password.length,
     };
     try {
-      await axios.post("http://127.0.0.1:8000/api/profile/security", payload);
+      await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/profile/security", payload);
       setSecurityEditing(false);
       setSecurityData({ password: "", confirmPassword: "" });
       swal(
@@ -251,7 +251,7 @@ const Perfil = () => {
             ? URL.createObjectURL(newImageBlob)
             : user.photo && !deletePhoto
               ? user.photo
-              : "http://127.0.0.1:8000/imagenes/avatar_profile.png";
+              : "https://pagina-educacion-backend-production.up.railway.app/imagenes/avatar_profile.png";
 
         return (
           <div className="w-full px-8 pt-3 pb-8">

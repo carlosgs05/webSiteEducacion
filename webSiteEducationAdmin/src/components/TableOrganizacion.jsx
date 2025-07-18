@@ -41,7 +41,7 @@ const TableOrganizacion = ({
             <td className="py-2 px-4 text-center">
               <button
                 onClick={() =>
-                  openImagenModal(`http://localhost:8000/${item.Foto}`)
+                  openImagenModal(`https://pagina-educacion-backend-production.up.railway.app/${item.Foto}`)
                 }
                 className="cursor-pointer bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded-md transition"
               >

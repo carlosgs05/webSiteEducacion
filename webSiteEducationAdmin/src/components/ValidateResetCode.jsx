@@ -24,7 +24,7 @@ const ValidateResetCode = () => {
         }
 
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/password/validate-code", { email, code });
+            const response = await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/password/validate-code", { email, code });
             if (response.data.success) {
                 swal("¡Código correcto!", "Ahora puedes establecer una nueva contraseña.", "success").then(() => {
                     // Se redirige al componente de reset de contraseña pasando el email en el state.

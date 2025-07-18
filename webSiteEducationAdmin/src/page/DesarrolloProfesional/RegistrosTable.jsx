@@ -44,7 +44,7 @@ const RegistrosTable = ({
               <td className="py-3 text-center">
                 <button
                   onClick={() =>
-                    openImagenModal(`http://localhost:8000/${item.Imagen}`)
+                    openImagenModal(`https://pagina-educacion-backend-production.up.railway.app/${item.Imagen}`)
                   }
                   className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-2 py-2 rounded"
                 >

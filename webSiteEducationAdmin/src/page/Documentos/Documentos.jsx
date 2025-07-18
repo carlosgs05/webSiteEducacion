@@ -19,7 +19,7 @@ const Documentos = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/documentos");
+      const response = await axios.get("https://pagina-educacion-backend-production.up.railway.app/api/documentos");
       setData(response.data);
     } catch (error) {
       console.error("Error al obtener los documentos", error);
@@ -57,7 +57,7 @@ const Documentos = () => {
     }).then((willDelete) => {
       if (willDelete) {
         axios
-          .delete(`http://localhost:8000/api/destroyDocumento/${id}`)
+          .delete(`https://pagina-educacion-backend-production.up.railway.app/api/destroyDocumento/${id}`)
           .then(() => {
             swal("El registro ha sido eliminado.", {
               icon: "success",

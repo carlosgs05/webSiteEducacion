@@ -17,7 +17,7 @@ const ForgotPassword = () => {
 
     try {
       // Consulta el backend para ver si existe el usuario
-      const response = await axios.post("http://127.0.0.1:8000/api/password/forgot", { email });
+      const response = await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/password/forgot", { email });
       // Si se encuentra, se espera que el backend retorne los datos del usuario
       const { user } = response.data;
       // Redirige al componente de confirmación pasando la data del usuario en state

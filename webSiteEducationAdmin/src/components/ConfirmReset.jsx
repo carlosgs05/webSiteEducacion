@@ -17,7 +17,7 @@ const ConfirmReset = () => {
   const handleContinue = async () => {
     setLoading(true); // Activamos el estado de carga
     try {
-      await axios.post("http://127.0.0.1:8000/api/password/send-code", { email: user.email });
+      await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/password/send-code", { email: user.email });
 
       swal({
         title: "¡Código enviado!",
@@ -46,7 +46,7 @@ const ConfirmReset = () => {
 
         <div className="flex justify-center mb-4">
           <img
-            src={user.photo || "http://127.0.0.1:8000/imagenes/avatar_profile.png"}
+            src={user.photo || "https://pagina-educacion-backend-production.up.railway.app/imagenes/avatar_profile.png"}
             alt="Perfil"
             className="w-40 h-40 rounded-full object-cover border-2 shadow-lg border-gray-200"
           />

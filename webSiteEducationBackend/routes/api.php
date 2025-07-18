@@ -12,7 +12,7 @@ use App\Http\Controllers\AuthController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
+Route::get('/user/{id}', [AuthController::class, 'user']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/profile/update', [AuthController::class, 'updateProfile']);
 Route::post('/profile/security', [AuthController::class, 'updateSecurity']);

@@ -43,14 +43,14 @@ const MallaCurricular = () => {
     if (!malla || !malla.pdfMalla) return "";
     return malla.pdfMalla.startsWith("http")
       ? malla.pdfMalla
-      : `http://127.0.0.1:8000/${malla.pdfMalla}`;
+      : `https://pagina-educacion-backend-production.up.railway.app/${malla.pdfMalla}`;
   };
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:8000/api/malla");
+        const response = await axios.get("https://pagina-educacion-backend-production.up.railway.app/api/malla");
         const { malla: mallaData, cursos: cursosData } = response.data;
         setMalla(mallaData || null);
         setCursos(cursosData || []);
@@ -94,7 +94,7 @@ const MallaCurricular = () => {
     }).then((willDelete) => {
       if (willDelete) {
         axios
-          .delete("http://localhost:8000/api/destroyMalla")
+          .delete("https://pagina-educacion-backend-production.up.railway.app/api/destroyMalla")
           .then(() => {
             swal(
               "Eliminado",
@@ -130,7 +130,7 @@ const MallaCurricular = () => {
       }
 
       if (isNew) {
-        await axios.post("http://localhost:8000/api/storeMalla", formData);
+        await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/storeMalla", formData);
         swal(
           "Creado",
           "La malla curricular ha sido registrada con éxito.",
@@ -139,7 +139,7 @@ const MallaCurricular = () => {
           window.location.reload();
         });
       } else {
-        await axios.post("http://localhost:8000/api/updateMalla", formData);
+        await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/updateMalla", formData);
         swal(
           "Actualizado",
           "La malla curricular ha sido actualizada con éxito.",

@@ -9,7 +9,7 @@ const AddImageSlider = ({
 }) => {
   const [images, setImages] = useState(
     initialImages.map((img) => ({
-      preview: `http://127.0.0.1:8000/${img}`,
+      preview: `https://pagina-educacion-backend-production.up.railway.app/${img}`,
       name: img,
       file: null,
     }))
@@ -20,7 +20,7 @@ const AddImageSlider = ({
   useEffect(() => {
     setImages(
       initialImages.map((img) => ({
-        preview: `http://127.0.0.1:8000/${img}`,
+        preview: `https://pagina-educacion-backend-production.up.railway.app/${img}`,
         name: img,
         file: null,
       }))

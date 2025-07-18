@@ -23,7 +23,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/login", {
+      const response = await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/login", {
         email,
         password,
       });

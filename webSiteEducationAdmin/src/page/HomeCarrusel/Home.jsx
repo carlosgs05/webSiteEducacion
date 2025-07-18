@@ -17,7 +17,7 @@ const Home = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/imagenesHomeCarrusel"
+        "https://pagina-educacion-backend-production.up.railway.app/api/imagenesHomeCarrusel"
       );
       const images = response.data.map((item) => item.Imagen);
       setDbImages(images);
@@ -57,7 +57,7 @@ const Home = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/storeImagenesCarrusel",
+        "https://pagina-educacion-backend-production.up.railway.app/api/storeImagenesCarrusel",
         formData
       );
       swal("Éxito", response.data.message, "success").then(() => {
