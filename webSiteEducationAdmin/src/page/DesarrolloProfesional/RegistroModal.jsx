@@ -40,6 +40,7 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
   const [fecha, setFecha] = useState("");
   const [errors, setErrors] = useState({});
   const fileInputRef = useRef(null);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   // Precarga datos al editar
   useEffect(() => {
@@ -70,6 +71,36 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
       return () => URL.revokeObjectURL(objectUrl);
     }
   }, [imagen]);
+
+  // Mostrar SweetAlert de éxito cuando se cierra el modal de progreso
+  useEffect(() => {
+    if (!uploading && showSuccessAlert) {
+      const titleMap = {
+        "bolsa de trabajo": [
+          editingRecord ? "Bolsa de trabajo actualizada!" : "Bolsa de trabajo registrada!",
+          editingRecord 
+            ? "La bolsa de trabajo ha sido actualizada con éxito" 
+            : "La bolsa de trabajo ha sido registrada con éxito"
+        ],
+        pasantias: [
+          editingRecord ? "Pasantía actualizada!" : "Pasantía registrada!",
+          editingRecord 
+            ? "La pasantía ha sido actualizada con éxito"
+            : "La pasantía ha sido registrada con éxito"
+        ],
+        default: [
+          editingRecord ? "Actualización exitosa!" : "Registro exitoso!",
+          editingRecord 
+            ? "Se ha actualizado con éxito"
+            : "Se ha registrado con éxito"
+        ],
+      };
+
+      const [title, text] = titleMap[tipo] || titleMap.default;
+      swal(title, text, "success");
+      setShowSuccessAlert(false);
+    }
+  }, [uploading, showSuccessAlert, editingRecord, tipo]);
 
   // Limpia error de un campo al cambiar
   const handleFieldChange = (field, setter) => (e) => {
@@ -161,23 +192,13 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      if (!editingRecord) {
-        const titleMap = {
-          "bolsa de trabajo": [
-            "Bolsa de trabajo registrada!",
-            "La bolsa de trabajo ha sido registrada con éxito",
-          ],
-          pasantias: [
-            "Pasantía registrada!",
-            "La pasantía ha sido registrada con éxito",
-          ],
-          default: ["Registro exitoso!", "Se ha registrado con éxito"],
-        };
-        const [title, text] = titleMap[tipo] || titleMap.default;
-        swal(title, text, "success");
-      }
+      // Indicar que debemos mostrar el SweetAlert después de cerrar el modal de progreso
+      setShowSuccessAlert(true);
 
-      onClose();
+      // Cerrar el modal principal después de un pequeño retraso
+      setTimeout(() => {
+        onClose();
+      }, 100);
     } catch (error) {
       if (error.response?.status === 422) {
         setErrors(error.response.data.errors);

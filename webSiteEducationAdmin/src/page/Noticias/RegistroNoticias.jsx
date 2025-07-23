@@ -185,7 +185,7 @@ const RegistroNoticias = (props) => {
 
       if (editingRecord) {
         await axios.post(
-          `https://pagina-educacion-backend-production.up.railway.app/api/updateNoticia/${editingRecord.IdNoticia}?_method=PUT`,
+          `https://pagina-educacion-backend-production.up.railway.app/api/updateNoticia/${editingRecord.IdNoticia}`,
           formData,
           config
         );

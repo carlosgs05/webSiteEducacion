@@ -86,7 +86,7 @@ const RegistroModal = ({ onClose, editingRecord }) => {
 
       if (editingRecord) {
         await axios.post(
-          `https://pagina-educacion-backend-production.up.railway.app/api/updateDocumento/${editingRecord.IdDocumento}?_method=PUT`,
+          `https://pagina-educacion-backend-production.up.railway.app/api/updateDocumento/${editingRecord.IdDocumento}`,
           formData,
           { 
             headers: { "Content-Type": "multipart/form-data" },
