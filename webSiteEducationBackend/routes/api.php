@@ -42,7 +42,7 @@ Route::delete('/destroyMalla', [MallaCurricularController::class, 'destroy']);
 Route::get('/desarrolloProfesional', [DesarrolloController::class, 'index']);
 Route::post('/storeDesarrolloProfesional', [DesarrolloController::class, 'store']);
 Route::get('/showDesarrolloProfesional/{id}', [DesarrolloController::class, 'show']);
-Route::put('/updateDesarrolloProfesional/{id}', [DesarrolloController::class, 'update']);
+Route::post('/updateDesarrolloProfesional/{id}', [DesarrolloController::class, 'update']);
 Route::delete('/destroyDesarrolloProfesional/{id}', [DesarrolloController::class, 'destroy']);
 
 Route::get('/documentos', [DocumentoController::class, 'index']);

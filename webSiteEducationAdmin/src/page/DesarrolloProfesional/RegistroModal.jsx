@@ -3,47 +3,9 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import swal from "sweetalert";
 import ModalPortal from "../../components/ModalPortal";
+import { X, Trash2, Plus } from "lucide-react";
 
-// Iconos
-const TrashIcon = () => (
-  <svg
-    className="w-5 h-5 cursor-pointer hover:text-red-600 transition"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M19 7l-.867 12.142A2 2 0 0116.138 
-         21H7.862a2 2 0 01-1.995-1.858L5 
-         7m5 4v6m4-6v6m1-10V5a2 2 0 
-         00-2-2H9a2 2 0 00-2 2v2m-2 
-         0h12"
-    />
-  </svg>
-);
-
-const CloseIcon = () => (
-  <svg
-    className="w-6 h-6 cursor-pointer hover:text-gray-700 transition"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M6 18L18 6M6 6l12 12"
-    />
-  </svg>
-);
-
-// Spinner inline para el botón
+// Spinner para el botón
 const Spinner = () => (
   <svg
     className="animate-spin h-5 w-5"
@@ -69,6 +31,8 @@ const Spinner = () => (
 
 const RegistroModal = ({ onClose, editingRecord, tipo }) => {
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [descripcion, setDescripcion] = useState("");
   const [imagen, setImagen] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -130,12 +94,16 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
     }
     e.target.value = "";
   };
+  
   const handleDragOver = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     e.dataTransfer.dropEffect = "copy";
   };
+  
   const handleDrop = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const file = e.dataTransfer.files[0];
     if (file && /image\/(png|jpe?g)/.test(file.type)) {
       setImagen(file);
@@ -146,6 +114,7 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
       });
     }
   };
+  
   const handleRemovePhoto = () => {
     setImagen(null);
     setPreview(null);
@@ -170,11 +139,24 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
     if (imagen) formData.append("Imagen", imagen);
 
     try {
+      setUploading(true);
+      setProgress(0);
+
+      const config = {
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setProgress(percentCompleted);
+        },
+      };
+
       const endpoint = editingRecord
         ? `https://pagina-educacion-backend-production.up.railway.app/api/updateDesarrolloProfesional/${editingRecord.IdDesarrollo}?_method=PUT`
         : "https://pagina-educacion-backend-production.up.railway.app/api/storeDesarrolloProfesional";
 
       await axios.post(endpoint, formData, {
+        ...config,
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -205,6 +187,7 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
       console.error(error);
     } finally {
       setLoading(false);
+      setUploading(false);
     }
   };
 
@@ -215,155 +198,213 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
           cursor: pointer;
         }
       `}</style>
+      
+      {/* Modal Principal */}
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div className="relative bg-white w-full max-w-5xl rounded-2xl shadow-lg p-6 overflow-y-auto max-h-screen">
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-          >
-            <CloseIcon />
-          </button>
+        <div className="relative bg-white w-full max-w-5xl rounded-2xl shadow-xl flex flex-col max-h-[98vh]">
+          {/* Encabezado */}
+          <div className="bg-[#545454] p-4 flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-white">
+              {editingRecord ? `Edición ${tipo}` : `Registro ${tipo}`}
+            </h2>
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-white hover:text-red-300 transition-colors duration-200 p-1 rounded-full hover:bg-white/10 cursor-pointer"
+              title="Cerrar"
+            >
+              <X size={24} />
+            </button>
+          </div>
 
-          <h2 className="text-2xl text-center font-semibold mb-6 text-gray-700 uppercase">
-            {editingRecord ? `Edición ${tipo}` : `Registro ${tipo}`}
-          </h2>
-
-          <form
-            onSubmit={handleSubmit}
-            encType="multipart/form-data"
-            className="space-y-6 text-sm"
-          >
-            {/* URL y Fecha */}
-            <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-2">
-                <label className="block mb-1 font-semibold">URL</label>
-                <input
-                  type="text"
-                  value={url}
-                  onChange={handleFieldChange("Url", setUrl)}
-                  className={`w-full border p-2 rounded focus:outline-none focus:ring-1 ${
-                    errors.Url
-                      ? "border-red-500 ring-red-200"
-                      : "border-gray-300 ring-gray-400"
-                  }`}
-                />
-                {errors.Url && (
-                  <p className="text-red-500 text-xs mt-1">{errors.Url[0]}</p>
-                )}
-              </div>
-              <div>
-                <label className="block mb-1 font-semibold">Fecha</label>
-                <input
-                  type="date"
-                  value={fecha}
-                  onChange={handleFieldChange("Fecha", setFecha)}
-                  className={`w-full border p-2 rounded focus:outline-none focus:ring-1 ${
-                    errors.Fecha
-                      ? "border-red-500 ring-red-200"
-                      : "border-gray-300 ring-gray-400"
-                  }`}
-                  style={{ cursor: "pointer" }}
-                />
-                {errors.Fecha && (
-                  <p className="text-red-500 text-xs mt-1">{errors.Fecha[0]}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Imagen y Descripción */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block mb-1 font-semibold">Imagen</label>
-                <div
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
-                  className={`relative w-full h-64 aspect-square border-2 border-dashed rounded-md overflow-hidden hover:bg-gray-50 cursor-pointer ${
-                    errors.Imagen ? "border-red-500" : "border-gray-300"
-                  }`}
-                >
-                  {preview ? (
-                    <img
-                      src={preview}
-                      alt="Preview"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
-                      <span className="text-3xl">+</span>
-                      <p className="text-sm text-center">
-                        Agregar imagen
-                        <br />o arrastrar y soltar
-                      </p>
-                    </div>
-                  )}
+          {/* Contenido con scroll interno */}
+          <div className="p-5 overflow-y-auto flex-1">
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
+              {/* URL y Fecha */}
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="col-span-2">
+                  <label className="block mb-2 text-sm font-medium text-gray-700">
+                    URL
+                  </label>
                   <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/png,image/jpeg"
-                    onChange={handleFileChange}
-                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    type="text"
+                    value={url}
+                    onChange={handleFieldChange("Url", setUrl)}
+                    className={`w-full border p-3 rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.Url
+                        ? "border-red-500 ring-red-200"
+                        : "border-gray-300 ring-[#262D73]"
+                    }`}
                   />
-                  {preview && (
-                    <button
-                      type="button"
-                      onClick={handleRemovePhoto}
-                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
-                      title="Eliminar imagen"
-                    >
-                      <TrashIcon />
-                    </button>
+                  {errors.Url && (
+                    <p className="text-red-500 text-xs mt-1">{errors.Url[0]}</p>
                   )}
                 </div>
-                {errors.Imagen && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.Imagen[0]}
-                  </p>
-                )}
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-700">
+                    Fecha
+                  </label>
+                  <input
+                    type="date"
+                    value={fecha}
+                    onChange={handleFieldChange("Fecha", setFecha)}
+                    className={`w-full border p-3 rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.Fecha
+                        ? "border-red-500 ring-red-200"
+                        : "border-gray-300 ring-[#262D73]"
+                    }`}
+                    style={{ cursor: "pointer" }}
+                  />
+                  {errors.Fecha && (
+                    <p className="text-red-500 text-xs mt-1">{errors.Fecha[0]}</p>
+                  )}
+                </div>
               </div>
-              <div>
-                <label className="block mb-1 font-semibold">Descripción</label>
-                <textarea
-                  value={descripcion}
-                  onChange={handleFieldChange("Descripcion", setDescripcion)}
-                  className={`w-full h-64 border p-2 rounded focus:outline-none focus:ring-1 ${
-                    errors.Descripcion
-                      ? "border-red-500 ring-red-200"
-                      : "border-gray-300 ring-gray-400"
-                  }`}
-                />
-                {errors.Descripcion && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.Descripcion[0]}
-                  </p>
-                )}
-              </div>
-            </div>
 
-            {/* Botones */}
-            <div className="flex justify-center gap-4">
-              <button
-                type="submit"
-                disabled={loading}
-                className={`flex items-center justify-center gap-2 bg-[#262D73] text-white py-2 px-6 rounded-lg font-semibold transition cursor-pointer ${
-                  loading
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-[#1F265F]"
-                }`}
-              >
-                {loading && <Spinner />}
-                {loading ? "Guardando..." : "Guardar"}
-              </button>
-              <button
-                type="button"
-                onClick={onClose}
-                className="bg-red-500 text-white py-2 px-6 rounded-lg font-semibold hover:bg-red-600 cursor-pointer"
-              >
-                Cancelar
-              </button>
-            </div>
-          </form>
+              {/* Imagen y Descripción */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-700">
+                    Imagen
+                  </label>
+                  <div
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    className={`relative w-full h-64 border-2 border-dashed rounded-xl overflow-hidden cursor-pointer ${
+                      errors.Imagen ? "border-red-500" : "border-gray-300"
+                    }`}
+                  >
+                    {preview ? (
+                      <>
+                        <img
+                          src={preview}
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleRemovePhoto}
+                          className="absolute top-3 right-3 bg-red-500 text-white p-2 rounded-full cursor-pointer hover:bg-red-600 transition"
+                          title="Eliminar imagen"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </>
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 p-4">
+                        <div className="mb-3 bg-gray-100 rounded-full p-3">
+                          <Plus size={24} />
+                        </div>
+                        <p className="text-center text-sm">
+                          Arrastra una imagen aquí o haz clic para seleccionar
+                        </p>
+                      </div>
+                    )}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg"
+                      onChange={handleFileChange}
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                    />
+                  </div>
+                  {errors.Imagen && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.Imagen[0]}
+                    </p>
+                  )}
+                </div>
+                
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-700">
+                    Descripción
+                  </label>
+                  <textarea
+                    value={descripcion}
+                    onChange={handleFieldChange("Descripcion", setDescripcion)}
+                    className={`w-full h-64 border p-3 rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.Descripcion
+                        ? "border-red-500 ring-red-200"
+                        : "border-gray-300 ring-[#262D73]"
+                    }`}
+                  />
+                  {errors.Descripcion && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.Descripcion[0]}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Botones */}
+              <div className="flex justify-center gap-4">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={`flex items-center justify-center gap-2 bg-[#262D73] text-white py-2 px-6 rounded-lg font-semibold transition ${
+                    loading
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-[#363D8F] cursor-pointer"
+                  }`}
+                >
+                  {loading && <Spinner />}
+                  {loading ? "Guardando..." : "Guardar"}
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="bg-red-500 text-white py-2 px-6 rounded-lg font-semibold hover:bg-red-600 cursor-pointer"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
+
+        {/* Modal de progreso para carga */}
+        {uploading && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl transform transition-all">
+              <div className="flex flex-col items-center">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {editingRecord ? "Actualizando" : "Guardando"}
+                </h3>
+                <p className="text-sm text-gray-500 mb-6">
+                  Por favor, espere mientras se guardan los cambios
+                </p>
+                
+                {/* Barra de progreso con gradiente moderno */}
+                <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-2">
+                  <div 
+                    className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300 ease-out"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+                
+                {/* Indicador numérico */}
+                <div className="w-full flex justify-between px-1">
+                  <span className="text-xs font-medium text-blue-600">0%</span>
+                  <span className="text-xs font-medium text-blue-600">
+                    {progress}%
+                  </span>
+                  <span className="text-xs font-medium text-blue-600">100%</span>
+                </div>
+                
+                {/* Indicador de carga animado */}
+                <div className="mt-4 flex space-x-2">
+                  {[...Array(3)].map((_, i) => (
+                    <div 
+                      key={i}
+                      className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"
+                      style={{ animationDelay: `${i * 0.2}s` }}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </ModalPortal>
   );

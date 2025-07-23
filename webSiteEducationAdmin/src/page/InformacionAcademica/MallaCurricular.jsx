@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import swal from "sweetalert";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaEdit, FaTrash, FaPlus, FaFilePdf } from "react-icons/fa";
 import Layout from "../../components/Layout";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import FormCursosModal from "../../components/FormCursosModal";
@@ -21,7 +21,7 @@ const MallaCurricular = () => {
   const [selectedCurso, setSelectedCurso] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 5;
   const totalPages = Math.ceil(cursos.length / itemsPerPage);
   const currentCursos = cursos.slice(
     (currentPage - 1) * itemsPerPage,
@@ -50,7 +50,9 @@ const MallaCurricular = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("https://pagina-educacion-backend-production.up.railway.app/api/malla");
+        const response = await axios.get(
+          "https://pagina-educacion-backend-production.up.railway.app/api/malla"
+        );
         const { malla: mallaData, cursos: cursosData } = response.data;
         setMalla(mallaData || null);
         setCursos(cursosData || []);
@@ -94,7 +96,9 @@ const MallaCurricular = () => {
     }).then((willDelete) => {
       if (willDelete) {
         axios
-          .delete("https://pagina-educacion-backend-production.up.railway.app/api/destroyMalla")
+          .delete(
+            "https://pagina-educacion-backend-production.up.railway.app/api/destroyMalla"
+          )
           .then(() => {
             swal(
               "Eliminado",
@@ -130,7 +134,10 @@ const MallaCurricular = () => {
       }
 
       if (isNew) {
-        await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/storeMalla", formData);
+        await axios.post(
+          "https://pagina-educacion-backend-production.up.railway.app/api/storeMalla",
+          formData
+        );
         swal(
           "Creado",
           "La malla curricular ha sido registrada con éxito.",
@@ -139,7 +146,10 @@ const MallaCurricular = () => {
           window.location.reload();
         });
       } else {
-        await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/updateMalla", formData);
+        await axios.post(
+          "https://pagina-educacion-backend-production.up.railway.app/api/updateMalla",
+          formData
+        );
         swal(
           "Actualizado",
           "La malla curricular ha sido actualizada con éxito.",
@@ -238,12 +248,34 @@ const MallaCurricular = () => {
     }
   };
 
+  // Generar números de página con límites
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = startPage + maxVisiblePages - 1;
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  };
+
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
   };
+
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
+
   const handlePageClick = (pageNum) => setCurrentPage(pageNum);
 
   if (loading) {
@@ -259,17 +291,21 @@ const MallaCurricular = () => {
   if (!malla && !isEditing) {
     return (
       <Layout>
-        <div className="h-full p-4 flex flex-col gap-5">
-          <h1 className="text-2xl text-center font-medium text-blue-800 uppercase">
+        <div className="h-full p-4 max-w-7xl mx-auto">
+          <h1 className="text-2xl text-center font-bold uppercase text-blue-800 mb-8">
             MALLA CURRICULAR
           </h1>
           <div
-            className="h-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md overflow-hidden gap-10 cursor-pointer hover:border-gray-400 transition-colors"
+            className="h-64 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden gap-4 cursor-pointer hover:border-blue-500 transition-colors bg-white shadow-sm"
             onClick={handleRegistrar}
           >
             <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors p-6">
-              <span className="text-6xl font-light">+</span>
-              <p className="text-lg text-center">Registrar Malla Curricular</p>
+              <div className="bg-blue-100 rounded-full p-4 mb-4">
+                <FaPlus className="text-3xl text-blue-500" />
+              </div>
+              <p className="text-lg font-medium text-gray-600">
+                Registrar Malla Curricular
+              </p>
             </div>
           </div>
         </div>
@@ -277,37 +313,121 @@ const MallaCurricular = () => {
     );
   }
 
+  // Componente de tabla para cursos
+  const CursosTable = ({ cursos, isEditing, onEdit, onDelete }) => (
+    <div className="overflow-hidden rounded-2xl border border-gray-200 shadow-md">
+      <table className="w-full text-sm">
+        <thead className="bg-[#545454] text-white">
+          <tr className="h-14">
+            <th className="px-4 text-center font-medium">Nombre</th>
+            <th className="px-4 text-center font-medium">Ciclo</th>
+            {isEditing && (
+              <th className="px-4 text-center font-medium">Acciones</th>
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {cursos.length === 0 ? (
+            <tr className="bg-white">
+              <td
+                colSpan={3}
+                className="py-6 text-center text-gray-500 text-base"
+              >
+                SIN REGISTROS
+              </td>
+            </tr>
+          ) : (
+            cursos.map((course, idx) => (
+              <tr
+                key={course.IdCurso || idx}
+                className={`border-b border-gray-100 ${
+                  idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                } hover:bg-gray-100 transition-colors duration-150`}
+              >
+                <td className="py-4 px-4 text-center font-medium text-gray-700">
+                  {course.Nombre}
+                </td>
+                <td className="py-4 px-4 text-center text-gray-600">
+                  {course.ciclo?.Ciclo || "Sin ciclo"}
+                </td>
+                {isEditing && (
+                  <td className="py-4 px-4">
+                    <div className="flex justify-center space-x-2">
+                      <button
+                        onClick={() => onEdit(course)}
+                        title="Editar"
+                        className="flex items-center justify-center w-7 h-7 bg-[#262D73] hover:bg-[#36395d] rounded-full cursor-pointer transition-colors duration-200"
+                      >
+                        <FaEdit className="h-3 w-3 text-white" />
+                      </button>
+                      <button
+                        onClick={() => onDelete(course)}
+                        title="Eliminar"
+                        className="flex items-center justify-center w-7 h-7 bg-red-500 hover:bg-red-600 rounded-full cursor-pointer transition-colors duration-200"
+                      >
+                        <FaTrash className="h-3 w-3 text-white" />
+                      </button>
+                    </div>
+                  </td>
+                )}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+
   return (
     <Layout>
-      <div className="p-4">
-        <h1 className="text-2xl text-center font-medium text-blue-800 uppercase">
+      <div className="p-4 max-w-7xl mx-auto">
+        <h1 className="text-2xl text-center font-bold uppercase text-blue-800 mb-8">
           MALLA CURRICULAR
         </h1>
 
         {malla && !isEditing && (
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 m-4">
-            <div className="text-gray-600">
-            </div>
-            <div className="flex gap-3">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+            <div className="text-gray-600"></div>
+            <div className="flex gap-4">
               <button
                 onClick={handleEditar}
-                className="text-[#262D73] hover:text-[#363D8F] font-medium transition-colors cursor-pointer"
+                className="flex items-center gap-2 bg-[#262D73] hover:bg-[#36395d] text-white font-medium py-2.5 px-5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
               >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 text-white"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                </svg>
                 Editar malla
               </button>
               <button
                 onClick={handleEliminar}
-                className="text-red-600 hover:text-red-700 font-medium transition-colors cursor-pointer"
+                className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white font-medium py-2.5 px-5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
               >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 text-white"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
                 Eliminar malla
               </button>
             </div>
           </div>
         )}
 
-        <div className="space-y-4">
+        <div className="space-y-6 bg-white rounded-2xl p-6 shadow-md mb-8">
           <div>
-            <label className="block mb-2 text-base font-medium text-gray-600">
+            <label className="block mb-3 text-base font-medium text-gray-700">
               Nombre Malla
             </label>
             <input
@@ -315,19 +435,19 @@ const MallaCurricular = () => {
               readOnly={!isEditing}
               value={nombreMalla}
               onChange={(e) => setNombreMalla(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#545454]"
+              className="w-full border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#545454]"
             />
           </div>
 
           <div>
-            <label className="block mb-2 text-base font-medium text-gray-600">
+            <label className="block mb-3 text-base font-medium text-gray-700">
               PDF
             </label>
             <div
               className={`relative w-full border-2 border-dashed ${
-                isEditing ? "border-gray-400" : "border-gray-300"
-              } rounded-md flex items-center justify-center cursor-pointer transition-colors`}
-              style={{ height: "50px" }}
+                isEditing ? "border-blue-400" : "border-gray-300"
+              } rounded-xl flex items-center justify-center cursor-pointer transition-colors bg-gray-50`}
+              style={{ height: "55px" }}
               onClick={
                 isEditing ? () => pdfInputRef.current.click() : undefined
               }
@@ -336,82 +456,65 @@ const MallaCurricular = () => {
             >
               {isEditing ? (
                 pdfMalla ? (
-                  <div className="w-full h-full flex items-center justify-center relative px-4 text-sm text-gray-600 truncate">
-                    {getCleanPdfName(pdfMalla.name)}
+                  <div className="w-full h-full flex items-center justify-center relative px-4 text-sm text-gray-700 truncate">
+                    <div className="flex items-center gap-3">
+                      <FaFilePdf className="text-red-500 text-xl" />
+                      <span>{getCleanPdfName(pdfMalla.name)}</span>
+                    </div>
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleRemovePdf();
                       }}
-                      className="absolute top-2 right-2 p-1 bg-red-500 hover:bg-red-600 text-white rounded-md cursor-pointer transition-colors"
+                      className="absolute top-3 right-3 p-2 bg-red-500 hover:bg-red-600 text-white rounded-full cursor-pointer transition-colors"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2"
-                        />
-                      </svg>
+                      <FaTrash className="h-4 w-4" />
                     </button>
                   </div>
                 ) : malla && malla.pdfMalla && !pdfRemoved ? (
-                  <div className="w-full h-full flex items-center justify-center relative px-4 text-sm text-gray-600 truncate">
-                    {getCleanPdfName(malla.pdfMalla)}
+                  <div className="w-full h-full flex items-center justify-center relative px-4 text-sm text-gray-700 truncate">
+                    <div className="flex items-center gap-3">
+                      <FaFilePdf className="text-red-500 text-xl" />
+                      <span>{getCleanPdfName(malla.pdfMalla)}</span>
+                    </div>
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleRemovePdf();
                       }}
-                      className="absolute top-2 right-2 p-1 bg-red-500 hover:bg-red-600 text-white rounded-md cursor-pointer transition-colors"
+                      className="absolute top-3 right-3 p-2 bg-red-500 hover:bg-red-600 text-white rounded-full cursor-pointer transition-colors"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2"
-                        />
-                      </svg>
+                      <FaTrash className="h-4 w-4" />
                     </button>
                   </div>
                 ) : (
-                  <div className="text-gray-400 flex gap-2 items-center">
-                    <span className="text-2xl">+</span>
+                  <div className="text-gray-400 flex flex-col items-center">
+                    <FaFilePdf className="text-2xl mb-2" />
                     <p className="text-sm">Agregar PDF o arrastrar y soltar</p>
                   </div>
                 )
               ) : malla && malla.pdfMalla && !pdfRemoved ? (
-                <div className="w-full h-full flex items-center justify-center relative px-4 text-sm text-gray-600 truncate">
-                  {getCleanPdfName(malla.pdfMalla)}
+                <div className="w-full h-full flex items-center justify-center relative px-4 text-sm text-gray-700 truncate">
+                  <div className="flex items-center gap-3">
+                    <FaFilePdf className="text-red-500 text-xl" />
+                    <span>{getCleanPdfName(malla.pdfMalla)}</span>
+                  </div>
                   <button
                     type="button"
                     onClick={(e) => {
                       window.open(getPdfUrl(), "_blank");
                       e.stopPropagation();
                     }}
-                    className="absolute top-2 right-2 p-1 bg-gray-600 hover:bg-gray-700 text-white rounded-md cursor-pointer transition-colors"
+                    className="absolute top-3 right-3 p-2 bg-gray-600 hover:bg-gray-700 text-white rounded-full cursor-pointer transition-colors"
                   >
-                    <FaEye className="h-5 w-5" />
+                    <FaEye className="h-4 w-4" />
                   </button>
                 </div>
               ) : (
-                <div className="text-gray-400 flex gap-2 items-center">
-                  <span className="text-2xl">+</span>
+                <div className="text-gray-400 flex flex-col items-center">
+                  <FaFilePdf className="text-2xl mb-2" />
                   <p className="text-sm">Agregar PDF o arrastrar y soltar</p>
                 </div>
               )}
@@ -427,152 +530,113 @@ const MallaCurricular = () => {
           </div>
 
           <div>
-            <h2 className="text-base font-medium text-gray-700 mb-3">CURSOS</h2>
-            {isEditing && (
-              <button
-                onClick={handleAgregarCurso}
-                className="mb-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer"
-              >
-                Agregar curso
-              </button>
-            )}
-            <div className="border border-gray-200 rounded-md overflow-hidden">
-              <table className="w-full text-sm text-left">
-                <thead className="bg-[#545454] text-white uppercase text-xs">
-                  <tr className="h-12">
-                    <th className="px-4 py-3">Nombre</th>
-                    <th className="px-4 py-3">Ciclo</th>
-                    {isEditing && (
-                      <th className="px-4 py-3 text-center">Acciones</th>
-                    )}
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentCursos.length === 0 ? (
-                    <tr className="bg-white border-b">
-                      <td
-                        colSpan={3}
-                        className="py-4 text-center text-gray-500"
-                      >
-                        SIN REGISTROS
-                      </td>
-                    </tr>
-                  ) : (
-                    currentCursos.map((course, index) => (
-                      <tr
-                        key={course.IdCurso || index}
-                        className={`border-b ${
-                          index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                        } hover:bg-gray-100`}
-                      >
-                        <td className="px-4 py-3">{course.Nombre}</td>
-                        <td className="px-4 py-3">
-                          {course.ciclo?.Ciclo || "Sin ciclo"}
-                        </td>
-                        {isEditing && (
-                          <td className="px-4 py-3 text-center">
-                            <div className="flex justify-center space-x-3">
-                              <button
-                                onClick={() => handleEditarCurso(course)}
-                                className="bg-[#262D73] hover:bg-[#36395d] text-white p-1 rounded-md transition-colors cursor-pointer"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-5 w-5"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5m-1.414-6.414L16 3m0 0l-3 3m3-3L19 6"
-                                  />
-                                </svg>
-                              </button>
-                              <button
-                                onClick={() => {
-                                  const globalIndex =
-                                    (currentPage - 1) * itemsPerPage + index;
-                                  const newCourses = [...cursos];
-                                  newCourses.splice(globalIndex, 1);
-                                  setCursos(newCourses);
-                                  if (
-                                    newCourses.length <=
-                                      (currentPage - 1) * itemsPerPage &&
-                                    currentPage > 1
-                                  ) {
-                                    setCurrentPage((prev) => prev - 1);
-                                  }
-                                }}
-                                className="bg-red-500 hover:bg-red-600 text-white p-1 rounded-md transition-colors cursor-pointer"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-5 w-5"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                          </td>
-                        )}
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+              <h2 className="text-lg font-semibold text-gray-700">CURSOS</h2>
+              {isEditing && (
+                <button
+                  onClick={handleAgregarCurso}
+                  className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 px-5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+                >
+                  <FaPlus className="h-4 w-4" />
+                  Agregar curso
+                </button>
+              )}
             </div>
 
-            {totalPages > 1 && (
-              <div className="flex justify-center mt-4">
-                <div className="inline-flex items-center border border-gray-300 rounded-md overflow-hidden">
+            <CursosTable
+              cursos={currentCursos}
+              isEditing={isEditing}
+              onEdit={handleEditarCurso}
+              onDelete={(course) => {
+                const globalIndex = cursos.findIndex(
+                  (c) => c.IdCurso === course.IdCurso
+                );
+                if (globalIndex !== -1) {
+                  const newCourses = [...cursos];
+                  newCourses.splice(globalIndex, 1);
+                  setCursos(newCourses);
+
+                  if (
+                    newCourses.length <= (currentPage - 1) * itemsPerPage &&
+                    currentPage > 1
+                  ) {
+                    setCurrentPage((prev) => prev - 1);
+                  }
+                }
+              }}
+            />
+
+            {cursos.length > itemsPerPage && (
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
+                <div className="text-gray-600 text-sm">
+                  Mostrando{" "}
+                  {Math.min(
+                    (currentPage - 1) * itemsPerPage + 1,
+                    cursos.length
+                  )}{" "}
+                  - {Math.min(currentPage * itemsPerPage, cursos.length)} de{" "}
+                  {cursos.length} cursos
+                </div>
+
+                <div className="flex items-center space-x-1">
                   <button
                     onClick={handlePrevPage}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1.5 text-sm ${
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${
                       currentPage === 1
                         ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        : "bg-white text-gray-700 hover:bg-gray-50 cursor-pointer"
+                        : "bg-gray-200 hover:bg-gray-300 cursor-pointer"
                     }`}
                   >
-                    &lt;
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
                   </button>
-                  {Array.from({ length: totalPages }, (_, i) => {
-                    const pageNum = i + 1;
-                    return (
-                      <button
-                        key={pageNum}
-                        onClick={() => handlePageClick(pageNum)}
-                        className={`px-3 py-1.5 text-sm ${
-                          pageNum === currentPage
-                            ? "bg-[#545454] text-white cursor-pointer"
-                            : "bg-white text-gray-700 hover:bg-gray-50 cursor-pointer"
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    );
-                  })}
+
+                  {getPageNumbers().map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => handlePageClick(page)}
+                      className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                        currentPage === page
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-100 hover:bg-gray-200"
+                      } font-medium cursor-pointer`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
                   <button
                     onClick={handleNextPage}
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1.5 text-sm ${
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${
                       currentPage === totalPages
                         ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        : "bg-white text-gray-700 hover:bg-gray-50 cursor-pointer"
+                        : "bg-gray-200 hover:bg-gray-300 cursor-pointer"
                     }`}
                   >
-                    &gt;
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -581,16 +645,16 @@ const MallaCurricular = () => {
         </div>
 
         {isEditing && (
-          <div className="flex justify-center gap-4 mt-6">
+          <div className="flex justify-center gap-6 mt-6">
             <button
               onClick={handleGuardar}
-              className="bg-[#262D73] hover:bg-[#36395d] text-white px-6 py-2 rounded-md font-medium transition-colors cursor-pointer"
+              className="flex items-center gap-2 bg-[#262D73] hover:bg-[#36395d] text-white font-medium py-3 px-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
             >
               Guardar
             </button>
             <button
               onClick={handleCancelar}
-              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-md font-medium transition-colors cursor-pointer"
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
             >
               Cancelar
             </button>

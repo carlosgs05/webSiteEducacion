@@ -1,8 +1,6 @@
-// src/pages/Rsu.jsx
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
-import Button from "../../components/Button";
 import RegistroModal from "./RegistroModal";
 import DescripcionModal from "../../components/DescripcionModal";
 import ImagenModal from "../../components/ImagenModal";
@@ -40,6 +38,7 @@ const Rsu = () => {
     }
     setLoading(false);
   };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -70,9 +69,7 @@ const Rsu = () => {
     }).then((willDelete) => {
       if (willDelete) {
         axios
-          .delete(
-            `https://pagina-educacion-backend-production.up.railway.app/api/destroyDesarrolloProfesional/${id}`
-          )
+          .delete(`https://pagina-educacion-backend-production.up.railway.app/api/destroyDesarrolloProfesional/${id}`)
           .then(() => {
             swal("El registro ha sido eliminado.", {
               icon: "success",
@@ -106,50 +103,113 @@ const Rsu = () => {
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
+  // Generar números de página con límites
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = startPage + maxVisiblePages - 1;
+    
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    
+    return pages;
+  };
+
   return (
     <Layout>
-      <div className="p-4">
-        <div className="mb-6">
-          <h2 className="text-2xl text-center font-medium text-blue-800 uppercase">
+      <div className="p-4 max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h2 className="text-2xl text-center font-bold uppercase text-blue-800">
             {activeSection}
           </h2>
-          <div className="flex mt-5 mb-7">
-            <Button
-              name="Nuevo registro"
+          <div className="flex my-10">
+            <button
               onClick={openNewModal}
-              bgColor="bg-[#4CAF50]"
-              className="cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-[#45A049] transition"
-            />
+              className="flex items-center gap-2 bg-[#4CAF50] hover:bg-[#45A049] text-white font-medium py-3 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
+              </svg>
+              Nuevo registro
+            </button>
           </div>
         </div>
 
         {loading ? (
-          <LoadingIndicator />
+          <div className="flex justify-center py-16">
+            <LoadingIndicator size="large" />
+          </div>
         ) : (
-          <RegistrosTable
-            data={currentItems}
-            openDescripcionModal={openDescripcionModal}
-            openImagenModal={openImagenModal}
-            openEditModal={openEditModal}
-            handleDelete={handleDelete}
-          />
+          <div className="mb-8">
+            <RegistrosTable
+              data={currentItems}
+              openDescripcionModal={openDescripcionModal}
+              openImagenModal={openImagenModal}
+              openEditModal={openEditModal}
+              handleDelete={handleDelete}
+            />
+          </div>
         )}
 
-        <div className="flex justify-center space-x-2 mt-4">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentPage(index + 1)}
-              className={`px-3 py-1 rounded-md cursor-pointer ${
-                currentPage === index + 1
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-300 hover:bg-gray-400"
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+        {data.length > itemsPerPage && (
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+            <div className="text-gray-600 text-sm">
+              Mostrando {indexOfFirstItem + 1} - {Math.min(indexOfLastItem, data.length)} de {data.length} registros
+            </div>
+            
+            <div className="flex items-center space-x-1">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                  currentPage === 1 
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed" 
+                    : "bg-gray-200 hover:bg-gray-300 cursor-pointer"
+                }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </button>
+              
+              {getPageNumbers().map(page => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                    currentPage === page
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-100 hover:bg-gray-200"
+                  } font-medium cursor-pointer`}
+                >
+                  {page}
+                </button>
+              ))}
+              
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                  currentPage === totalPages 
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed" 
+                    : "bg-gray-200 hover:bg-gray-300 cursor-pointer"
+                }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
 
         {showModal && (
           <RegistroModal
@@ -162,6 +222,7 @@ const Rsu = () => {
             tipo={activeSection.toLowerCase()}
           />
         )}
+
         {showDescripcionModal && (
           <DescripcionModal
             descripcion={descripcionActual}

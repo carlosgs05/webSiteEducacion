@@ -255,7 +255,7 @@ const Perfil = () => {
 
         return (
           <div className="w-full px-8 pt-3 pb-8">
-            <h1 className="text-2xl text-center font-medium text-blue-800 mb-9">
+            <h1 className="text-2xl text-center font-bold text-blue-800 mb-9">
               MI PERFIL
             </h1>
             <div className="w-full mx-auto mt-5 rounded-xl shadow overflow-hidden">
@@ -294,13 +294,13 @@ const Perfil = () => {
                           />
                           <button
                             onClick={handleUploadClick}
-                            className="bg-indigo-600 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-700 transition"
+                            className="bg-indigo-600 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-700 transition cursor-pointer"
                           >
                             Editar
                           </button>
                           <button
                             onClick={handleDeleteImage}
-                            className="bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700 transition"
+                            className="bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700 transition cursor-pointer"
                           >
                             Eliminar
                           </button>
@@ -311,7 +311,7 @@ const Perfil = () => {
                       {!editing && (
                         <button
                           onClick={() => handleEdit(user)}
-                          className="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 transition"
+                          className="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 transition cursor-pointer"
                         >
                           Editar
                         </button>
@@ -409,13 +409,13 @@ const Perfil = () => {
                     <div className="flex justify-end mt-4 space-x-4">
                       <button
                         onClick={handleCancel}
-                        className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md shadow hover:bg-gray-400 transition"
+                        className="bg-red-700 text-white px-4 py-2 rounded-md shadow hover:bg-red-800 transition cursor-pointer"
                       >
                         Cancelar
                       </button>
                       <button
                         onClick={() => handleSave(user.id)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition cursor-pointer"
                       >
                         Guardar
                       </button>
@@ -435,7 +435,7 @@ const Perfil = () => {
                     {!securityEditing && (
                       <button
                         onClick={handleSecurityEdit}
-                        className="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 transition"
+                        className="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 transition cursor-pointer"
                       >
                         Editar
                       </button>
@@ -510,13 +510,13 @@ const Perfil = () => {
                     <div className="mt-8 flex justify-end space-x-4">
                       <button
                         onClick={handleSecurityCancel}
-                        className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md shadow hover:bg-gray-400 transition"
+                        className="bg-red-700 text-white px-4 py-2 rounded-md shadow hover:bg-red-800 transition cursor-pointer"
                       >
                         Cancelar
                       </button>
                       <button
                         onClick={() => handleSecuritySave(user.id)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition cursor-pointer"
                       >
                         Guardar
                       </button>

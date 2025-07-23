@@ -357,7 +357,7 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
     <ModalPortal>
       {/* Modal Principal */}
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div className="relative bg-white w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[98vh]">
+        <div className="relative bg-white w-full max-w-6xl rounded-2xl shadow-2xl flex flex-col max-h-[98vh]">
           {/* Encabezado */}
           <div className="bg-[#545454] p-4 flex justify-between items-center">
             <h2 className="text-xl font-semibold text-white">
