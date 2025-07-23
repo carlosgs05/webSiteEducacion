@@ -100,7 +100,7 @@ class PersonaController extends Controller
             'Cargo'           => ['required', 'string', 'max:50', 'regex:/^[A-Za-z0-9ÁÉÍÓÚáéíóúñÑ ]+$/'],
             'TituloPersona'   => ['required', 'string', 'max:255'],
             'RolPersona'      => ['required', Rule::in(['Autoridades', 'Personal Docente', 'Personal Administrativo'])],
-            'Foto'            => ['required', 'image', 'mimes:jpg,jpeg,png'],
+            'Foto'            => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
         ];
 
         $messages = [
@@ -112,7 +112,6 @@ class PersonaController extends Controller
             'Cargo.regex'            => 'El cargo solo puede contener letras, números y espacios',
             'TituloPersona.required' => 'El título es obligatorio',
             'RolPersona.in'          => 'El rol seleccionado no es válido',
-            'Foto.required'         => 'La foto es obligatoria',
             'Foto.image'             => 'La foto debe ser una imagen',
             'Foto.mimes'             => 'La foto debe ser jpg, jpeg o png',
         ];
