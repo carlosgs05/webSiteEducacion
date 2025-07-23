@@ -3,48 +3,9 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import swal from "sweetalert";
 import ModalPortal from "./ModalPortal";
+import { X, Trash2, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 
-// Icono de papelera
-const TrashIcon = () => (
-  <svg
-    className="w-5 h-5 cursor-pointer hover:text-red-600 transition"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M19 7l-.867 12.142A2 2 0 0116.138 
-         21H7.862a2 2 0 01-1.995-1.858L5 
-         7m5 4v6m4-6v6m1-10V5a2 2 0 
-         00-2-2H9a2 2 0 00-2 2v2m-2 
-         0h12"
-    />
-  </svg>
-);
-
-// Icono de "X" para cerrar el modal
-const CloseIcon = () => (
-  <svg
-    className="w-6 h-6 cursor-pointer hover:text-gray-700 transition"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M6 18L18 6M6 6l12 12"
-    />
-  </svg>
-);
-
-// Spinner inline para el botón
+// Spinner para el botón
 const Spinner = () => (
   <svg
     className="animate-spin h-5 w-5"
@@ -74,69 +35,119 @@ SUBMODAL: PublicationModal
 const PublicationModal = ({ onClose, onAccept }) => {
   const [titulo, setTitulo] = useState("");
   const [url, setUrl] = useState("");
+  const [errors, setErrors] = useState({ titulo: null, url: null });
+
+  const validate = () => {
+    const newErrors = { titulo: null, url: null };
+    let isValid = true;
+
+    if (!titulo.trim()) {
+      newErrors.titulo = "El título es obligatorio";
+      isValid = false;
+    }
+
+    if (!url.trim()) {
+      newErrors.url = "La URL es obligatoria";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleAccept = () => {
-    onAccept({ titulo, url });
-    onClose();
+    if (validate()) {
+      onAccept({ titulo, url });
+      onClose();
+    }
+  };
+
+  const handleTituloChange = (e) => {
+    setTitulo(e.target.value);
+    if (errors.titulo) {
+      setErrors((prev) => ({ ...prev, titulo: null }));
+    }
+  };
+
+  const handleUrlChange = (e) => {
+    setUrl(e.target.value);
+    if (errors.url) {
+      setErrors((prev) => ({ ...prev, url: null }));
+    }
   };
 
   return (
     <ModalPortal>
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div className="relative bg-white w-full max-w-md rounded-2xl shadow-lg p-4">
-          {/* Botón (X) para cerrar */}
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 cursor-pointer"
-          >
-            <CloseIcon />
-          </button>
+        <div className="relative bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden">
+          {/* Encabezado */}
+          <div className="bg-[#545454] p-4 flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-white">
+              Nueva Publicación
+            </h2>
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-white hover:text-red-300 transition-colors duration-200 p-1 rounded-full hover:bg-white/10 cursor-pointer"
+              title="Cerrar"
+            >
+              <X size={24} />
+            </button>
+          </div>
 
-          <h2 className="text-base font-semibold mb-4 text-gray-700">
-            Nueva Publicación
-          </h2>
-
-          <div className="space-y-3 text-sm">
-            {/* Título */}
+          {/* Contenido */}
+          <div className="p-5 space-y-4">
             <div>
-              <label className="block mb-1 text-gray-600 font-semibold">
+              <label className="block mb-2 text-sm font-medium text-gray-700">
                 Título
               </label>
               <input
                 type="text"
                 value={titulo}
-                onChange={(e) => setTitulo(e.target.value)}
-                className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm"
+                onChange={handleTituloChange}
+                className={`w-full border ${
+                  errors.titulo ? "border-red-500" : "border-gray-300"
+                } p-3 rounded-lg focus:outline-none focus:ring-2 ${
+                  errors.titulo ? "ring-red-200" : "focus:ring-[#262D73]"
+                } text-sm`}
               />
+              {errors.titulo && (
+                <p className="text-red-500 text-xs mt-1">{errors.titulo}</p>
+              )}
             </div>
-            {/* URL */}
             <div>
-              <label className="block mb-1 text-gray-600 font-semibold">
+              <label className="block mb-2 text-sm font-medium text-gray-700">
                 URL
               </label>
               <input
                 type="text"
                 value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm"
+                onChange={handleUrlChange}
+                className={`w-full border ${
+                  errors.url ? "border-red-500" : "border-gray-300"
+                } p-3 rounded-lg focus:outline-none focus:ring-2 ${
+                  errors.url ? "ring-red-200" : "focus:ring-[#262D73]"
+                } text-sm`}
               />
+              {errors.url && (
+                <p className="text-red-500 text-xs mt-1">{errors.url}</p>
+              )}
             </div>
           </div>
 
-          {/* Botones */}
-          <div className="flex justify-center gap-4 mt-4">
-            <button
-              onClick={handleAccept}
-              className="bg-[#262D73] cursor-pointer text-white py-2 px-5 font-semibold rounded-lg transition duration-200 text-sm hover:bg-[#1F265F]"
-            >
-              Aceptar
-            </button>
+          {/* Footer */}
+          <div className="bg-gray-50 px-5 py-4 flex justify-end gap-3 border-t border-gray-200">
             <button
               onClick={onClose}
-              className="bg-red-500 cursor-pointer text-white font-semibold px-5 py-2 rounded-lg shadow-md transition duration-200 text-sm hover:bg-red-600"
+              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors duration-200 cursor-pointer text-sm"
             >
               Cancelar
+            </button>
+            <button
+              onClick={handleAccept}
+              className="px-4 py-2 bg-[#262D73] hover:bg-[#363D8F] text-white font-medium rounded-lg transition-colors duration-200 cursor-pointer text-sm"
+            >
+              Aceptar
             </button>
           </div>
         </div>
@@ -325,310 +336,361 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
     <ModalPortal>
       {/* Modal Principal */}
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div className="relative bg-white w-full max-w-4xl rounded-lg shadow-lg p-6 overflow-y-auto max-h-screen">
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 cursor-pointer"
-          >
-            <CloseIcon />
-          </button>
+        <div className="relative bg-white w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[98vh]">
+          {/* Encabezado */}
+          <div className="bg-[#545454] p-4 flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-white">
+              {editingRecord ? `Edición ${tipo}` : `Registro ${tipo}`}
+            </h2>
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-white hover:text-red-300 transition-colors duration-200 p-1 rounded-full hover:bg-white/10 cursor-pointer"
+              title="Cerrar"
+            >
+              <X size={24} />
+            </button>
+          </div>
 
-          <h2 className="text-2xl text-center font-semibold mb-5 text-gray-700 uppercase">
-            {editingRecord ? `Edición ${tipo}` : `Registro ${tipo}`}
-          </h2>
-
-          <form
-            onSubmit={handleSubmit}
-            encType="multipart/form-data"
-            className="text-sm"
-          >
-            {/* Datos y Foto */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div className="space-y-4">
-                {/* Nombres */}
-                <div>
-                  <label className="block mb-1 font-semibold">Nombres</label>
-                  <input
-                    type="text"
-                    value={nombres}
-                    onChange={handleFieldChange("Nombres", setNombres)}
-                    className={`w-full border p-2 rounded focus:outline-none focus:ring ${
-                      errors.Nombres
-                        ? "border-red-500 ring-red-200"
-                        : "border-gray-300 ring-gray-400"
-                    }`}
-                  />
-                  {errors.Nombres && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.Nombres}
-                    </p>
-                  )}
-                </div>
-
-                {/* Correo */}
-                <div>
-                  <label className="block mb-1 font-semibold">Correo</label>
-                  <input
-                    type="email"
-                    value={correo}
-                    onChange={handleFieldChange("Correo", setCorreo)}
-                    className={`w-full border p-2 rounded focus:outline-none focus:ring ${
-                      errors.Correo
-                        ? "border-red-500 ring-red-200"
-                        : "border-gray-300 ring-gray-400"
-                    }`}
-                  />
-                  {errors.Correo && (
-                    <p className="text-red-500 text-xs mt-1">{errors.Correo}</p>
-                  )}
-                </div>
-
-                {/* Cargo */}
-                <div>
-                  <label className="block mb-1 font-semibold">Cargo</label>
-                  <input
-                    type="text"
-                    value={cargo}
-                    onChange={handleFieldChange("Cargo", setCargo)}
-                    className={`w-full border p-2 rounded focus:outline-none focus:ring ${
-                      errors.Cargo
-                        ? "border-red-500 ring-red-200"
-                        : "border-gray-300 ring-gray-400"
-                    }`}
-                  />
-                  {errors.Cargo && (
-                    <p className="text-red-500 text-xs mt-1">{errors.Cargo}</p>
-                  )}
-                </div>
-
-                {/* Título */}
-                <div>
-                  <label className="block mb-1 font-semibold">Título</label>
-                  <input
-                    type="text"
-                    value={tituloPersona}
-                    onChange={handleFieldChange(
-                      "TituloPersona",
-                      setTituloPersona
-                    )}
-                    className={`w-full border p-2 rounded focus:outline-none focus:ring ${
-                      errors.TituloPersona
-                        ? "border-red-500 ring-red-200"
-                        : "border-gray-300 ring-gray-400"
-                    }`}
-                  />
-                  {errors.TituloPersona && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.TituloPersona}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Foto */}
-              <div className="flex flex-col">
-                <label className="block mb-1 font-semibold">Foto</label>
-                <div
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
-                  className={`relative w-full h-[271px] border-2 border-dashed border-gray-300 rounded-md overflow-hidden hover:bg-gray-50 cursor-pointer ${
-                    errors.Foto ? "border-red-500" : "border-gray-300"
-                  }`}
-                >
-                  {previewFoto ? (
-                    <img
-                      src={previewFoto}
-                      alt="Vista previa"
-                      className="w-full h-full object-cover"
+          {/* Contenido con scroll interno */}
+          <div className="p-5 overflow-y-auto flex-1">
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
+              {/* Datos y Foto */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div className="space-y-4">
+                  {/* Nombres */}
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
+                      Nombres
+                    </label>
+                    <input
+                      type="text"
+                      value={nombres}
+                      onChange={handleFieldChange("Nombres", setNombres)}
+                      className={`w-full border p-3 rounded-lg focus:outline-none focus:ring-2 ${
+                        errors.Nombres
+                          ? "border-red-500 ring-red-200"
+                          : "border-gray-300 ring-[#262D73]"
+                      }`}
                     />
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
-                      <span className="text-2xl">+</span>
-                      <p className="text-sm text-center">
-                        Agregar imagen
-                        <br />o arrastrar y soltar
+                    {errors.Nombres && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.Nombres}
                       </p>
-                    </div>
-                  )}
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/png,image/jpeg"
-                    onChange={handleFileChange}
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                  />
-                  {previewFoto && (
-                    <button
-                      type="button"
-                      onClick={handleRemovePhoto}
-                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full cursor-pointer hover:bg-red-600 transition"
-                      title="Eliminar foto"
-                    >
-                      <TrashIcon />
-                    </button>
+                    )}
+                  </div>
+
+                  {/* Correo */}
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
+                      Correo
+                    </label>
+                    <input
+                      type="email"
+                      value={correo}
+                      onChange={handleFieldChange("Correo", setCorreo)}
+                      className={`w-full border p-3 rounded-lg focus:outline-none focus:ring-2 ${
+                        errors.Correo
+                          ? "border-red-500 ring-red-200"
+                          : "border-gray-300 ring-[#262D73]"
+                      }`}
+                    />
+                    {errors.Correo && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.Correo}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Cargo */}
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
+                      Cargo
+                    </label>
+                    <input
+                      type="text"
+                      value={cargo}
+                      onChange={handleFieldChange("Cargo", setCargo)}
+                      className={`w-full border p-3 rounded-lg focus:outline-none focus:ring-2 ${
+                        errors.Cargo
+                          ? "border-red-500 ring-red-200"
+                          : "border-gray-300 ring-[#262D73]"
+                      }`}
+                    />
+                    {errors.Cargo && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.Cargo}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Título */}
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
+                      Título
+                    </label>
+                    <input
+                      type="text"
+                      value={tituloPersona}
+                      onChange={handleFieldChange(
+                        "TituloPersona",
+                        setTituloPersona
+                      )}
+                      className={`w-full border p-3 rounded-lg focus:outline-none focus:ring-2 ${
+                        errors.TituloPersona
+                          ? "border-red-500 ring-red-200"
+                          : "border-gray-300 ring-[#262D73]"
+                      }`}
+                    />
+                    {errors.TituloPersona && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.TituloPersona}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Foto */}
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-700">
+                    Foto
+                  </label>
+                  <div
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    className={`relative w-full h-[330px] border-2 border-dashed rounded-xl overflow-hidden cursor-pointer ${
+                      errors.Foto ? "border-red-500" : "border-gray-300"
+                    }`}
+                  >
+                    {previewFoto ? (
+                      <>
+                        <img
+                          src={previewFoto}
+                          alt="Vista previa"
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleRemovePhoto}
+                          className="absolute top-3 right-3 bg-red-500 text-white p-2 rounded-full cursor-pointer hover:bg-red-600 transition"
+                          title="Eliminar foto"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </>
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 p-4">
+                        <div className="mb-3 bg-gray-100 rounded-full p-3">
+                          <Plus size={24} />
+                        </div>
+                        <p className="text-center text-sm">
+                          Arrastra una imagen aquí o haz clic para seleccionar
+                        </p>
+                      </div>
+                    )}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg"
+                      onChange={handleFileChange}
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                    />
+                  </div>
+                  {errors.Foto && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.Foto[0]}
+                    </p>
                   )}
                 </div>
-                {errors.Foto && (
-                  <p className="text-red-500 text-xs mt-1">{errors.Foto[0]}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Publicaciones */}
-            <div className="mb-4">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-lg">Publicaciones</h3>
-                <button
-                  type="button"
-                  onClick={handleOpenSubModal}
-                  className="bg-green-600 cursor-pointer hover:bg-green-700 text-white px-4 py-2 rounded-lg transition font-semibold"
-                >
-                  Agregar
-                </button>
               </div>
 
-              <div className="overflow-x-auto border border-gray-300 rounded-md">
-                <table className="min-w-full text-left">
-                  <thead className="bg-gray-800 text-white uppercase text-sm h-11">
-                    <tr>
-                      <th className="p-2">#</th>
-                      <th className="p-2">Título</th>
-                      <th className="p-2">URL</th>
-                      <th className="p-2">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {publicaciones.length === 0 && (
-                      <tr>
-                        <td
-                          colSpan={4}
-                          className="py-4 text-center text-gray-500 text-sm"
-                        >
-                          SIN REGISTROS
-                        </td>
+              {/* Publicaciones */}
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-semibold text-gray-700">Publicaciones</h3>
+                  <button
+                    type="button"
+                    onClick={handleOpenSubModal}
+                    className="flex items-center gap-2 cursor-pointer bg-[#4CAF50] hover:bg-[#45A049] text-white px-4 py-2 rounded-lg transition font-medium text-sm"
+                  >
+                    <Plus size={18} />
+                    Agregar publicación
+                  </button>
+                </div>
+
+                <div className="overflow-hidden rounded-xl border border-gray-200 shadow-sm">
+                  <table className="w-full text-sm">
+                    <thead className="bg-[#545454] text-white">
+                      <tr className="h-12">
+                        <th className="px-4 text-left">#</th>
+                        <th className="px-4 text-left">Título</th>
+                        <th className="px-4 text-left">URL</th>
+                        <th className="px-4 text-center">Acciones</th>
                       </tr>
-                    )}
-                    {currentPublications.map((pub, idx) => {
-                      const globalIndex =
-                        (currentPage - 1) * itemsPerPage + idx;
-                      return (
-                        <tr
-                          key={globalIndex}
-                          className="border-b last:border-0"
-                        >
-                          <td className="px-2 py-2 text-base">
-                            {globalIndex + 1}
-                          </td>
-                          <td className="px-2 py-2 text-base">
-                            <span
-                              className={
-                                errors[`publicaciones.${globalIndex}.titulo`]
-                                  ? "text-red-500"
-                                  : ""
-                              }
-                            >
-                              {pub.Titulo || pub.titulo}
-                            </span>
-                            {errors[`publicaciones.${globalIndex}.titulo`] && (
-                              <p className="text-red-500 text-xs">
-                                {errors[`publicaciones.${globalIndex}.titulo`]}
-                              </p>
-                            )}
-                          </td>
-                          <td className="px-2 py-2 text-base">
-                            <span
-                              className={
-                                errors[`publicaciones.${globalIndex}.url`]
-                                  ? "text-red-500"
-                                  : ""
-                              }
-                            >
-                              {pub.Url || pub.url}
-                            </span>
-                            {errors[`publicaciones.${globalIndex}.url`] && (
-                              <p className="text-red-500 text-xs">
-                                {errors[`publicaciones.${globalIndex}.url`]}
-                              </p>
-                            )}
-                          </td>
-                          <td className="px-2 py-2">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleRemovePublication(globalIndex)
-                              }
-                              className="cursor-pointer text-red-600 hover:text-red-800 transition"
-                            >
-                              <TrashIcon />
-                            </button>
+                    </thead>
+                    <tbody>
+                      {publicaciones.length === 0 ? (
+                        <tr>
+                          <td
+                            colSpan={4}
+                            className="py-6 text-center text-gray-500 text-sm"
+                          >
+                            SIN REGISTROS
                           </td>
                         </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                      ) : (
+                        currentPublications.map((pub, idx) => {
+                          const globalIndex =
+                            (currentPage - 1) * itemsPerPage + idx;
+                          return (
+                            <tr
+                              key={globalIndex}
+                              className={`border-b border-gray-100 ${
+                                idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                              }`}
+                            >
+                              <td className="px-4 py-3 text-gray-600">
+                                {globalIndex + 1}
+                              </td>
+                              <td className="px-4 py-3">
+                                <span
+                                  className={
+                                    errors[
+                                      `publicaciones.${globalIndex}.titulo`
+                                    ]
+                                      ? "text-red-500"
+                                      : "text-gray-800"
+                                  }
+                                >
+                                  {pub.Titulo || pub.titulo}
+                                </span>
+                                {errors[
+                                  `publicaciones.${globalIndex}.titulo`
+                                ] && (
+                                  <p className="text-red-500 text-xs mt-1">
+                                    {
+                                      errors[
+                                        `publicaciones.${globalIndex}.titulo`
+                                      ]
+                                    }
+                                  </p>
+                                )}
+                              </td>
+                              <td className="px-4 py-3">
+                                <span
+                                  className={
+                                    errors[`publicaciones.${globalIndex}.url`]
+                                      ? "text-red-500"
+                                      : "text-gray-800"
+                                  }
+                                >
+                                  {pub.Url || pub.url}
+                                </span>
+                                {errors[`publicaciones.${globalIndex}.url`] && (
+                                  <p className="text-red-500 text-xs mt-1">
+                                    {errors[`publicaciones.${globalIndex}.url`]}
+                                  </p>
+                                )}
+                              </td>
+                              <td className="px-4 py-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleRemovePublication(globalIndex)
+                                  }
+                                  className="text-red-500 hover:text-red-700 transition-colors cursor-pointer"
+                                  title="Eliminar"
+                                >
+                                  <Trash2 size={18} />
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Paginación */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-between mt-4">
+                    <div className="text-sm text-gray-600">
+                      Página {currentPage} de {totalPages}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handlePrevPage}
+                        disabled={currentPage === 1}
+                        className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                          currentPage === 1
+                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                            : "bg-gray-200 hover:bg-gray-300 cursor-pointer"
+                        }`}
+                      >
+                        <ChevronLeft size={16} />
+                      </button>
+
+                      {Array.from({ length: totalPages }, (_, i) => (
+                        <button
+                          type="button"
+                          key={i}
+                          onClick={() => handlePageClick(i + 1)}
+                          className={`flex items-center justify-center w-8 h-8 rounded-full text-sm ${
+                            currentPage === i + 1
+                              ? "bg-[#262D73] text-white"
+                              : "bg-gray-100 hover:bg-gray-200"
+                          } cursor-pointer`}
+                        >
+                          {i + 1}
+                        </button>
+                      ))}
+
+                      <button
+                        type="button"
+                        onClick={handleNextPage}
+                        disabled={currentPage === totalPages}
+                        className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                          currentPage === totalPages
+                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                            : "bg-gray-200 hover:bg-gray-300 cursor-pointer"
+                        }`}
+                      >
+                        <ChevronRight size={16} />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Paginación */}
-              {totalPages > 1 && (
-                <div className="flex justify-center mt-2 space-x-2">
-                  <button
-                    onClick={handlePrevPage}
-                    disabled={currentPage === 1}
-                    className="px-2 py-1 rounded cursor-pointer border"
-                  >
-                    &lt;
-                  </button>
-                  {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => handlePageClick(i + 1)}
-                      className={`px-2 py-1 rounded cursor-pointer border ${
-                        currentPage === i + 1
-                          ? "bg-blue-500 text-white"
-                          : "bg-white"
-                      }`}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-                  <button
-                    onClick={handleNextPage}
-                    disabled={currentPage === totalPages}
-                    className="px-2 py-1 rounded cursor-pointer border"
-                  >
-                    &gt;
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Botones Guardar/Cancelar */}
-            <div className="flex justify-center gap-4 mt-4">
-              <button
-                type="submit"
-                disabled={loading}
-                className={`flex items-center justify-center gap-2 bg-[#262D73] text-white py-2 px-6 rounded-lg font-semibold transition cursor-pointer ${
-                  loading
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-[#1F265F]"
-                }`}
-              >
-                {loading && <Spinner />}
-                {loading ? "Guardando..." : "Guardar"}
-              </button>
-              <button
-                type="button"
-                onClick={onClose}
-                className="bg-red-500 cursor-pointer text-white py-2 px-6 rounded-lg font-semibold hover:bg-red-600 transition"
-              >
-                Cancelar
-              </button>
-            </div>
-          </form>
+              {/* Botones Guardar/Cancelar */}
+              <div className="flex justify-center gap-4 mt-6">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={`flex items-center justify-center gap-2 bg-[#262D73] text-white py-2 px-4 rounded-xl font-medium transition ${
+                    loading
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-[#363D8F] cursor-pointer"
+                  }`}
+                >
+                  {loading && <Spinner />}
+                  {loading ? "Guardando..." : "Guardar"}
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl transition cursor-pointer"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
 
+        {/* Submodal para publicaciones */}
         {isSubModalOpen && (
           <PublicationModal
             onClose={handleCloseSubModal}

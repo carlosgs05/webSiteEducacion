@@ -27,7 +27,7 @@ Route::post('/storeImagenesCarrusel', [CarruselHomeController::class, 'storeImag
 
 Route::get('/organizacion', [PersonaController::class, 'index']);
 Route::post('/storeOrganizacion', [PersonaController::class, 'store']);
-Route::put('/updateOrganizacion/{id}', [PersonaController::class, 'update']);
+Route::post('/updateOrganizacion/{id}', [PersonaController::class, 'update']);
 Route::delete('/destroyOrganizacion/{id}', [PersonaController::class, 'destroy']);
 
 

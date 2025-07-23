@@ -12,6 +12,8 @@ const Home = () => {
   const [imagesState, setImagesState] = useState([]); // { preview, name, file }
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const fetchImages = async () => {
     setLoading(true);
@@ -56,15 +58,39 @@ const Home = () => {
     formData.append("existingImages", JSON.stringify(existingImages));
 
     try {
+      setUploading(true);
+      setProgress(0);
+      
+      // Simular progreso cada 100ms
+      const interval = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 98) {
+            clearInterval(interval);
+            return prev;
+          }
+          return prev + 2;
+        });
+      }, 100);
+
       const response = await axios.post(
         "https://pagina-educacion-backend-production.up.railway.app/api/storeImagenesCarrusel",
         formData
       );
-      swal("Éxito", response.data.message, "success").then(() => {
-        window.location.reload();
-      });
+      
+      // Completar la barra de progreso
+      clearInterval(interval);
+      setProgress(100);
+      
+      // Esperar un momento para mostrar el 100%
+      setTimeout(() => {
+        setUploading(false);
+        swal("Éxito", response.data.message, "success").then(() => {
+          window.location.reload();
+        });
+      }, 500);
     } catch (error) {
       console.error("Error al guardar las imágenes:", error);
+      setUploading(false);
       swal("Error", "Hubo un error al guardar las imágenes", "error");
     }
   };
@@ -78,7 +104,7 @@ const Home = () => {
     <Layout>
       <div className="p-4">
         <div className="flex flex-col gap-y-4">
-          <h1 className="text-2xl text-center font-medium text-blue-800">
+          <h1 className="text-2xl text-center font-bold text-blue-800">
             IMÁGENES DEL CARRUSEL
           </h1>
           <h3 className="text-base">
@@ -120,6 +146,44 @@ const Home = () => {
                 />
               </div>
             )}
+          </div>
+        )}
+        
+        {/* Modal de progreso */}
+        {uploading && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl transform transition-all">
+              <div className="flex flex-col items-center">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Subiendo imágenes</h3>
+                <p className="text-sm text-gray-500 mb-6">Por favor, espere mientras se guardan los cambios</p>
+                
+                {/* Barra de progreso con gradiente moderno */}
+                <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-2">
+                  <div 
+                    className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300 ease-out"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+                
+                {/* Indicador numérico */}
+                <div className="w-full flex justify-between px-1">
+                  <span className="text-xs font-medium text-blue-600">0%</span>
+                  <span className="text-xs font-medium text-blue-600">{progress}%</span>
+                  <span className="text-xs font-medium text-blue-600">100%</span>
+                </div>
+                
+                {/* Indicador de carga animado */}
+                <div className="mt-4 flex space-x-2">
+                  {[...Array(3)].map((_, i) => (
+                    <div 
+                      key={i}
+                      className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"
+                      style={{ animationDelay: `${i * 0.2}s` }}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

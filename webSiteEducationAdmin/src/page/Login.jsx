@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
-import { FaUser, FaKey } from "react-icons/fa"; // Iconos necesarios
-import { Link } from "react-router";
-import LogoLogin from "../assets/fac_edu.jpg"; // Imagen para la columna izquierda
-import LoginFondo from "../assets/educacion_inicial.jpg"; // Imagen de fondo general
+import { FaUser, FaKey } from "react-icons/fa";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../context/AuthContext";
+import LogoLogin from "../assets/fac_edu.jpg";
+import LoginFondo from "../assets/educacion_inicial.jpg";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,15 +26,25 @@ const Login = () => {
       return;
     }
 
+    setIsLoading(true);
+    
     try {
       const response = await axios.post("https://pagina-educacion-backend-production.up.railway.app/api/login", {
         email,
         password,
       });
-      localStorage.setItem("token", response.data.access_token);
-      window.location.href = "/inicio";
+      
+      if (response.data.success) {
+        login(response.data);
+        navigate("/inicio");
+      } else {
+        swal("Error", response.data.message || "Credenciales incorrectas", "error");
+      }
     } catch (error) {
-      swal("Error", "Credenciales incorrectas o error en el servidor.", "error");
+      const errorMsg = error.response?.data?.message || "Error al iniciar sesión";
+      swal("Error", errorMsg, "error");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -106,9 +120,12 @@ const Login = () => {
               {/* Botón Iniciar Sesión */}
               <button
                 type="submit"
-                className="w-full py-2 text-sm text-white bg-[#262D73] hover:bg-[#1c1e33] rounded focus:outline-none focus:ring-2 focus:ring-[#262D73] cursor-pointer"
+                disabled={isLoading}
+                className={`w-full py-2 text-sm text-white bg-[#262D73] hover:bg-[#1c1e33] rounded focus:outline-none focus:ring-2 focus:ring-[#262D73] cursor-pointer ${
+                  isLoading ? "opacity-75" : ""
+                }`}
               >
-                Iniciar Sesión
+                {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
               </button>
 
               {/* Enlace para Olvidaste tu contraseña */}

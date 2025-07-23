@@ -6,7 +6,6 @@ const Header = ({ onToggleSidebar, user }) => {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Cierra el dropdown si se hace clic fuera de él
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -25,7 +24,7 @@ const Header = ({ onToggleSidebar, user }) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between bg-gradient-to-r from-[#4a4a4a] to-[#383838] text-white px-6 py-4 shadow-xl backdrop-blur-sm border-b border-gray-600">
+        <header className="sticky top-0 z-40 flex items-center justify-between bg-gradient-to-r from-[#4a4a4a] to-[#383838] text-white px-6 py-4 shadow-xl backdrop-blur-sm border-b border-gray-600">
       <div className="flex items-center space-x-4">
         <button
           className="md:hidden cursor-pointer bg-gray-700 hover:bg-gray-600 rounded-full p-3 transition-all duration-300 transform hover:scale-105"
@@ -52,7 +51,7 @@ const Header = ({ onToggleSidebar, user }) => {
             </div>
             <div className="text-left hidden lg:block">
               <div className="font-medium text-sm">
-                {`${user.name} ${user.lastname}`}
+                {`${user.name} ${user.last_name}`}
               </div>
               <div className="text-xs text-[#E4BCD3]">Administrador</div>
             </div>
