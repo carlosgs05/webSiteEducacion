@@ -94,13 +94,13 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
     }
     e.target.value = "";
   };
-  
+
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
     e.dataTransfer.dropEffect = "copy";
   };
-  
+
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -114,8 +114,9 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
       });
     }
   };
-  
-  const handleRemovePhoto = () => {
+
+  const handleRemovePhoto = (e) => {
+    e.stopPropagation();
     setImagen(null);
     setPreview(null);
     setErrors((prev) => {
@@ -152,7 +153,7 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
       };
 
       const endpoint = editingRecord
-        ? `https://pagina-educacion-backend-production.up.railway.app/api/updateDesarrolloProfesional/${editingRecord.IdDesarrollo}?_method=PUT`
+        ? `https://pagina-educacion-backend-production.up.railway.app/api/updateDesarrolloProfesional/${editingRecord.IdDesarrollo}`
         : "https://pagina-educacion-backend-production.up.railway.app/api/storeDesarrolloProfesional";
 
       await axios.post(endpoint, formData, {
@@ -198,7 +199,7 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
           cursor: pointer;
         }
       `}</style>
-      
+
       {/* Modal Principal */}
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
         <div className="relative bg-white w-full max-w-5xl rounded-2xl shadow-xl flex flex-col max-h-[98vh]">
@@ -256,7 +257,9 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
                     style={{ cursor: "pointer" }}
                   />
                   {errors.Fecha && (
-                    <p className="text-red-500 text-xs mt-1">{errors.Fecha[0]}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.Fecha[0]}
+                    </p>
                   )}
                 </div>
               </div>
@@ -270,6 +273,7 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
                   <div
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
+                    onClick={() => fileInputRef.current.click()}
                     className={`relative w-full h-64 border-2 border-dashed rounded-xl overflow-hidden cursor-pointer ${
                       errors.Imagen ? "border-red-500" : "border-gray-300"
                     }`}
@@ -283,7 +287,10 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
                         />
                         <button
                           type="button"
-                          onClick={handleRemovePhoto}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemovePhoto(e);
+                          }}
                           className="absolute top-3 right-3 bg-red-500 text-white p-2 rounded-full cursor-pointer hover:bg-red-600 transition"
                           title="Eliminar imagen"
                         >
@@ -305,7 +312,7 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
                       type="file"
                       accept="image/png,image/jpeg"
                       onChange={handleFileChange}
-                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      className="hidden"
                     />
                   </div>
                   {errors.Imagen && (
@@ -314,7 +321,7 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
                     </p>
                   )}
                 </div>
-                
+
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">
                     Descripción
@@ -373,28 +380,30 @@ const RegistroModal = ({ onClose, editingRecord, tipo }) => {
                 <p className="text-sm text-gray-500 mb-6">
                   Por favor, espere mientras se guardan los cambios
                 </p>
-                
+
                 {/* Barra de progreso con gradiente moderno */}
                 <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-2">
-                  <div 
+                  <div
                     className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300 ease-out"
                     style={{ width: `${progress}%` }}
                   ></div>
                 </div>
-                
+
                 {/* Indicador numérico */}
                 <div className="w-full flex justify-between px-1">
                   <span className="text-xs font-medium text-blue-600">0%</span>
                   <span className="text-xs font-medium text-blue-600">
                     {progress}%
                   </span>
-                  <span className="text-xs font-medium text-blue-600">100%</span>
+                  <span className="text-xs font-medium text-blue-600">
+                    100%
+                  </span>
                 </div>
-                
+
                 {/* Indicador de carga animado */}
                 <div className="mt-4 flex space-x-2">
                   {[...Array(3)].map((_, i) => (
-                    <div 
+                    <div
                       key={i}
                       className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"
                       style={{ animationDelay: `${i * 0.2}s` }}

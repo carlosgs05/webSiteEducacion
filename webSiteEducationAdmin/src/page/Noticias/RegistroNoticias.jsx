@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useLocation } from "react-router";
 import axios from "axios";
 import PropTypes from "prop-types";
@@ -51,6 +51,8 @@ const RegistroNoticias = (props) => {
   const [additionalImages, setAdditionalImages] = useState([]);
   const [portadaPreview, setPortadaPreview] = useState("");
   const [errors, setErrors] = useState({});
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (editingRecord) {
@@ -84,18 +86,50 @@ const RegistroNoticias = (props) => {
     setAdditionalImages(images);
   };
 
-  const handlePortadaChange = (e) => {
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+    e.dataTransfer.dropEffect = "copy";
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile && /image\/(png|jpe?g)/.test(droppedFile.type)) {
+      processImageFile(droppedFile);
+    }
+  };
+
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      processImageFile(file);
+    }
+  };
+
+  const processImageFile = (file) => {
+    if (file && /image\/(png|jpe?g)/.test(file.type)) {
       setImagenPortada(file);
       setPortadaPreview(URL.createObjectURL(file));
       setErrors((prev) => ({ ...prev, imagenPortada: null }));
     }
   };
 
-  const handleRemovePortada = () => {
+  const handleRemovePortada = (e) => {
+    e.stopPropagation();
     setImagenPortada(null);
     setPortadaPreview("");
+    setErrors((prev) => ({ ...prev, imagenPortada: null }));
   };
 
   // Limpia errores de un campo al cambiar
@@ -234,7 +268,9 @@ const RegistroNoticias = (props) => {
                     className={`w-full border ${
                       errors.Encabezado ? "border-red-500" : "border-gray-300"
                     } p-3 rounded-lg focus:outline-none focus:ring-2 ${
-                      errors.Encabezado ? "ring-red-200" : "focus:ring-[#262D73]"
+                      errors.Encabezado
+                        ? "ring-red-200"
+                        : "focus:ring-[#262D73]"
                     }`}
                   />
                   {errors.Encabezado && (
@@ -270,16 +306,23 @@ const RegistroNoticias = (props) => {
                 </label>
                 <div
                   className={`relative w-full aspect-[16/9] rounded-xl overflow-hidden border-2 ${
-                    errors.imagenPortada
+                    errors.imagenPortada || isDragging
                       ? "border-red-500"
                       : "border-gray-300 border-dashed"
+                  } ${isDragging ? "border-blue-500 bg-blue-50" : ""} ${
+                    errors.imagenPortada ? "border-red-500" : ""
                   } cursor-pointer`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={() => fileInputRef.current.click()}
                 >
                   <input
+                    ref={fileInputRef}
                     type="file"
-                    onChange={handlePortadaChange}
+                    onChange={handleFileChange}
                     accept="image/*"
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    className="hidden"
                   />
                   {portadaPreview ? (
                     <>
@@ -300,23 +343,42 @@ const RegistroNoticias = (props) => {
                   ) : (
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 p-4">
                       <div className="mb-3 bg-gray-100 rounded-full p-3">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 4v16m8-8H4"
-                          />
-                        </svg>
+                        {isDragging ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 text-blue-500"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 4v16m8-8H4"
+                            />
+                          </svg>
+                        )}
                       </div>
                       <p className="text-center text-sm">
-                        Arrastra una imagen aquí o haz clic para seleccionar
+                        {isDragging
+                          ? "Suelta la imagen aquí"
+                          : "Arrastra una imagen aquí o haz clic para seleccionar"}
                       </p>
                     </div>
                   )}
@@ -453,28 +515,32 @@ const RegistroNoticias = (props) => {
                   <p className="text-sm text-gray-500 mb-6">
                     Por favor, espere mientras se guardan los cambios
                   </p>
-                  
+
                   {/* Barra de progreso con gradiente moderno */}
                   <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-2">
-                    <div 
+                    <div
                       className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300 ease-out"
                       style={{ width: `${progress}%` }}
                     ></div>
                   </div>
-                  
+
                   {/* Indicador numérico */}
                   <div className="w-full flex justify-between px-1">
-                    <span className="text-xs font-medium text-blue-600">0%</span>
+                    <span className="text-xs font-medium text-blue-600">
+                      0%
+                    </span>
                     <span className="text-xs font-medium text-blue-600">
                       {progress}%
                     </span>
-                    <span className="text-xs font-medium text-blue-600">100%</span>
+                    <span className="text-xs font-medium text-blue-600">
+                      100%
+                    </span>
                   </div>
-                  
+
                   {/* Indicador de carga animado */}
                   <div className="mt-4 flex space-x-2">
                     {[...Array(3)].map((_, i) => (
-                      <div 
+                      <div
                         key={i}
                         className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"
                         style={{ animationDelay: `${i * 0.2}s` }}

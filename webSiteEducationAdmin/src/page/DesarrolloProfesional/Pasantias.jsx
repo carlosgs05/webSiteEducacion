@@ -226,6 +226,7 @@ const Pasantias = () => {
           <DescripcionModal
             descripcion={descripcionActual}
             onClose={() => setShowDescripcionModal(false)}
+            nombre="Descripción"
           />
         )}
 

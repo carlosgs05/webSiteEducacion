@@ -252,7 +252,8 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
     }
   };
 
-  const handleRemovePhoto = () => {
+  const handleRemovePhoto = (e) => {
+    e.stopPropagation(); // Detener la propagación para evitar que se active el input file
     setFoto(null);
     setPreviewFoto(null);
   };
@@ -479,6 +480,7 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
                   <div
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
+                    onClick={() => fileInputRef.current.click()}
                     className={`relative w-full h-[330px] border-2 border-dashed rounded-xl overflow-hidden cursor-pointer ${
                       errors.Foto ? "border-red-500" : "border-gray-300"
                     }`}
@@ -492,7 +494,10 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
                         />
                         <button
                           type="button"
-                          onClick={handleRemovePhoto}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemovePhoto(e);
+                          }}
                           className="absolute top-3 right-3 bg-red-500 text-white p-2 rounded-full cursor-pointer hover:bg-red-600 transition"
                           title="Eliminar foto"
                         >
@@ -514,7 +519,7 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
                       type="file"
                       accept="image/png,image/jpeg"
                       onChange={handleFileChange}
-                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      className="hidden"
                     />
                   </div>
                   {errors.Foto && (
