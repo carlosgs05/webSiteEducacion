@@ -127,8 +127,6 @@ class PersonaController extends Controller
             'publicaciones.*.titulo.string'   => 'El título debe ser texto',
             'publicaciones.*.titulo.max'      => 'El título no debe exceder 255 caracteres',
             'publicaciones.*.url.required'    => 'La URL de la publicación es obligatoria',
-            'publicaciones.*.url.url'         => 'La URL debe tener un formato válido',
-            'publicaciones.*.url.max'         => 'La URL no debe exceder 255 caracteres',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
