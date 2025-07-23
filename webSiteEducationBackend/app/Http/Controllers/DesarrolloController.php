@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DesarrolloProfesional;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class DesarrolloController extends Controller
 {
@@ -86,84 +87,76 @@ class DesarrolloController extends Controller
     /**
      * Actualiza un registro existente de desarrollo profesional.
      */
-public function update(Request $request, $id)
-{
-    // Encuentra el registro específico o lanza un error
-    $desarrollo = DesarrolloProfesional::where('IdDesarrollo', $id)->firstOrFail();
+    public function update(Request $request, $id)
+    {
+        $desarrollo = DesarrolloProfesional::findOrFail($id);
 
-    // Verifica el tipo de $desarrollo
-    dd($desarrollo); // Esto te ayudará a entender qué tipo de objeto se está obteniendo.
+        $rules = [
+            'Descripcion' => ['required', 'string'],
+            'Url'         => ['required', 'max:255'],
+            'Tipo'        => ['required', 'string', 'max:100'],
+            'Fecha'       => ['required', 'date'],
+            'Imagen'      => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
+        ];
 
-    // Reglas de validación (sin cambios)
-    $rules = [
-        'Descripcion' => ['required', 'string'],
-        'Url'         => ['required', 'max:255'],
-        'Tipo'        => ['required', 'string', 'max:100'],
-        'Fecha'       => ['required', 'date'],
-        'Imagen'      => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
-    ];
+        $messages = [
+            'Descripcion.required' => 'La descripción es obligatoria',
+            'Descripcion.string'   => 'La descripción debe ser texto',
+            'Url.required'         => 'La URL es obligatoria',
+            'Url.max'              => 'La URL no puede exceder 255 caracteres',
+            'Tipo.required'        => 'El tipo es obligatorio',
+            'Tipo.string'          => 'El tipo debe ser texto',
+            'Tipo.max'             => 'El tipo no puede exceder 100 caracteres',
+            'Fecha.required'       => 'La fecha es obligatoria',
+            'Fecha.date'           => 'La fecha debe ser una fecha válida',
+            'Imagen.image'         => 'El archivo debe ser una imagen',
+            'Imagen.mimes'         => 'La imagen debe ser jpg, jpeg o png',
+        ];
 
-    // Mensajes personalizados (sin cambios)
-    $messages = [
-        'Descripcion.required' => 'La descripción es obligatoria',
-        'Descripcion.string'   => 'La descripción debe ser texto',
-        'Url.required'         => 'La URL es obligatoria',
-        'Url.max'              => 'La URL no puede exceder 255 caracteres',
-        'Tipo.required'        => 'El tipo es obligatorio',
-        'Tipo.string'          => 'El tipo debe ser texto',
-        'Tipo.max'             => 'El tipo no puede exceder 100 caracteres',
-        'Fecha.required'       => 'La fecha es obligatoria',
-        'Fecha.date'           => 'La fecha debe ser una fecha válida',
-        'Imagen.image'         => 'El archivo debe ser una imagen',
-        'Imagen.mimes'         => 'La imagen debe ser jpg, jpeg o png',
-    ];
+        $validator = Validator::make($request->all(), $rules, $messages);
 
-    // Validación
-    $validator = Validator::make($request->all(), $rules, $messages);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'message' => 'Errores de validación',
-            'errors'  => $validator->errors(),
-        ], 422);
-    }
-
-    // Obtener los datos validados
-    $data = $validator->validated();
-
-    // Actualización de los campos
-    $desarrollo->Descripcion = $data['Descripcion'];
-    $desarrollo->Url         = $data['Url'];
-    $desarrollo->Tipo        = $data['Tipo'];
-    $desarrollo->Fecha       = $data['Fecha'];
-
-    // Comprobar si hay un archivo de imagen y procesarlo
-    if ($request->hasFile('Imagen')) {
-        // Eliminar imagen anterior si existe
-        if ($desarrollo->Imagen && file_exists(public_path($desarrollo->Imagen))) {
-            unlink(public_path($desarrollo->Imagen));
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Errores de validación',
+                'errors'  => $validator->errors(),
+            ], 422);
         }
 
-        // Procesar la nueva imagen
-        $imagen = $request->file('Imagen');
-        $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
-        $imagen->move(public_path('imagenes'), $nombreImagen);
+        $data = $validator->validated();
 
-        // Guardar la ruta de la nueva imagen
-        $desarrollo->Imagen = 'imagenes/' . $nombreImagen;
+        // Actualizar campos básicos
+        $desarrollo->update([
+            'Descripcion' => $data['Descripcion'],
+            'Url'         => $data['Url'],
+            'Tipo'        => $data['Tipo'],
+            'Fecha'       => $data['Fecha'],
+        ]);
+
+        // Manejo de la imagen
+        if ($request->hasFile('Imagen')) {
+            // Eliminar imagen anterior si existe
+            $imagenAnterior = $desarrollo->Imagen;
+            if ($imagenAnterior) {
+                $rutaCompleta = public_path($imagenAnterior);
+                if (File::exists($rutaCompleta)) {
+                    File::delete($rutaCompleta);
+                }
+            }
+
+            // Guardar nueva imagen
+            $imagen = $request->file('Imagen');
+            $nombreArchivo = time() . '_' . $imagen->getClientOriginalName();
+            $imagen->move(public_path('imagenes'), $nombreArchivo);
+
+            // Actualizar solo el campo de imagen
+            $desarrollo->update(['Imagen' => 'imagenes/' . $nombreArchivo]);
+        }
+
+        return response()->json([
+            'message' => 'Registro actualizado con éxito.',
+            'data'    => $desarrollo->fresh(),
+        ], 200);
     }
-
-    // Guardar los cambios
-    $desarrollo->save();
-
-    // Respuesta con los datos actualizados
-    return response()->json([
-        'message' => 'Registro actualizado con éxito.',
-        'data'    => $desarrollo,
-    ], 200);
-}
-
-
 
     public function destroy($id)
     {
