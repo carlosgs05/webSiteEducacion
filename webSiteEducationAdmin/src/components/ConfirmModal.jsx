@@ -13,13 +13,13 @@ const ConfirmModal = ({ message, onConfirm, onCancel }) => {
         <div className="flex justify-center gap-4">
           <button 
             onClick={onCancel} 
-            className="bg-[#262D73] hover:bg-[#36395d] text-white font-semibold px-4 py-2 rounded-xl transition-colors"
+            className="bg-[#262D73] hover:bg-[#36395d] text-white font-semibold px-4 py-2 rounded-xl transition-colors cursor-pointer"
           >
             No
           </button>
           <button 
             onClick={onConfirm} 
-            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-xl transition-colors"
+            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-xl transition-colors cursor-pointer"
           >
             Sí
           </button>

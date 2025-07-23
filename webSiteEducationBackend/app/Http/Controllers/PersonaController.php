@@ -22,7 +22,7 @@ class PersonaController extends Controller
     /* Registra una persona con sus publicaciones asociadas */
     public function store(Request $request)
     {
-        // Reglas de validación incluyendo formato (regex)
+        // Reglas de validación incluyendo publicaciones
         $rules = [
             'Nombres'         => ['required', 'string', 'max:255', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/'],
             'Correo'          => ['required', 'email', 'max:255'],
@@ -30,7 +30,16 @@ class PersonaController extends Controller
             'TituloPersona'   => ['required', 'string', 'max:255'],
             'RolPersona'      => ['required', Rule::in(['Autoridades', 'Personal Docente', 'Personal Administrativo'])],
             'Foto'            => ['required', 'image', 'mimes:jpg,jpeg,png'],
+            'publicaciones'   => ['nullable', 'array'], // Añadir regla para publicaciones
         ];
+
+        // Añadir reglas dinámicas para cada publicación
+        if ($request->has('publicaciones')) {
+            foreach ($request->input('publicaciones') as $key => $value) {
+                $rules["publicaciones.$key.titulo"] = ['required', 'string', 'max:255'];
+                $rules["publicaciones.$key.url"] = ['required'];
+            }
+        }
 
         $messages = [
             'Nombres.required'       => 'El nombre es obligatorio.',
@@ -44,6 +53,10 @@ class PersonaController extends Controller
             'Foto.required'         => 'La foto es obligatoria',
             'Foto.image'             => 'La foto debe ser una imagen',
             'Foto.mimes'             => 'La foto debe ser jpg, jpeg o png',
+            'publicaciones.*.titulo.required' => 'El título de la publicación es obligatorio',
+            'publicaciones.*.titulo.string'   => 'El título debe ser texto',
+            'publicaciones.*.titulo.max'      => 'El título no debe exceder 255 caracteres',
+            'publicaciones.*.url.required'    => 'La URL de la publicación es obligatoria',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -64,6 +77,7 @@ class PersonaController extends Controller
         $persona->Titulo         = $data['TituloPersona'];
         $persona->RolPersona     = $data['RolPersona'];
 
+        // Procesar imagen
         if ($request->hasFile('Foto')) {
             $imagen       = $request->file('Foto');
             $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
@@ -73,8 +87,9 @@ class PersonaController extends Controller
 
         $persona->save();
 
-        if (!empty($data['publicaciones'])) {
-            foreach ($data['publicaciones'] as $pubData) {
+        // Crear publicaciones si existen
+        if ($request->has('publicaciones')) {
+            foreach ($request->input('publicaciones') as $pubData) {
                 $persona->publicaciones()->create([
                     'Titulo' => $pubData['titulo'],
                     'Url'    => $pubData['url'],
