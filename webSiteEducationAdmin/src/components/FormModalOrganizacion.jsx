@@ -166,6 +166,8 @@ MODAL PRINCIPAL: FormModalOrganizacion
 */
 const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   // Datos de la persona
   const [nombres, setNombres] = useState("");
@@ -293,7 +295,7 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
     });
   };
 
-  // Envío del formulario (sin validación cliente)
+  // Envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -305,20 +307,38 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
     formData.append("Cargo", cargo);
     formData.append("TituloPersona", tituloPersona);
     formData.append("RolPersona", tipo);
-    if (foto) formData.append("Foto", foto);
+    
+    // Solo agregar la foto si hay un archivo nuevo o es un nuevo registro
+    if (foto || !editingRecord) {
+      formData.append("Foto", foto || ""); // Envía campo vacío si no hay foto en creación
+    }
 
+    // Asegurar que siempre se envíe el array de publicaciones
     publicaciones.forEach((pub, index) => {
-      formData.append(`publicaciones[${index}][titulo]`, pub.titulo);
-      formData.append(`publicaciones[${index}][url]`, pub.url);
+      formData.append(`publicaciones[${index}][titulo]`, pub.titulo || pub.Titulo);
+      formData.append(`publicaciones[${index}][url]`, pub.url || pub.Url);
     });
 
     try {
-      const url =
-        editingRecord && editingRecord.IdPersona
-          ? `https://pagina-educacion-backend-production.up.railway.app/api/updateOrganizacion/${editingRecord.IdPersona}`
-          : "https://pagina-educacion-backend-production.up.railway.app/api/storeOrganizacion";
-      const resp = await axios.post(url, formData);
-      swal("¡Éxito!", resp.data.message, "success");
+      setUploading(true);
+      setProgress(0);
+
+      const config = {
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setProgress(percentCompleted);
+        },
+      };
+
+      const url = editingRecord
+        ? `https://pagina-educacion-backend-production.up.railway.app/api/updateOrganizacion/${editingRecord.IdPersona}`
+        : "https://pagina-educacion-backend-production.up.railway.app/api/storeOrganizacion";
+
+      const response = await axios.post(url, formData, config);
+
+      swal("¡Éxito!", response.data.message, "success");
       onClose();
     } catch (error) {
       if (error.response?.status === 422) {
@@ -329,6 +349,7 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
       }
     } finally {
       setLoading(false);
+      setUploading(false);
     }
   };
 
@@ -697,6 +718,50 @@ const FormModalOrganizacion = ({ onClose, editingRecord, tipo }) => {
             onAccept={handleAddPublication}
           />
         )}
+
+        {/* Modal de progreso para carga */}
+        {uploading && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl transform transition-all">
+              <div className="flex flex-col items-center">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {editingRecord ? "Actualizando" : "Guardando"}
+                </h3>
+                <p className="text-sm text-gray-500 mb-6">
+                  Por favor, espere mientras se guardan los cambios
+                </p>
+                
+                {/* Barra de progreso con gradiente moderno */}
+                <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-2">
+                  <div 
+                    className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300 ease-out"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+                
+                {/* Indicador numérico */}
+                <div className="w-full flex justify-between px-1">
+                  <span className="text-xs font-medium text-blue-600">0%</span>
+                  <span className="text-xs font-medium text-blue-600">
+                    {progress}%
+                  </span>
+                  <span className="text-xs font-medium text-blue-600">100%</span>
+                </div>
+                
+                {/* Indicador de carga animado */}
+                <div className="mt-4 flex space-x-2">
+                  {[...Array(3)].map((_, i) => (
+                    <div 
+                      key={i}
+                      className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"
+                      style={{ animationDelay: `${i * 0.2}s` }}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </ModalPortal>
   );
@@ -714,8 +779,8 @@ FormModalOrganizacion.propTypes = {
     Foto: PropTypes.string,
     publicaciones: PropTypes.arrayOf(
       PropTypes.shape({
-        titulo: PropTypes.string,
-        url: PropTypes.string,
+        Titulo: PropTypes.string,
+        Url: PropTypes.string,
       })
     ),
   }),

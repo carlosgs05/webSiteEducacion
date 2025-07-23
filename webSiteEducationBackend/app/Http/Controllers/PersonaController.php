@@ -93,7 +93,7 @@ class PersonaController extends Controller
     {
         $persona = Persona::findOrFail($id);
 
-        // Reglas de validación incluyendo formato (regex)
+        // Reglas de validación incluyendo publicaciones
         $rules = [
             'Nombres'         => ['required', 'string', 'max:255', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/'],
             'Correo'          => ['required', 'email', 'max:255'],
@@ -101,7 +101,16 @@ class PersonaController extends Controller
             'TituloPersona'   => ['required', 'string', 'max:255'],
             'RolPersona'      => ['required', Rule::in(['Autoridades', 'Personal Docente', 'Personal Administrativo'])],
             'Foto'            => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
+            'publicaciones'   => ['nullable', 'array'], // Añadir regla para publicaciones
         ];
+
+        // Añadir reglas dinámicas para cada publicación
+        if ($request->has('publicaciones')) {
+            foreach ($request->input('publicaciones') as $key => $value) {
+                $rules["publicaciones.$key.titulo"] = ['required', 'string', 'max:255'];
+                $rules["publicaciones.$key.url"] = ['required', 'url', 'max:255'];
+            }
+        }
 
         $messages = [
             'Nombres.required'       => 'El nombre es obligatorio.',
@@ -114,6 +123,12 @@ class PersonaController extends Controller
             'RolPersona.in'          => 'El rol seleccionado no es válido',
             'Foto.image'             => 'La foto debe ser una imagen',
             'Foto.mimes'             => 'La foto debe ser jpg, jpeg o png',
+            'publicaciones.*.titulo.required' => 'El título de la publicación es obligatorio',
+            'publicaciones.*.titulo.string'   => 'El título debe ser texto',
+            'publicaciones.*.titulo.max'      => 'El título no debe exceder 255 caracteres',
+            'publicaciones.*.url.required'    => 'La URL de la publicación es obligatoria',
+            'publicaciones.*.url.url'         => 'La URL debe tener un formato válido',
+            'publicaciones.*.url.max'         => 'La URL no debe exceder 255 caracteres',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -142,15 +157,17 @@ class PersonaController extends Controller
 
         $persona->save();
 
+        // Obtener publicaciones del request
+        $publicaciones = $request->input('publicaciones', []);
+
         // Reemplazar publicaciones
         $persona->publicaciones()->delete();
-        if (!empty($data['publicaciones'])) {
-            foreach ($data['publicaciones'] as $pubData) {
-                $persona->publicaciones()->create([
-                    'Titulo' => $pubData['titulo'],
-                    'Url'    => $pubData['url'],
-                ]);
-            }
+
+        foreach ($publicaciones as $pubData) {
+            $persona->publicaciones()->create([
+                'Titulo' => $pubData['titulo'],
+                'Url'    => $pubData['url'],
+            ]);
         }
 
         return response()->json([
