@@ -107,8 +107,8 @@ class PersonaController extends Controller
         // Añadir reglas dinámicas para cada publicación
         if ($request->has('publicaciones')) {
             foreach ($request->input('publicaciones') as $key => $value) {
-                $rules["publicaciones.$key.titulo"] = ['required', 'string', 'max:255'];
-                $rules["publicaciones.$key.url"] = ['required', 'url', 'max:255'];
+                $rules["publicaciones.$key.titulo"] = ['required'];
+                $rules["publicaciones.$key.url"] = ['required'];
             }
         }
 
