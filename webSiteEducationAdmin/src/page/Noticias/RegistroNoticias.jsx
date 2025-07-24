@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { useLocation } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { X } from "lucide-react";
@@ -35,6 +35,7 @@ const Spinner = () => (
 
 const RegistroNoticias = (props) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const editingRecord =
     props.editingRecord ||
     (location.state && location.state.editingRecord) ||
@@ -189,7 +190,7 @@ const RegistroNoticias = (props) => {
           formData,
           config
         );
-        swal(
+        await swal(
           "¡Éxito!",
           "La noticia ha sido actualizada correctamente",
           "success"
@@ -200,13 +201,15 @@ const RegistroNoticias = (props) => {
           formData,
           config
         );
-        swal(
+        await swal(
           "¡Éxito!",
           "La noticia ha sido registrada correctamente",
           "success"
         );
       }
-      window.location.href = "/noticias";
+      
+      // Navegar solo después de que el usuario cierre el SweetAlert
+      navigate("/noticias");
     } catch (error) {
       if (error.response?.status === 422) {
         setErrors(error.response.data.errors);
@@ -493,7 +496,7 @@ const RegistroNoticias = (props) => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => window.history.back()}
+                  onClick={() => navigate(-1)}
                   className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl transition cursor-pointer"
                 >
                   Cancelar
